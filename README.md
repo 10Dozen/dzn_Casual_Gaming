@@ -7,9 +7,9 @@ Small cheat-mod to make any mission playable and fun if it isn't (e.g. not enoug
 - ACE / Vanilla player and global healing and fatigue switch
 - Respawn timer change
 - Arsenal
-- Garage
+- Garage (MP-compatible)
 - Individual and Squad Rallypoint for fast move
-- Vehicle service (Repair, Rearm, Refuel)
+- Vehicle service (Repair, Rearm, Refuel, Add driver, Set In Flight)
 - Splendid camera
 - Scripting console
 
