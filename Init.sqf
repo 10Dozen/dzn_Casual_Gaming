@@ -61,6 +61,7 @@ TOPIC(true, "Vehicle Service")
    [<font color='#A0DB65'><execute expression='1 call dzn_CG_fnc_serviceVehicle;'>REFUEL</execute></font>]
    [<font color='#A0DB65'><execute expression='2 call dzn_CG_fnc_serviceVehicle;'>REARM</execute></font>]
    [<font color='#A0DB65'><execute expression='3 call dzn_CG_fnc_serviceVehicle;'>ADD DRIVER</execute></font>]
+   [<font color='#A0DB65'><execute expression='4 call dzn_CG_fnc_serviceVehicle;'>SET IN FLIGHT</execute></font>]
 "
 END
 
