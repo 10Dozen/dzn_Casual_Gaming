@@ -28,7 +28,7 @@ dzn_CG_fnc_serviceVehicle = {
 			_u moveInDriver _veh;	
 		};
 		case 4: {
-			closeDialog 2;
+			openMap false;
 			
 			_title = "Set In Flight";
 			_veh engineOn true;

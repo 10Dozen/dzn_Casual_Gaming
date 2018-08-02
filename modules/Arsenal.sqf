@@ -35,7 +35,7 @@ dzn_CG_fnc_openGarage = {
 	sleep 0.25;
 	private _nv = _vType createVehicle _pos;
 	_nv setPosATL _pos;
-	try { _nv call compile _vCustomizationStr; };
+	_nv call compile _vCustomizationStr;
 	
 	sleep 0.025;
 	while { !((crew _nv) isEqualTo []) } do {
