@@ -33,18 +33,11 @@ dzn_CG_fnc_serviceVehicle = {
 			_title = "Set In Flight";
 			_veh engineOn true;
 			private _pos = getPosASL _veh;
-			private _vel = 0;
 			
-			if (_veh isKindOf "Plane") then { 
-				_pos set [2, 200];
-				_vel = 100;
-			} else { 
-				_pos set [2, 30];
-				_vel = 50;
-			};
+			_veh setPosATL [_pos select 0, _pos select 1, 200];
+			if (getPosASL _veh select 2 < 10) exitWith { _title = "Set In Flight -- Aborted"; };
 			
-			_veh setPosASL _pos;
-			_veh setVelocityModelSpace [0, _vel, 0];
+			_veh setVelocityModelSpace [0, if (_veh isKindOf "Plane") then { 100 } else { 50 }, 0];
 		};
 	};
 

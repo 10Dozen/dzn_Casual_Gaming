@@ -8,6 +8,18 @@ dzn_CG_fnc_openArsenal = {
 	["Open", true] call BIS_fnc_Arsenal;
 };
 
+dzn_CG_fnc_loadout = {
+	params ["_mode", "_slotId"];
+	
+	if (toLower _mode == "save") then {
+		call compile format ["dzn_CG_Loadout_%1 = getUnitLoadout player;", _slotId];
+		hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Loadout %1 saved</t>", _slotId];		
+	} else {
+		call compile format ["player setUnitLoadout dzn_CG_Loadout_%1;", _slotId];
+		hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Loadout %1 loaded</t>", _slotId];
+	};
+};
+
 dzn_CG_fnc_openGarage = {
 	closeDialog 2;
 

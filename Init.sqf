@@ -3,12 +3,20 @@ if !(hasInterface) exitWith {};
 [] spawn {
 waitUntil { time > 1 };
 
+dzn_CG_Loadout_1 = getUnitLoadout player;
+dzn_CG_Loadout_2 = getUnitLoadout player;
+dzn_CG_Loadout_3 = getUnitLoadout player;
+
 call compile preProcessFileLineNumbers "\dzn_CasualGaming\modules\Arsenal.sqf";
 call compile preProcessFileLineNumbers "\dzn_CasualGaming\modules\AutoHeal.sqf";
 call compile preProcessFileLineNumbers "\dzn_CasualGaming\modules\Respawn.sqf";
 call compile preProcessFileLineNumbers "\dzn_CasualGaming\modules\Rallypoint.sqf";
 call compile preProcessFileLineNumbers "\dzn_CasualGaming\modules\VehicleService.sqf";
+call compile preProcessFileLineNumbers "\dzn_CasualGaming\modules\Wallhack.sqf";
 call compile preProcessFileLineNumbers "\dzn_CasualGaming\UIFunctions.sqf";
+
+
+
 
 // ********** Topics ****************
 #define NOTES		private["_topics"]; _topics = []; player createDiarySubject ["dzn_CG_Page","dzn Casual Gaming"];
@@ -48,9 +56,15 @@ TOPIC(true, "Respawn Time")
 "
 END
 
+
+
 TOPIC(true, "Arsenal & Garage")
 "<font color='#12C4FF' size='14'>Arsenal</font>
-<br />[<font color='#A0DB65'><execute expression='[] spawn dzn_CG_fnc_openArsenal;'>Open Arsenal</execute></font>]
+<br />[<font color='#A0DB65'><execute expression='[] spawn dzn_CG_fnc_openArsenal;'>Open Arsenal</execute></font>]  |  [<font color='#A0DB65'><execute expression='[player, player, true] spawn ace_arsenal_fnc_openBox;'>Open ACE Arsenal</execute></font>]
+<br />  Loadout #1  (<font color='#A0DB65'><execute expression='[""save"", 1] spawn dzn_CG_fnc_loadout;'>Save</execute></font>) (<font color='#A0DB65'><execute expression='[""load"", 1] spawn dzn_CG_fnc_loadout;'>Load</execute></font>)
+<br />  Loadout #2  (<font color='#A0DB65'><execute expression='[""save"", 2] spawn dzn_CG_fnc_loadout;'>Save</execute></font>) (<font color='#A0DB65'><execute expression='[""load"", 2] spawn dzn_CG_fnc_loadout;'>Load</execute></font>)
+<br />  Loadout #2  (<font color='#A0DB65'><execute expression='[""save"", 3] spawn dzn_CG_fnc_loadout;'>Save</execute></font>) (<font color='#A0DB65'><execute expression='[""load"", 3] spawn dzn_CG_fnc_loadout;'>Load</execute></font>)
+<br />
 <br />[<font color='#A0DB65'><execute expression='[] spawn dzn_CG_fnc_openGarage;'>Open Garage</execute></font>]
 "
 END
@@ -79,6 +93,7 @@ TOPIC(true, "Misc")
 <br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn BIS_fnc_camera;'>Open Splendid Camera</execute></font>]
 <br />[<font color='#A0DB65'><execute expression='openMap false; closeDialog 2; [] spawn { createDialog ""dzn_CG_Console_Group""};'>Open Console</execute></font>]
 <br />
+<br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn dzn_CG_fnc_toggleWallhack;'>Toggle Wallhack (300m)</execute></font>]
 "
 END
 
