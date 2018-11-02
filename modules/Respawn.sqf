@@ -1,3 +1,5 @@
+#include "..\macro.hpp"
+
 /*
  *	Respawn
  *	If respawn enbaled - change respawn timer to 15 seconds
@@ -9,6 +11,8 @@ dzn_CG_fnc_setRespawnTime = {
 		<br /><br />Set to %1 seconds"
 		, _this
 	];
+
+	[player, 11] call GVAR(fnc_logUserAction);
 };
 
 dzn_CG_fnc_showModel = {

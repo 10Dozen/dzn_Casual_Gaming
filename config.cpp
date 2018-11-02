@@ -8,11 +8,11 @@ class CfgPatches
 		requiredVersion = 0.1;
 		requiredAddons[] = {"CBA_MAIN"};
 		author[] = {"10Dozen"};
-		version = "3";
+		version = "4";
 	};
 };
 
-class Extended_PostInit_EventHandlers
+class Extended_PreInit_EventHandlers
 {
 	dzn_CasualGamingXEH = call compile preprocessFileLineNumbers "\dzn_CasualGaming\Init.sqf";
 };

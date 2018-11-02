@@ -1,3 +1,5 @@
+#include "..\macro.hpp"
+
 /*
  *	Auto Healing
  *
@@ -19,20 +21,35 @@ dzn_CG_fnc_setAutoHealSettings = {
 };
 
 dzn_CG_fnc_heal = {
+	params ["_showHint"];
+	// --- Vanilla healing
 	player setDamage 0;
-	[player ,player] call ace_medical_fnc_treatmentAdvanced_fullHealLocal;
-	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Healed</t>";
+
+	// --- ACE Healing
+	if (!isNil "ace_medical_fnc_treatmentAdvanced_fullHealLocal") then {
+		[player ,player] call ace_medical_fnc_treatmentAdvanced_fullHealLocal;
+	};
+
+	// --- BIS Revive
+	["", 1, player] call BIS_fnc_reviveOnState;
+	player setVariable ["#rev", 1];
+
+	if (_showHint) then {
+		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Healed</t>";
+	};
+	[player, 1] call GVAR(fnc_logUserAction);
 };
 	
 dzn_CG_fnc_healAll = {	
-	call dzn_CG_fnc_heal;
+	[true] call dzn_CG_fnc_heal;
 	
 	{
-		[] remoteExec ["dzn_CG_fnc_heal", _x];
-		sleep 0.1;
+		[true] remoteExec ["dzn_CG_fnc_heal", _x];
+		sleep 0.5;
 	} forEach (call BIS_fnc_listPlayers);
 	
 	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Global Healing done</t>";
+	[player, 2] call GVAR(fnc_logUserAction);
 };
 
 dzn_CG_fnc_toggleFatigue = {
@@ -55,26 +72,22 @@ dzn_CG_fnc_toggleFatigue = {
 		"<t size='1.5' shadow='1'><t color='#FFD000' >Fatigue</t> %1</t>"
 		, if (_this) then { "ON" } else { "OFF" }
 	];
+
+	[player, 3] call GVAR(fnc_logUserAction);
 };
 
 [] spawn {
 	sleep 2;
 	
-	dzn_CG_AutoHealEnabled = false;
-	dzn_CG_AutoHealTimer = 30;
-	dzn_CG_ACE_Available = !isNil "ace_medical_fnc_treatmentAdvanced_fullHealLocal";
-	
+	GVAR(AutoHealEnabled) = false;
+	GVAR(AutoHealTimer) = 30;	
 
 	while { true } do {
 		sleep 0.5;
 		
 		if (dzn_CG_AutoHealEnabled) then {
-			sleep dzn_CG_AutoHealTimer;
-			
-			player setDamage 0;
-			if (dzn_CG_ACE_Available) then {
-				[player ,player] call ace_medical_fnc_treatmentAdvanced_fullHealLocal;
-			};
+			sleep GVAR(AutoHealTimer);
+			[false] call GVAR(fnc_heal);
 		};
 	};
 };
