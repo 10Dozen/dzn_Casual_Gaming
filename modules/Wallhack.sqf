@@ -1,4 +1,4 @@
-
+#include "..\macro.hpp"
 
 dzn_CG_WallhackEnabled = false;
 
@@ -11,6 +11,8 @@ dzn_CG_fnc_toggleWallhack = {
 		"<t size='1.5' color='#FFD000' shadow='1'>Wallhack toggled to %1</t>"
 		, if (dzn_CG_WallhackEnabled) then { "ON" } else { "OFF" }
 	];
+
+	[player, 17] call GVAR(fnc_logUserAction);
 };
 
 
