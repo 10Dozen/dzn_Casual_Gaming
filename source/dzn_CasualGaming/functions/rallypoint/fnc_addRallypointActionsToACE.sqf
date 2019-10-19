@@ -1,0 +1,45 @@
+#include "..\..\macro.hpp"
+
+/* ----------------------------------------------------------------------------
+Function: dzn_CasualGaming_fnc_addRallypointActionsToACE
+
+Description:
+	Creats ACE Intercation menu actions to use rallypoint system.
+
+Parameters:
+	none
+
+Returns:
+	<BOOL> - is added
+
+Examples:
+    (begin example)
+		_added = [] call dzn_CasualGaming_fnc_addRallypointActionsToACE; // true
+    (end)
+
+Author:
+	10Dozen
+---------------------------------------------------------------------------- */
+
+if (isNil "ace_interact_menu_fnc_addActionToClass") exitWith { false };
+
+private _player = typeof player;
+private _actionFormat = [_player, 1, ["ACE_SelfActions",SVAR(RallypointNode)]];
+
+// --- Root node
+[
+	_player,1,["ACE_SelfActions"]
+	, [SVAR(RallypointNode), "Rallypoint", "", {}, {}] call ace_interact_menu_fnc_createAction
+] call ace_interact_menu_fnc_addActionToClass;
+
+// --- Actions
+{
+	private _action = _x call ace_interact_menu_fnc_createAction;
+	(+_actionFormat + [_action]) call ace_interact_menu_fnc_addActionToClass;
+} forEach [
+	[SVAR(SetRallypointNode), "Set Rallypoint", "", { [0] call GVAR(fnc_setRallypoint) }, {true}]
+	, [SVAR(GoToMyRallypointNode), "Deploy to My Rallypoint", "", { [0] spawn GVAR(fnc_moveToRallypoint) }, {call GVAR(fnc_isRallypointExist) # 0}]
+	, [SVAR(GoToSquadRallypointNode), "Deploy to Squad Rallypoint", "", { [1] spawn GVAR(fnc_moveToRallypoint) }, {call GVAR(fnc_isRallypointExist) # 1} ]
+];
+
+true
