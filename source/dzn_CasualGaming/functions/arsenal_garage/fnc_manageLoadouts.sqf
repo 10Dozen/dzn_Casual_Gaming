@@ -35,7 +35,7 @@ switch (toUpper _mode) do {
 			_msg = format ["Loadout %1 saved", _slotID];
 		} else {
 			_namespace = profileNamespace;
-			_msg = format ["Persistant Loadout P%1 saved", _slotID - 99];
+			_msg = format ["Persistant Loadout P%1 saved", _slotID - 100];
 		};
 
 		_namespace setVariable [format ["%1_%2", SVAR(Loadout), _slotID], getUnitLoadout player];
@@ -50,7 +50,7 @@ switch (toUpper _mode) do {
 			_msg = format ["Loadout %1 loaded", _slotID]; 
 		} else {
 			_namespace = profileNamespace;
-			_msg = format ["Persistant Loadout P%1 loaded", _slotID - 99];
+			_msg = format ["Persistant Loadout P%1 loaded", _slotID - 100];
 		};
 
 		private _loadout = _namespace getVariable [format ["%1_%2", SVAR(Loadout), _slotID], []];
@@ -77,6 +77,7 @@ switch (toUpper _mode) do {
 		if (isNull cursorTarget) exitWith { hint "No unit under the cursor!"; };
 
 		cursorTarget setUnitLoadout (getUnitLoadout player);
+		["REMOVE_COPY_ACTION"] call SELF;
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied to unit!</t>";
 		[player, 10] call GVAR(fnc_logUserAction);
@@ -85,19 +86,19 @@ switch (toUpper _mode) do {
 		openMap false;
 		closeDialog 2;
 		["REMOVE_COPY_ACTION"] call SELF;
-
-		private _copyToID = player addAction [
-			"<t color='#FF0000'>COPY MY LOADOUT TO UNIT</t>"
-			, {	["COPY_LOADOUT_TO"] call SELF; }
-			, "", 6, true, true
-		];
+		
 		private _copyFromID = player addAction [
-			"<t color='#FF0000'>COPY UNIT LOADOUT</t>"
+			"<t color='#FF0000'>Copy LOADOUT FROM unit</t>"
 			, {	["COPY_LOADOUT_FROM"] call SELF; }
 			, "", 6, true, true
 		];
+		private _copyToID = player addAction [
+			"<t color='#FF0000'>Copy MY LOADOUT TO unit</t>"
+			, {	["COPY_LOADOUT_TO"] call SELF; }
+			, "", 6, true, true
+		];
 
-		player setVariable [SVAR(CopyLoadoutActionsID), [_copyToID, _copyFromID]];
+		player setVariable [SVAR(CopyLoadoutActionsID), [_copyFromID,_copyToID]];
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>To copy loadout</t><br /><br />Point to unit and use action!";
 	};

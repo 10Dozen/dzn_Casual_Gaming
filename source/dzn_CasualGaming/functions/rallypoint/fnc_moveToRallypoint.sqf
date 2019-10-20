@@ -24,23 +24,29 @@ Author:
 
 params["_modeID"];
 
-private _pos = [0,0,0];
+private _namespace = objNull;
+private _varname = "";
 private _msgWord = "";
 	
 switch (_modeID) do {
 	case 0: {
 		_msgWord = "My";
-		_pos = player getVariable [SVAR(RallypointPos), []];
+		_namespace = player;
+		_varname = SVAR(Rallypoint);
 	};
 	case 1: {
 		_msgWord = "Squad";
-		_pos = (leader group player) getVariable [SVAR(RallypointPos), []];
+		_namespace = (leader group player);
+		_varname = SVAR(Rallypoint);
 	};
 	case 2: {
 		_msgWord = "Global";
-		_pos = if (!isNil SVAR(GlobalRallypoint)) then { getPos GVAR(GlobalRallypoint) } else { [] };
+		_namespace = missionNamespace;
+		_varname = SVAR(GlobalRallypoint);
 	};
 };
+
+private _pos = if (isNull {_namespace getVariable [_varname, objNull]}) then { [] } else { getPos (_namespace getVariable _varname) };
 	
 if (_pos isEqualTo []) exitWith {
 	hint parseText format [

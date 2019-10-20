@@ -32,9 +32,7 @@ private _publish = false;
 
 switch (_modeID) do {
 	case 0;
-	case 1: {
-		player setVariable [SVAR(RallypointPos), _pos, true];
-		
+	case 1: {		
 		_namespace = player;
 		_rpMrkName = SVAR(RallypointMrk);
 		_rpName = SVAR(Rallypoint);

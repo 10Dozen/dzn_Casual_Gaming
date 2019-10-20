@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+#define SELF GVAR(fnc_serviceVehicle)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_serviceVehicle
@@ -35,6 +36,10 @@ params ["_mode", ["_args",[]]];
 
 private _title = "";
 private _veh = vehicle player;
+
+if (_veh isEqualTo player) exitWith {
+	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Player is not in vehicle!";
+};
 	
 switch (toUpper _mode) do {
 	case "REPAIR": {
@@ -53,9 +58,14 @@ switch (toUpper _mode) do {
 		[player, 14] call GVAR(fnc_logUserAction);
 	};
 	case "DRIVER_ADD": {
+		if (!isNull (driver _veh)) exitWith {
+			_title = "Driver NOT added. Driver place is already occupied!";
+		};
+
 		_title = "Driver added";
 		private _grp = createGroup (side player);
 		private _u = _grp createUnit [typeof player, getPos _veh, [], 0, "FORM"];
+		_u setUnitLoadout (getUnitLoadout player);
 		_u assignAsDriver _veh;
 		_u moveInDriver _veh;
 		_veh setVariable [SVAR(AIDriver), _u];
@@ -105,7 +115,7 @@ switch (toUpper _mode) do {
 	case "HOVER_TOGGLE": {
 		openMap false;
 
-		if (!isNil SVAR(VehicleHover_PFH)) then {
+		if (isNil SVAR(VehicleHover_PFH)) then {
 			_title = "Auto-hover is ON";
 
 			GVAR(VehicleHover_PFH) = [{
@@ -116,7 +126,8 @@ switch (toUpper _mode) do {
 			}] call CBA_fnc_addPerFrameHandler;
 		} else {
 			_title = "Auto-hover is OFF";
-			GVAR(VehicleHover_PFH) call CBA_fnc_removePerFrameHandler;
+			[GVAR(VehicleHover_PFH)] call CBA_fnc_removePerFrameHandler;
+			GVAR(VehicleHover_PFH) = nil;
 		};
 		
 		[player, 22] call GVAR(fnc_logUserAction);
@@ -136,16 +147,16 @@ switch (toUpper _mode) do {
 		GVAR(ChangeSeatsActionsVehicle) = _veh;
 		GVAR(ChangeSeatsActions) = [];
 		{
-			_x params ["","_role","_cargoID","_turretID"]
+			_x params ["","_role","_cargoID","_turretID"];
 
 			private ["_actionTitle"];
 			if (_cargoID > -1) then {
 				_actionTitle = format ["[ Move in %1 %2 ]", toUpper _role, _cargoID];
 			} else {
-				if (_turretID > -1) then {
-					_actionTitle = format ["[ Move in %1 %2 ]", toUpper _role, _turretID];
-				} else {
+				if (_turretID isEqualTo []) then {
 					_actionTitle = format ["[ Move in %1 ]", toUpper _role];
+				} else {
+					_actionTitle = format ["[ Move in %1 %2 ]", toUpper _role, _turretID];
 				};
 			};
 
@@ -173,27 +184,33 @@ switch (toUpper _mode) do {
 		_title = "Change seat actions removed!";
 	};
 	case "CHANGE_SEAT": {
-		_args params ["_role", "_cargoID", "_turretID"];
-
 		// --- Move out and move in player
+		player allowDamage false;
 		moveOut player;
-		switch (toLower _role) do {
-			case "driver": {
-				[{ player moveInDriver _this; }, _veh] call CBA_fnc_execNextFrame;
-			};
-			case "gunner": {
-				[{ player moveInGunner _this; }, _veh] call CBA_fnc_execNextFrame;
-			};
-			case "turret": {
-				[{ player moveInTurret _this; }, [_veh, _turretID]] call CBA_fnc_execNextFrame;
-			};
-			case "cargo": {
-				[{ player moveInCargo _this; }, [_veh, _cargoID]] call CBA_fnc_execNextFrame;
-			};
-		};
+
+		// --- Move in
+		[
+			{
+				_this params ["_veh","_args"];
+				_args params ["_role", "_cargoID", "_turretID"];
+
+				switch (toLower _role) do {
+					case "driver": { player moveInDriver _veh; };
+					case "gunner": { player moveInGunner _veh; };
+					case "turret": { player moveInTurret [_veh, _turretID]; };
+					case "cargo": { player moveInCargo [_veh, _cargoID] };
+				};
+
+				[{
+					player allowDamage false;
+					["CHANGE_SEAT_ACTION_ADD"] call SELF;
+				}, 0.5] call CBA_fnc_execNextFrame;
+			}
+			, [_veh, _args]
+		] call CBA_fnc_execNextFrame;
 
 		// --- Re-add actions to exclude new player's position and add previous to actions
-		["CHANGE_SEAT_ACTION_ADD"] call SELF;
+		
 		_title = "Seat changed!";
 	};
 };

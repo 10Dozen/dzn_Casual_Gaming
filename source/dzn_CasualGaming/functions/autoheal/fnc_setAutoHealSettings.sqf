@@ -24,12 +24,15 @@ Author:
 	10Dozen
 ---------------------------------------------------------------------------- */
 
-if (typename _this == "BOOL") then {
-	GVAR(AutoHealEnabled) = _this;
+params ["_setting"];
+
+if (typename _setting == "BOOL") then {
+	GVAR(AutoHealEnabled) = _setting;
 } else {
-	GVAR(AutoHealTimer) = _this;
-	[] call GVAR(fnc_setAuthoHealHandler);
+	GVAR(AutoHealTimer) = _setting;
 };
+
+[] call GVAR(fnc_setAuthoHealHandler);
 	
 hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Auto-Heal</t>
 	<br /><br />%1

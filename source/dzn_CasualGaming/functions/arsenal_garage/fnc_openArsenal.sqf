@@ -28,6 +28,9 @@ closeDialog 2;
 
 switch (toUpper _mode) do {
 	case "ACE": {
+		if (isNil "ace_arsenal_fnc_openBox") exitWith {
+			hint parseText "<t size='1.5' color='#FFFFFF' shadow='1'>No ACE detected</t>";
+		};
 		[player, player, true] spawn ace_arsenal_fnc_openBox;
 	};
 	default {

@@ -61,6 +61,7 @@ switch (toUpper _mode) do {
 				private _gv = _vType createVehicle _pos;
 				_gv setPosATL _pos;
 				_gv call compile _vCustomizationStr;
+				_gv setDir (getDir player);
 				{ _gv deleteVehicleCrew _x; } forEach (crew _gv); 
 			}
 			, [_vType, _vCustomizationStr, GVAR(GaragePosition)]

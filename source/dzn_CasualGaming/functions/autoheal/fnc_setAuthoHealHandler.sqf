@@ -8,7 +8,7 @@ Description:
 	Adds auto-heal handler.
 
 Parameters:
-	none (some internal parameters are "INIT", "SET", "UPDATE_TIME" and "REMOVE")
+	none (some internal parameters are "INIT", "SET", "RESET" and "REMOVE")
 
 Returns:
 	none
@@ -26,24 +26,21 @@ params [["_mode","SET"]];
 
 switch (toUpper _mode) do {
 	case "INIT": {
-		GVAR(AutoHealEnabled) = false;
+		GVAR(AutoHealEnabled) = true;
 		GVAR(AutoHealTimer) = 30;
 		GVAR(AutoHeal_Handler) = -1;
 	};
 	case "SET": {
-		if (isNil SVAR(AutoHeal_Handler)) then {
-			["INIT"] call SELF;
+		if (isNil SVAR(AutoHeal_Handler)) then { ["INIT"] call SELF; };
+		if (GVAR(AutoHeal_Handler) > -1) then { ["REMOVE"] call SELF; };
 
-			GVAR(AutoHeal_Handler) = [
-				{ if (GVAR(AutoHealEnabled)) then { [false] call GVAR(fnc_heal); }; }
-				, GVAR(AutoHealTimer)
-			] call CBA_fnc_addPerFrameHandler;
-		} else {
-			["UPDATE_TIMER"] call SELF;
-		};
+		["START"] call SELF;
 	};
-	case "UPDATE_TIMER": {
-		(CBA_common_perFrameHandlerArray # GVAR(AutoHeal_Handler)) set [1, GVAR(AutoHealTimer)];
+	case "START": {
+		GVAR(AutoHeal_Handler) = [
+			{ if (GVAR(AutoHealEnabled)) then { [false] call GVAR(fnc_heal); }; }
+			, GVAR(AutoHealTimer)
+		] call CBA_fnc_addPerFrameHandler;
 	};
 	case "REMOVE": {
 		GVAR(AutoHeal_Handler) call CBA_fnc_removePerFrameHandler;
