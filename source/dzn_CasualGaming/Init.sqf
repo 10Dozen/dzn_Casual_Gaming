@@ -2,9 +2,17 @@
 
 /*
     TODO:
-    - Move to seat --> need to check is palce free before moveout 
-    - Hover --> If Plane -> add velocity
+    - Re-adding topics during the game (via CBA Settings)
+    - Add rating restore (to be > 0)
+    - CBA Keybind for features 
 
+    - Player group AI manager:
+        Squad:
+           [Heal All][Rally Up]
+
+        Unit #1  [Gear][Heal][Rally] : [Add][Remove]
+        Unit #2  [Gear][Heal][Rally] : [Add][Remove]
+        Unit #3  [Gear][Heal][Rally] : [Add][Remove]
 */
 
 call compile preprocessFileLineNumbers format ["%1\Functions.sqf", PATH];
@@ -20,7 +28,6 @@ GVAR(RallyPointClass) = "Pole_F";
 
 // Wallhack module
 GVAR(WallhackEnabled) = false;
-
 
 if (isServer) then {
     GVAR(LogReasons) = [
@@ -75,21 +82,3 @@ if (isServer) then {
         ["ADD_ALL"] call GVAR(fnc_addTopic);
     }, 60] call CBA_fnc_addPerFrameHandler;
 };
-
-/*
-
-[] spawn {
-    [player, 0] call GVAR(fnc_logUserAction);
-
-    dzn_CG_Loadout_1 = getUnitLoadout player;
-    dzn_CG_Loadout_2 = [] + dzn_CG_Loadout_1;
-    dzn_CG_Loadout_3 = [] + dzn_CG_Loadout_1;
- 
-    dzn_CG_Loadout_4 = profileNamespace getVariable ["dzn_CG_Loadout_4", [] + dzn_CG_Loadout_1];
-    dzn_CG_Loadout_5 = profileNamespace getVariable ["dzn_CG_Loadout_5", [] + dzn_CG_Loadout_1];
-    dzn_CG_Loadout_6 = profileNamespace getVariable ["dzn_CG_Loadout_6", [] + dzn_CG_Loadout_1];
-
-
-};
-
-*/

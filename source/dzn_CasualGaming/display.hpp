@@ -1,5 +1,6 @@
+#include "macro.hpp"
 
-class dzn_CG_Console_Group: RscControlsGroup
+class GVAR(Console_Group): RscControlsGroup
 {
 	idd = 192001;
 	idc = 3100;
@@ -8,11 +9,11 @@ class dzn_CG_Console_Group: RscControlsGroup
 	w = 0.354265 * safezoneW;
 	h = 0.532079 * safezoneH;
 	colorBackground[] = {0,0,0,.75};
-	onLoad = "[] spawn { uiSleep 0.01; call dzn_CG_fnc_restoreLastExecutedAndWatch;};"
+	onLoad = "[] spawn { uiSleep 0.01; ['OPEN'] call dzn_CasualGaming_fnc_handleConsole; };"
 	
 	class controls
 	{
-		class dzn_CG_Console_DisplayMain: RscFrame
+		class GVAR(Console_DisplayMain): RscFrame
 		{
 			idc = 3101;
 			x = 0.316307 * safezoneW + safezoneX;
@@ -21,9 +22,8 @@ class dzn_CG_Console_Group: RscControlsGroup
 			h = 0.532079 * safezoneH;
 			colorBackground[] = {0,0,0,.5};
 			style=80;
-			
 		};
-		class dzn_CG_Console_InputMain: RscEdit
+		class GVAR(Console_InputMain): RscEdit
 		{
 			idc = 1400;
 			x = 0.322867 * safezoneW + safezoneX;
@@ -35,7 +35,7 @@ class dzn_CG_Console_Group: RscControlsGroup
 			font = "PuristaMedium";
 			colorBackground[] = {0,0,0,0.75};
 		};
-		class dzn_CG_Console_ServerExecBtn: RscButtonMenu
+		class GVAR(Console_ServerExecBtn): RscButtonMenu
 		{
 			idc = 1600;
 			text = "SERVER EXEC"; //--- ToDo: Localize;
@@ -45,9 +45,9 @@ class dzn_CG_Console_Group: RscControlsGroup
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
 			
-			onButtonClick = "'server' spawn dzn_CG_fnc_handleExecute";
+			onButtonClick = "['HANDLE','SERVER'] call dzn_CasualGaming_fnc_handleConsole";
 		};
-		class dzn_CG_Console_GlobalExecBtn: RscButtonMenu
+		class GVAR(Console_GlobalExecBtn): RscButtonMenu
 		{
 			idc = 1601;
 			text = "GLOBAL EXEC"; //--- ToDo: Localize;
@@ -57,9 +57,9 @@ class dzn_CG_Console_Group: RscControlsGroup
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
 			
-			onButtonClick = "'global' spawn dzn_CG_fnc_handleExecute";
+			onButtonClick = "['HANDLE','GLOBAL'] call dzn_CasualGaming_fnc_handleConsole";
 		};
-		class dzn_CG_Console_LocalExecBtn: RscButtonMenu
+		class GVAR(Console_LocalExecBtn): RscButtonMenu
 		{
 			idc = 1602;
 			text = "LOCAL EXEC"; //--- ToDo: Localize;
@@ -68,9 +68,9 @@ class dzn_CG_Console_Group: RscControlsGroup
 			w = 0.104967 * safezoneW;
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
-			onButtonClick = "'local' spawn dzn_CG_fnc_handleExecute";
+			onButtonClick = "['HANDLE','LOCAL'] call dzn_CasualGaming_fnc_handleConsole";
 		};
-		class dzn_CG_Console_PlayerExecCombo: RscCombo
+		class GVAR(Console_PlayerExecCombo): RscCombo
 		{
 			idc = 2100;
 			x = 0.322867 * safezoneW + safezoneX;
@@ -78,9 +78,9 @@ class dzn_CG_Console_Group: RscControlsGroup
 			w = 0.229616 * safezoneW;
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
-			onSetFocus = "call dzn_CG_fnc_updatePlayerList";			
+			onSetFocus = "['UPDATE_PLAYER_LIST'] call dzn_CasualGaming_fnc_handleConsole";			
 		};
-		class dzn_CG_Console_PlayerExecBtn: RscButtonMenu
+		class GVAR(Console_PlayerExecBtn): RscButtonMenu
 		{
 			idc = 1603;
 			text = "EXEC ON PLAYER"; //--- ToDo: Localize;
@@ -89,9 +89,9 @@ class dzn_CG_Console_Group: RscControlsGroup
 			w = 0.104967 * safezoneW;
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
-			onButtonClick = "'player' spawn dzn_CG_fnc_handleExecute";
+			onButtonClick = "['HANDLE','PLAYER'] call dzn_CasualGaming_fnc_handleConsole";
 		};
-		class dzn_CG_Console_WatchInput: RscEdit
+		class GVAR(Console_WatchInput): RscEdit
 		{
 			idc = 1401;
 			x = 0.322867 * safezoneW + safezoneX;
@@ -99,9 +99,9 @@ class dzn_CG_Console_Group: RscControlsGroup
 			w = 0.341144 * safezoneW;
 			h = 0.0280042 * safezoneH;
 			font = "PuristaMedium";
-			onKeyDown = "if ((_this select 1) in [28,156]) then { call dzn_CG_fnc_handleWatch }";
+			onKeyDown = "if ((_this select 1) in [28,156]) then { ['WATCH'] call dzn_CasualGaming_fnc_handleConsole; }";
 		};
-		class dzn_CG_Console_WatchOutput: RscEdit
+		class GVAR(Console_WatchOutput): RscEdit
 		{
 			idc = 1402;
 			x = 0.322867 * safezoneW + safezoneX;
@@ -110,7 +110,7 @@ class dzn_CG_Console_Group: RscControlsGroup
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
 			font = "PuristaMedium";
-			onSetFocus = "call dzn_CG_fnc_handleWatch";
+			onSetFocus = "['WATCH'] call dzn_CasualGaming_fnc_handleConsole";
 		};
 		class RscStructuredText_1101: RscStructuredText
 		{

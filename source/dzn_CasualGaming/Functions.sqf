@@ -17,18 +17,19 @@ COMPILE_FUNCTION(autoheal,fnc_toggleFatigue);
 COMPILE_FUNCTION(rallypoint,fnc_checkRallypointExists);
 COMPILE_FUNCTION(rallypoint,fnc_setRallypoint);
 COMPILE_FUNCTION(rallypoint,fnc_moveToRallypoint);
+COMPILE_FUNCTION(rallypoint,fnc_removeRallypoint);
 COMPILE_FUNCTION(rallypoint,fnc_addRallypointActionsToACE);
 
 // --- Arsenal & Garage component 
-COMPILE_FUNCTION(arsenal_garage,fnc_openArsenal);
-COMPILE_FUNCTION(arsenal_garage,fnc_openGarage);
-COMPILE_FUNCTION(arsenal_garage,fnc_manageLoadouts);
+COMPILE_FUNCTION(arsenal,fnc_openArsenal);
+COMPILE_FUNCTION(arsenal,fnc_manageLoadouts);
 
 // --- Respawn component 
 COMPILE_FUNCTION(respawn,fnc_respawnManager);
 
-// --- Vehicle service 
-COMPILE_FUNCTION(vehicleService,fnc_serviceVehicle);
+// --- Vehicle  
+COMPILE_FUNCTION(vehicle,fnc_manageVehicle);
+COMPILE_FUNCTION(vehicle,fnc_openGarage);
 
 // --- Misc component
 COMPILE_FUNCTION(misc,fnc_toggleWallhack);

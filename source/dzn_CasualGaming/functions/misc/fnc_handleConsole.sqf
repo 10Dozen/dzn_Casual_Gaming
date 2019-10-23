@@ -17,6 +17,7 @@ Returns:
 Examples:
     (begin example)
 		["HANDLE"] call dzn_CasualGaming_fnc_handleConsole;
+		["RESTORE_LAST"] call dzn_CasualGaming_fnc_handleConsole;
     (end)
 
 Author:
@@ -26,6 +27,11 @@ Author:
 params [["_mode","HANDLE"],["_payload",[]]];
 
 switch (toUpper _mode) do {
+	case "OPEN": {
+		["UPDATE_PLAYER_LIST"] call SELF;
+		["RESTORE_LAST"] call SELF;
+		["WATCH"] call SELF;
+	};
 	case "UPDATE_PLAYER_LIST": {
 		private _list = call BIS_fnc_listPlayers;
 		private _ctrl = findDisplay 192001 displayCtrl 2100;
@@ -43,19 +49,21 @@ switch (toUpper _mode) do {
 	case "EXECUTE": {
 		_payload params ["_code", "_execType"];
 
-		switch toLower(_execType) do {
-			case "local": {		[] spawn _code; };
-			case "global": {	[[], _code] remoteExec ["bis_fnc_call", 0]; };
-			case "server": {	[[], _code] remoteExec ["bis_fnc_call", 2]; };
-			case "player": {
+		switch toUpper(_execType) do {
+			case "LOCAL": {		[] spawn _code; };
+			case "GLOBAL": {	[[], _code] remoteExec ["bis_fnc_call", 0]; };
+			case "SERVER": {	[[], _code] remoteExec ["bis_fnc_call", 2]; };
+			case "PLAYER": {
 				[[], _code] remoteExec [
 					"bis_fnc_call"
-					, (GVAR(PlayersList) # { _x # 0 == (lbText [2100, lbCurSel 2100]) }) # 0 # 1
+					, (GVAR(PlayersList) select { _x # 0 == (lbText [2100, lbCurSel 2100]) }) # 0 # 1
 				];
 			};
 		};
 		
 		hint "Executed";
+		
+		[{ ["WATCH"] call SELF; }] call CBA_fnc_execNextFrame;
 	};
 	case "HANDLE": {
 		private _type = _payload;
@@ -69,7 +77,7 @@ switch (toUpper _mode) do {
 		private _output = call compile _code;
 		profileNamespace setVariable [SVAR(Console_LastWatch), _code];
 		
-		ctrlSetText [1402, str(_output)];
+		ctrlSetText [1402, if (isNil "_output") then { "--nil--" } else { str(_output) }];
 	};
 	case "RESTORE_LAST": {
 		if (!isNil {profileNamespace getVariable SVAR(Console_LastWatch)}) then {

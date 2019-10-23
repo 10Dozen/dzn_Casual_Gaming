@@ -21,9 +21,10 @@ Author:
 	10Dozen
 ---------------------------------------------------------------------------- */
 
+GVAR(WallhackEnabled) = !( GVAR(WallhackEnabled) );
 if (GVAR(WallhackEnabled)) then {
 	GVAR(Wallhack_PFH) = [GVAR(fnc_handleWallhackEH)] call CBA_fnc_addPerFrameHandler;
-} else {
+} else {	
 	GVAR(Wallhack_PFH) call CBA_fnc_removePerFrameHandler;
 };
 

@@ -53,8 +53,8 @@ switch (toUpper _mode) do {
 			/* Reversed order, as last added displayed first in the list */
 			"MISC"
 			,"RALLYPOINT"
-			,"VEHICLE_SERVICE"
-			,"ARSENAL_GARAGE"
+			,"VEHICLE"
+			,"ARSENAL"
 			,"RESPAWN"
 			,"AUTOHEAL"
 		];
@@ -104,9 +104,9 @@ switch (toUpper _mode) do {
 					]
 				];
 			};
-			case "ARSENAL_GARAGE": {
+			case "ARSENAL": {
 				_result = [
-					"Arsenal & Garage"
+					"Arsenal"
 					, format [
 						"<font color='#12C4FF' size='14'>Arsenal</font>
 						<br />[<font color='#A0DB65'><execute expression='[""BIS""] spawn %1;'>Open Arsenal</execute></font>]  |  [<font color='#A0DB65'><execute expression='[""ACE""] spawn %1;'>Open ACE Arsenal</execute></font>]
@@ -126,19 +126,15 @@ switch (toUpper _mode) do {
 						<br />Get unit loadout:
 						<br />  [<font color='#A0DB65'><execute expression='[""ADD_COPY_ACTION""] call %2;'>Copy loadout</execute></font>] | 
 						[<font color='#A0DB65'><execute expression='[""REMOVE_COPY_ACTION""] call %2;'>Disable copy loadout</execute></font>]
-						<br />
-						<br /><font color='#12C4FF' size='14'>Garage</font>
-						<br />[<font color='#A0DB65'><execute expression='[] spawn %3;'>Open Garage</execute></font>]
 						"
 						, SVAR(fnc_openArsenal)
 						, SVAR(fnc_manageLoadouts)
-						, SVAR(fnc_openGarage)
 					]
 				];
 			};
-			case "VEHICLE_SERVICE": {
+			case "VEHICLE": {
 				_result = [
-					"Vehicle Service"
+					"Vehicle"
 					, format [
 						"<font color='#12C4FF' size='14'>Vehicle Service</font>
 						<br />Apply for player's vehicle:
@@ -150,14 +146,17 @@ switch (toUpper _mode) do {
 						[<font color='#A0DB65'><execute expression='[""DRIVER_REMOVE""] call %1;'>REMOVE DRIVER</execute></font>]
 						<br />
 						<br />  [<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT""] call %1;'>SET IN FLIGHT</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[""LAND""] call %1;'>LAND</execute></font>]  |  
-						[<font color='#A0DB65'><execute expression='[""HOVER_TOGGLE""] call %1;'>Toggle HOVER ON/OFF</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""LAND""] call %1;'>LAND</execute></font>]           
+						[<font color='#A0DB65'><execute expression='[""HOVER_TOGGLE""] call %1;'>HOVER ON/OFF</execute></font>] 
 						<br />
 						<br />Move to seat:
-						<br />  [<font color='#A0DB65'><execute expression='[""CHANGE_SEAT_ACTION_ADD""] call %1;'>Enable change seat</execute></font>] | 
-						[<font color='#A0DB65'><execute expression='[""CHANGE_SEAT_ACTION_REMOVE""] call %1;'>Disable change seat</execute></font>]
+						<br />  [<font color='#A0DB65'><execute expression='[""CHANGE_SEAT_MENU""] call %1;'>CHANGE SEAT</execute></font>]
+						<br />
+						<br /><font color='#12C4FF' size='14'>Garage</font>
+						<br />[<font color='#A0DB65'><execute expression='[] spawn %2;'>Open Garage</execute></font>]
 						"
-						, SVAR(fnc_serviceVehicle)
+						, SVAR(fnc_manageVehicle)
+						, SVAR(fnc_openGarage)
 					]
 				];
 			};
@@ -190,12 +189,13 @@ switch (toUpper _mode) do {
 					, format [
 						"<font color='#12C4FF' size='14'>Camera</font>
 						<br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn BIS_fnc_camera; [player, 18] call %1;'>Open Splendid Camera</execute></font>]
-						<br />[<font color='#A0DB65'><execute expression='openMap false; closeDialog 2; [] spawn { createDialog ""dzn_CasualGaming_Console_Group""}; [player, 19] call %1;'>Open Console</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='openMap false; closeDialog 2; [] spawn { createDialog ""%3"" }; [player, 19] call %1;'>Open Console</execute></font>]
 						<br />
 						<br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn %2;'>Toggle Wallhack (300m)</execute></font>]
 						"
 						, SVAR(fnc_logUserAction)
 						, SVAR(fnc_toggleWallhack)
+						, SVAR(Console_Group)
 					]
 				];
 			};

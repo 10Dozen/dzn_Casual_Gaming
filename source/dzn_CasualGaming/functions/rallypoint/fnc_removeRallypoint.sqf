@@ -44,6 +44,8 @@ switch (_modeID) do {
 	};
 };
 
+
+
 // --- Nulify rallypoint related info 
 if !(isNull (_namespace getVariable [_rpName, objNull])) then {
 	deleteVehicle (_namespace getVariable _rpName);

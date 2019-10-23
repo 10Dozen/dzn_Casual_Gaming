@@ -1,8 +1,9 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_serviceVehicle)
+#define SELF GVAR(fnc_manageVehicle)
+#define QSELF SVAR(fnc_manageVehicle)
 
 /* ----------------------------------------------------------------------------
-Function: dzn_CasualGaming_fnc_serviceVehicle
+Function: dzn_CasualGaming_fnc_manageVehicle
 
 Description:
 	Apply service action to vehicle:
@@ -25,7 +26,7 @@ Returns:
 
 Examples:
     (begin example)
-		["REFUEL"] call dzn_CasualGaming_fnc_serviceVehicle; // refuels vehicle
+		["REFUEL"] call dzn_CasualGaming_fnc_manageVehicle; // refuels vehicle
     (end)
 
 Author:
@@ -36,6 +37,7 @@ params ["_mode", ["_args",[]]];
 
 private _title = "";
 private _veh = vehicle player;
+private _result = -1;
 
 if (_veh isEqualTo player) exitWith {
 	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Player is not in vehicle!";
@@ -95,7 +97,7 @@ switch (toUpper _mode) do {
 		[_veh, 200, 2] call CBA_fnc_setHeight;
 		if (getPosASL _veh # 2 < 10) exitWith { _title = "Set In Flight -- Aborted"; };
 		
-		_veh setVelocityModelSpace [0, if (_veh isKindOf "Plane") then { 150 } else { 50 }, 0];
+		_veh setVelocityModelSpace [0, if (_veh isKindOf "Plane") then { 150 } else { 30 }, 0];
 	
 		_title = "Set In Flight";
 		[player, 16] call GVAR(fnc_logUserAction);
@@ -126,65 +128,88 @@ switch (toUpper _mode) do {
 			}] call CBA_fnc_addPerFrameHandler;
 		} else {
 			_title = "Auto-hover is OFF";
-			[GVAR(VehicleHover_PFH)] call CBA_fnc_removePerFrameHandler;
-			GVAR(VehicleHover_PFH) = nil;
+			if (isNil SVAR(VehicleMenu)) then {
+				GVAR(VehicleMenu) = [
+					["RELEASE SPEED", true]
+					,["0 kph", [2],"",-5,[["expression",format["['HOVER_RELEASE', 0] call %1", QSELF]]], "1","1"]
+					,["50 kph", [3],"",-5,[["expression",format["['HOVER_RELEASE', 50] call %1", QSELF]]], "1","1"]
+					,["200 kph", [4],"",-5,[["expression",format["['HOVER_RELEASE', 200] call %1", QSELF]]], "1","1"]
+					,["400 kph", [5],"",-5,[["expression",format["['HOVER_RELEASE', 400] call %1", QSELF]]], "1","1"]
+				];
+			};
+
+			showCommandingMenu format ["#USER:%1", SVAR(VehicleMenu)];
 		};
 		
 		[player, 22] call GVAR(fnc_logUserAction);
 	};
-	case "CHANGE_SEAT_ACTION_ADD": {
+	case "HOVER_RELEASE": {
+		// --- Conversion from KPH to M/S
+		private _velocity = _args * 1000 / 3600;
+		[GVAR(VehicleHover_PFH)] call CBA_fnc_removePerFrameHandler;
+		GVAR(VehicleHover_PFH) = nil;
+		[{
+			(vehicle player) setVelocityModelSpace [0, _this, 2];
+		}, _velocity] call CBA_fnc_execNextFrame;
+	};
+	case "CHANGE_SEAT_MENU": {
 		// --- Get all empty seats
-		private _seats = []
-			+ fullCrew [_veh, "driver", true] 
-			+ fullCrew [_veh, "gunner", true]
-			+ fullCrew [_veh, "turret", true]
-			+ fullCrew [_veh, "cargo", true] 
-			- fullCrew _veh;
+		private _seats = ["GET_EMPTY_SEATS"] call SELF;
 
-		// --- Clear old actions and add new 
-		["CHANGE_SEAT_ACTION_REMOVE"] call SELF;
-
-		GVAR(ChangeSeatsActionsVehicle) = _veh;
-		GVAR(ChangeSeatsActions) = [];
+		// --- Format menu
+		GVAR(ChangeSeatsMenu) = [["CHANGE SEAT", true]];
 		{
-			_x params ["","_role","_cargoID","_turretID"];
+			_x params ["","_role","_cargoID","_turretID","_isFFV"];
 
 			private ["_actionTitle"];
 			if (_cargoID > -1) then {
-				_actionTitle = format ["[ Move in %1 %2 ]", toUpper _role, _cargoID];
+				// --- Cargo
+				if (_isFFV) then {
+					_actionTitle = format ["CARGO / FFV %1", _turretID];
+				} else {
+					_actionTitle = format ["%1 %2", toUpper _role, _cargoID];
+				};
 			} else {
 				if (_turretID isEqualTo []) then {
-					_actionTitle = format ["[ Move in %1 ]", toUpper _role];
+					// --- Driver
+					_actionTitle = format ["%1", toUpper _role];
 				} else {
-					_actionTitle = format ["[ Move in %1 %2 ]", toUpper _role, _turretID];
+					// --- Turret
+					_actionTitle = format ["%1 %2", toUpper _role, _turretID];
 				};
 			};
+			private _actionArgs = [_role, _cargoID, _turretID];
 
-			private _action = _veh addAction [
-				format ["<t color='#FF6633'>%1</t>", _actionTitle]
-				, {	["CHANGE_SEAT", _this # 3] call SELF; }
-				, [_role, _cargoID, _turretID], 6, true, true
+			GVAR(ChangeSeatsMenu) pushBack [
+				_actionTitle
+				, [2 + _forEachIndex]
+				,"",-5
+				,[["expression", format ["['CHANGE_SEAT', %2] call %1", QSELF, _actionArgs]]]
+				,"1"
+				,"1"
 			];
-
-			GVAR(ChangeSeatsActions) pushBack _action;
 		} forEach _seats;
 
-		_title = "Change seat actions added!";
-	};
-	case "CHANGE_SEAT_ACTION_REMOVE": {
-		if (isNil SVAR(ChangeSeatsActions)) exitWith {};
-
-		{
-			GVAR(ChangeSeatsActionsVehicle) removeAction _x;
-		} forEach GVAR(ChangeSeatsActions);
-
-		GVAR(ChangeSeatsActions) = nil;
-		GVAR(ChangeSeatsActionsVehicle) = nil;
-
-		_title = "Change seat actions removed!";
+		showCommandingMenu format ["#USER:%1", SVAR(ChangeSeatsMenu)];
+		_title = "Select seat!";
 	};
 	case "CHANGE_SEAT": {
+		_args params ["_role", "_cargoID", "_turretID"];
+
+		// -- Get empty seats and verify that seat selected by player is still empty
+		private _seats = ["GET_EMPTY_SEATS"] call SELF;
+		private _hasTargetSeat = _seats findIf {
+			_x params ["","_xrole","_xcid","_xtid"];
+			_xrole isEqualTo _role && _xcid isEqualTo _cargoID && _xtid isEqualTo _turretID
+		};
+
+		if (_hasTargetSeat < 0) exitWith {
+			_title = "Selected seat is OCCUPIED!";
+		};
+
 		// --- Move out and move in player
+		GVAR(vehicleEngineOn) = isEngineOn _veh;
+		openMap false;
 		player allowDamage false;
 		moveOut player;
 
@@ -196,26 +221,40 @@ switch (toUpper _mode) do {
 
 				switch (toLower _role) do {
 					case "driver": { player moveInDriver _veh; };
-					case "gunner": { player moveInGunner _veh; };
-					case "turret": { player moveInTurret [_veh, _turretID]; };
 					case "cargo": { player moveInCargo [_veh, _cargoID] };
+					case "gunner";
+					case "turret": { 
+						if (_turretID isEqualTo []) then {
+							player moveInGunner _veh;
+						} else {
+							player moveInTurret [_veh, _turretID]; 
+						};
+					};
 				};
 
-				[{
-					player allowDamage false;
-					["CHANGE_SEAT_ACTION_ADD"] call SELF;
-				}, 0.5] call CBA_fnc_execNextFrame;
+				if (GVAR(vehicleEngineOn)) then {
+					_veh engineOn true;
+				};
+
+				[{player allowDamage false;}, 0.5] call CBA_fnc_execNextFrame;
 			}
 			, [_veh, _args]
 		] call CBA_fnc_execNextFrame;
-
-		// --- Re-add actions to exclude new player's position and add previous to actions
 		
 		_title = "Seat changed!";
 	};
+	case "GET_EMPTY_SEATS": {
+		_result = []
+			+ fullCrew [_veh, "driver", true] 
+			+ fullCrew [_veh, "gunner", true]
+			+ fullCrew [_veh, "turret", true]
+			+ fullCrew [_veh, "cargo", true] 
+			- fullCrew _veh;
+	};
 };
 
-hint parseText format [
-	"<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />%1"
-	, toUpper(_title)
-];
+if !(_title isEqualTo "") then {
+	hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />%1", _title];
+};
+
+_result

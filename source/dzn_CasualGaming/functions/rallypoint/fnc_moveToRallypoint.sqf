@@ -46,7 +46,7 @@ switch (_modeID) do {
 	};
 };
 
-private _pos = if (isNull {_namespace getVariable [_varname, objNull]}) then { [] } else { getPos (_namespace getVariable _varname) };
+private _pos = if (isNull (_namespace getVariable [_varname, objNull])) then { [] } else { getPos (_namespace getVariable _varname) };
 	
 if (_pos isEqualTo []) exitWith {
 	hint parseText format [
