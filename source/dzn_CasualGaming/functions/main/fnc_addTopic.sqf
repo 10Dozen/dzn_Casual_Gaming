@@ -52,6 +52,7 @@ switch (toUpper _mode) do {
 		} forEach [
 			/* Reversed order, as last added displayed first in the list */
 			"MISC"
+			,"GROUP_AI"
 			,"RALLYPOINT"
 			,"VEHICLE"
 			,"ARSENAL"
@@ -199,8 +200,47 @@ switch (toUpper _mode) do {
 					]
 				];
 			};
+			case "GROUP_AI": {
+				_result = [
+					"Group AI"
+					, format [
+						"<font color='#12C4FF' size='14'>Rating</font>
+						<br />[<font color='#A0DB65'><execute expression='[true] spawn %1;'>Set Positive Rating</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='[false] spawn %2;'>Set Positive Rating for All</execute></font>]
+						<br />
+						<br /><font color='#12C4FF' size='14'>SQUAD</font>
+						<br />[<font color='#A0DB65'><execute expression='[0] spawn %3;'>BECOME LEADER</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[0] spawn %3;'>ADD UNIT</execute></font>]                                          
+						[<font color='#AB483E'><execute expression='[0] spawn %3;'>Delete Group</execute></font>]
+						<br />
+						<br />[<font color='#A0DB65'><execute expression='[""UNIT_HEAL"", units player] spawn %3;'>Heal All</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNIT_HEAL"", units player] spawn %3;'>Rearm All</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNIT_RALLY"", units player] spawn %3;'>Rally Up</execute></font>]
+						<br />
+						<br /><font color='#12C4FF' size='14'>GROUP MANAGEMENT</font>
+						<br />[<font color='#A0DB65'><execute expression='[""MENU_SHOW""] spawn %3;'>Manage group</execute></font>] 
+						<br />
+						<br /><font color='#888888'>Note: Open manage menu, select group members and then choose action to apply from manage menu</font>
+						
+						"
+						, SVAR(fnc_ratingFix)
+						, SVAR(fnc_ratingFixAll)
+						, SVAR(fnc_manageGroup)
+
+					]
+				];
+			};
 		};
 	};
 };
 
 _result
+/*
+
+						<br />[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Heal</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Rearm</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Arsenal</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Loadout</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Rally Up</execute></font>]
+						                    [<font color='#AB483E'><execute expression='[0] spawn %1;'>Remove</execute></font>]
+											*/
