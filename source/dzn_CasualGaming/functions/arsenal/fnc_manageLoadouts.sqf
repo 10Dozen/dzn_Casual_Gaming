@@ -75,8 +75,9 @@ switch (toUpper _mode) do {
 	};
 	case "COPY_LOADOUT_TO": {
 		if (isNull cursorTarget) exitWith { hint "No unit under the cursor!"; };
+		if !(cursorTarget isKindOf "CAManBase") exitWith {};
 
-		cursorTarget setUnitLoadout (getUnitLoadout player);
+		[cursorTarget, getUnitLoadout player] call GVAR(fnc_applyLoadoutToUnit);
 		["REMOVE_COPY_ACTION"] call SELF;
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied to unit!</t>";

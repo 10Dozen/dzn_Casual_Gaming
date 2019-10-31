@@ -7,12 +7,15 @@
     - CBA Keybind for features 
 
     - Player group AI manager:
-        Squad:
-           [Heal All][Rally Up]
+        [Set Positive Rating]
 
-        Unit #1  [Gear][Heal][Rally] : [Add][Remove]
-        Unit #2  [Gear][Heal][Rally] : [Add][Remove]
-        Unit #3  [Gear][Heal][Rally] : [Add][Remove]
+        Squad:
+            [BECOME LEADER] [ADD UNIT] (red)[REMOVE ALL](red) 
+            
+            [Heal All][Rearm All][Rally Up]
+            
+        Selected units:
+            [Heal][Gear][Rally Up]  (red)[Remove](red)
 */
 
 call compile preprocessFileLineNumbers format ["%1\Functions.sqf", PATH];
@@ -61,24 +64,32 @@ if (isServer) then {
         , /* 21 */ "Vehicle landed"
         , /* 22 */ "Vehicle hover toggled"
         , /* 23 */ "Rallypoint removed"
+
+        , /* 24 */ "Rating fixed"
+        , /* 25 */ "Global Rating fixed"
+        , /* 26 */ "Leadership taken"
+        , /* 27 */ "Units added to group"
+        , /* 28 */ "Group AI Units healed"
+        , /* 29 */ "Group AI Units rallied up"
+        , /* 30 */ "Group AI Loadouts applied"
+        , /* 31 */ "Group AI Loadouts restored / rearmed"
+        , /* 32 */ "Group AI Units removed"
     ];
 };
 
 
 
 // --- Init
-[] spawn {
-    // --- Exit if not authorized
-    if !(call GVAR(fnc_checkUserAuthorized)) exitWith {};
-    [player, 0] call GVAR(fnc_logUserAction);
 
-    // --- Save default mission loadout to mission loadout 1
-    ["SAVE",1] call GVAR(fnc_manageLoadouts);  
+// --- Exit if not authorized
+if !(call GVAR(fnc_checkUserAuthorized)) exitWith {};
+[player, 0] call GVAR(fnc_logUserAction);
 
-    // --- Re-adds topics if were deleted somehow (e.g. DRO/DCO when switching to new mission)
-    GVAR(Topics_PFH) = [{
-        if (["CHECK_EXISTS"] call GVAR(fnc_addTopic)) exitWith {};
-        hint "Re-add topic";
-        ["ADD_ALL"] call GVAR(fnc_addTopic);
-    }, 60] call CBA_fnc_addPerFrameHandler;
-};
+// --- Save default mission loadout to mission loadout 1
+["SAVE",1] call GVAR(fnc_manageLoadouts);  
+
+// --- Adds topics
+[{
+    if (["CHECK_EXISTS"] call GVAR(fnc_addTopic)) exitWith {};
+    ["ADD_ALL"] call GVAR(fnc_addTopic);
+}, [], 2] call CBA_fnc_waitAndExecute;

@@ -5,6 +5,7 @@ COMPILE_FUNCTION(main,fnc_checkUserAuthorized);
 COMPILE_FUNCTION(main,fnc_logUserAction);
 COMPILE_FUNCTION(main,fnc_publishFunction);
 COMPILE_FUNCTION(main,fnc_addTopic);
+COMPILE_FUNCTION(main,fnc_applyLoadoutToUnit);
 
 // --- AutoHeal component
 COMPILE_FUNCTION(autoheal,fnc_heal);
@@ -30,6 +31,11 @@ COMPILE_FUNCTION(respawn,fnc_respawnManager);
 // --- Vehicle  
 COMPILE_FUNCTION(vehicle,fnc_manageVehicle);
 COMPILE_FUNCTION(vehicle,fnc_openGarage);
+
+// --- Group AI
+COMPILE_FUNCTION(group_ai,fnc_ratingFix);
+COMPILE_FUNCTION(group_ai,fnc_ratingFixAll);
+COMPILE_FUNCTION(group_ai,fnc_manageGroup);
 
 // --- Misc component
 COMPILE_FUNCTION(misc,fnc_toggleWallhack);

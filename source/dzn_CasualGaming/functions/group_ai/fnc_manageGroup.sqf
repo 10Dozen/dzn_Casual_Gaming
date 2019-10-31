@@ -9,37 +9,33 @@ Description:
 	Apply action to player's group and individual units:
 		- take leadership "BECOME_LEADER"
 		- add new AI to group "UNIT_ADD"
-		- clear group from AI units "UNIT_REMOVE_ALL"
-		- heal all AI units "UNIT_HEAL_ALL"
-		- rearm all AI units "UNIT_REARM_ALL"
-		- teleport all AI units to player position "UNIT_RALLY_ALL"
-		- individual actions "UNIT_HEAL", "UNIT_REARM", "UNIT_RALLY"
+		- clear group from AI units "UNIT_REMOVE"
+		- heal all AI units "UNIT_HEAL"
+		- rearm all AI units "UNIT_REARM"
+		- teleport all AI units to player position "UNIT_RALLY"
+		- individual actions "UNIT_HEAL_EXECUTE", "UNIT_REARM_EXECUTE", "UNIT_RALLY_EXECUTE"
 		- manage group menu action "MENU_SHOW"
 
 Parameters:
 	_mode -- management modes <STRING>
-	_args -- (optional) call arguments <ARRAY>
+	_args -- (optional) call arguments, mostly unit object or array of units <ANY>
+	_args2 -- (optional) extra arguments, e.g. loadout info <ANY>
 
 Returns:
 	none
 
 Examples:
     (begin example)
-		["HEAL_ALL"] call dzn_CasualGaming_fnc_manageGroup; // refuels vehicle
+		["UNIT_HEAL", groupSelectedUnits player] call dzn_CasualGaming_fnc_manageGroup; // heals selected units
     (end)
 
 Author:
 	10Dozen
 ---------------------------------------------------------------------------- */
 
-/*
-	TODO:
-		- Become Leader 
-		- Remove all AI 
-		- Remove specific unit 
-*/
-
 params ["_mode", ["_args",[]], ["_args2",[]]];
+
+private _title = "";
 
 // --- Filter only AI units 
 private _units = [];
@@ -49,10 +45,7 @@ if (typename _args == typename []) then {
 
 switch (toUpper _mode) do {
 
-
 	case "MENU_SHOW": {
-
-		_title = "Auto-hover is OFF";
 		if (isNil SVAR(GroupMenu)) then {
 			GVAR(GroupMenu) = [
 				["APPLY TO SELECTED", true]
@@ -61,7 +54,7 @@ switch (toUpper _mode) do {
 				,["Re-arm", [4],"",-5,[["expression",format["['UNIT_REARM', groupSelectedUnits player] call %1", QSELF]]], "1","1"]			
 				,["Apply Loadout", [5], format ["#USER:%1", SVAR(LoadoutMenu)], -5, [],"1","1"]
 				,["-------------", [7],"",-1,[],"1","0"]
-				,["Remove unit", [10],"",-5,[["expression",format["['HOVER_RELEASE', groupSelectedUnits player] call %1", QSELF]]], "1","1"]
+				,["Remove unit", [10],"",-5,[["expression",format["['UNIT_REMOVE', groupSelectedUnits player] call %1", QSELF]]], "1","1"]
 			];
 		};
 
@@ -107,19 +100,51 @@ switch (toUpper _mode) do {
 		
 		showCommandingMenu format ["#USER:%1", SVAR(GroupMenu)];
 	};
+	case "BECOME_LEADER": {
+		_title = "Became leader";
+
+		(group player) selectLeader player;
+		private _grp = group player;
+		if (local _grp) then {
+			_grp selectLeader player;
+		} else {
+			[_grp, player] remoteExec ["selectLeader", groupOwner _grp];
+		};
+
+		[player, 26] call GVAR(fnc_logUserAction);
+	};
+	case "UNIT_ADD": {
+		_title = "Unit added";
+		private _grp = group player;
+		private _u = _grp createUnit [typeof player, getPos player, [], 0, "FORM"];
+		
+		private _loadout = getUnitLoadout player;
+		_u setUnitLoadout _loadout;
+		_u setVariable [SVAR(UnitLoadout), _loadout];
+
+		[player, 27] call GVAR(fnc_logUserAction);
+	};
 
 	// --- Envelope 
 	case "UNIT_HEAL": {
+		_title = "Units healed";
 		{ ["UNIT_HEAL_EXECUTE", _x] call SELF; } forEach _units;
+		[player, 28] call GVAR(fnc_logUserAction);
 	};
 	case "UNIT_RALLY": {
+		_title = "Units rallied up";
 		{ ["UNIT_RALLY_EXECUTE", _x] call SELF; } forEach _units;
+		[player, 29] call GVAR(fnc_logUserAction);
 	};
 	case "UNIT_APPLY_LOADOUT": {
+		_title = "Units loadout applied";
 		{ ["UNIT_APPLY_LOADOUT_EXECUTE", _x, _args2] call SELF; } forEach _units;
+		[player, 30] call GVAR(fnc_logUserAction);
 	};
 	case "UNIT_REARM": {
+		_title = "Units loadout restored";
 		{ ["UNIT_REARM_EXECUTE", _x] call SELF; } forEach _units;
+		[player, 31] call GVAR(fnc_logUserAction);
 	};
 	case "UNIT_ARSENAL": {
 		if (count _units > 1) then {
@@ -127,12 +152,10 @@ switch (toUpper _mode) do {
 			GVAR(UnitArsenalEH) = [missionNamespace, "arsenalClosed", {
 				// --- Apply loadout of first unit to other
 				private _loadout = getUnitLoadout (GVAR(UnitArsenalTarget) # 0);
-				for "_i" from 0 to (count GVAR(UnitArsenalTarget) - 1) do {
+				{
 					private _unit = GVAR(UnitArsenalTarget) # _i;
-
-					_unit setVariable [SVAR(UnitLoadout), _loadout];
-					if (_i > 0) then { _unit setUnitLoadout _loadout; };
-				};
+					[_unit, _loadout] call GVAR(fnc_applyLoadoutToUnit);
+				} forEach GVAR(UnitArsenalTarget);
 
 				// --- Nulify vars
 				[missionNamespace, "arsenalClosed", GVAR(UnitArsenalEH)] call BIS_fnc_removeScriptedEventHandler;
@@ -142,6 +165,12 @@ switch (toUpper _mode) do {
 		};
 
 		["Open", [true, objNull, _units # 0]] spawn BIS_fnc_arsenal;
+		[player, 32] call GVAR(fnc_logUserAction);
+	};
+	case "UNIT_REMOVE": {
+		_title = "Units removed";
+		{ ["UNIT_REMOVE_EXECUTE", _x] call SELF; } forEach _units;
+		[player, 33] call GVAR(fnc_logUserAction);
 	};
 
 	// --- Per each unit execution
@@ -178,10 +207,8 @@ switch (toUpper _mode) do {
 		_args2 params ["_loadoutName","_namespace"];
 
 		private _loadout = call compile format ["%1 getVariable ['%2',[]]", _namespace, _loadoutName];
-		if (_loadout isEqualTo []) exitWith {};
 
-		_u setVariable [SVAR(UnitLoadout), _loadout];
-		_u setUnitLoadout _loadout;
+		[_u, _loadout] call GVAR(fnc_applyLoadoutToUnit);
 	};
 	case "UNIT_REARM_EXECUTE": {
 		private _u = _args;
@@ -193,5 +220,19 @@ switch (toUpper _mode) do {
 			_u setUnitLoadout _loadout;
 		};
 	};
+	case "UNIT_REMOVE_EXECUTE": {
+		private _u = _args;
 
+		if (vehicle _u == _u) then {
+			deleteVehicle _u;
+		} else {
+			(vehicle _u) deleteVehicleCrew _u;
+		};
+	};
+
+};
+
+
+if !(_title isEqualTo "") then {
+	hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Group AI</t><br /><br />%1", _title];
 };

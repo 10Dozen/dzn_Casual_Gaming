@@ -143,15 +143,16 @@ switch (toUpper _mode) do {
 						[<font color='#A0DB65'><execute expression='[""REFUEL""] call %1;'>REFUEL</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""REARM""] call %1;'>REARM</execute></font>]
 						<br />
-						<br />  [<font color='#A0DB65'><execute expression='[""DRIVER_ADD""] call %1;'>ADD DRIVER</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[""DRIVER_REMOVE""] call %1;'>REMOVE DRIVER</execute></font>]
-						<br />
 						<br />  [<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT""] call %1;'>SET IN FLIGHT</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""LAND""] call %1;'>LAND</execute></font>]           
 						[<font color='#A0DB65'><execute expression='[""HOVER_TOGGLE""] call %1;'>HOVER ON/OFF</execute></font>] 
 						<br />
 						<br />Move to seat:
 						<br />  [<font color='#A0DB65'><execute expression='[""CHANGE_SEAT_MENU""] call %1;'>CHANGE SEAT</execute></font>]
+						<br />
+						<br />AI driver:
+						<br />  [<font color='#A0DB65'><execute expression='[""DRIVER_ADD""] call %1;'>ADD DRIVER</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""DRIVER_REMOVE""] call %1;'>REMOVE DRIVER</execute></font>]
 						<br />
 						<br /><font color='#12C4FF' size='14'>Garage</font>
 						<br />[<font color='#A0DB65'><execute expression='[] spawn %2;'>Open Garage</execute></font>]
@@ -209,16 +210,15 @@ switch (toUpper _mode) do {
 						<br />[<font color='#A0DB65'><execute expression='[false] spawn %2;'>Set Positive Rating for All</execute></font>]
 						<br />
 						<br /><font color='#12C4FF' size='14'>SQUAD</font>
-						<br />[<font color='#A0DB65'><execute expression='[0] spawn %3;'>BECOME LEADER</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[0] spawn %3;'>ADD UNIT</execute></font>]                                          
-						[<font color='#AB483E'><execute expression='[0] spawn %3;'>Delete Group</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='[""BECOME_LEADER""] spawn %3;'>BECOME LEADER</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNIT_ADD""] spawn %3;'>ADD UNIT</execute></font>]                                          
+						[<font color='#AB483E'><execute expression='[""UNIT_REMOVE"", units player] spawn %3;'>Delete Group</execute></font>]
 						<br />
 						<br />[<font color='#A0DB65'><execute expression='[""UNIT_HEAL"", units player] spawn %3;'>Heal All</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[""UNIT_HEAL"", units player] spawn %3;'>Rearm All</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNIT_REARM"", units player] spawn %3;'>Rearm All</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""UNIT_RALLY"", units player] spawn %3;'>Rally Up</execute></font>]
 						<br />
-						<br /><font color='#12C4FF' size='14'>GROUP MANAGEMENT</font>
-						<br />[<font color='#A0DB65'><execute expression='[""MENU_SHOW""] spawn %3;'>Manage group</execute></font>] 
+						<br />[<font color='#A0DB65'><execute expression='[""MENU_SHOW""] spawn %3;'>MANAGE GROUP</execute></font>] 
 						<br />
 						<br /><font color='#888888'>Note: Open manage menu, select group members and then choose action to apply from manage menu</font>
 						
