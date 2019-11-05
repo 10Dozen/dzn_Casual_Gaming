@@ -58,7 +58,6 @@ private _add = {
 	, {
 		if (["CHECK_EXISTS"] call GVAR(fnc_addTopic)) exitWith {};
         ["ADD_ALL"] call GVAR(fnc_addTopic);
-		hint "CasualGaming topics re-added";
 	}
 ] call _add;
 

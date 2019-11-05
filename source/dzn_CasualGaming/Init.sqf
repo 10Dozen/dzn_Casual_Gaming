@@ -19,7 +19,7 @@
 */
 
 call compile preprocessFileLineNumbers format ["%1\Functions.sqf", PATH];
-call compile preprocessFileLineNumbers format ["%1\Settings.sqf", PATH];
+// call compile preprocessFileLineNumbers format ["%1\Settings.sqf", PATH];
 
 // Exit at dedicated or headless client
 if !(hasInterface) exitWith {};
@@ -90,7 +90,7 @@ if !(call GVAR(fnc_checkUserAuthorized)) exitWith {};
 [player, 0] call GVAR(fnc_logUserAction);
 
 // --- Save default mission loadout to mission loadout 1
-["SAVE",1] call GVAR(fnc_manageLoadouts);  
+missionNamespace setVariable [format ["%1_%2", SVAR(Loadout), 1], getUnitLoadout player];
 
 // --- Adds topics
 [{

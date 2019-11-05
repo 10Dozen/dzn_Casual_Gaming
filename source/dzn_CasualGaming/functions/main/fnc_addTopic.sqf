@@ -237,12 +237,3 @@ switch (toUpper _mode) do {
 };
 
 _result
-/*
-
-						<br />[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Heal</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Rearm</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Arsenal</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Loadout</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Rally Up</execute></font>]
-						                    [<font color='#AB483E'><execute expression='[0] spawn %1;'>Remove</execute></font>]
-											*/
