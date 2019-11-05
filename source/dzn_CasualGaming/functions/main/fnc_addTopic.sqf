@@ -125,8 +125,7 @@ switch (toUpper _mode) do {
 						<br />  Loadout P5   (<font color='#A0DB65'><execute expression='[""SAVE"", 105] call %2;'>Save</execute></font>) (<font color='#A0DB65'><execute expression='[""LOAD"", 105] call %2;'>Load</execute></font>)
 						<br />
 						<br />Get unit loadout:
-						<br />  [<font color='#A0DB65'><execute expression='[""ADD_COPY_ACTION""] call %2;'>Copy loadout</execute></font>] | 
-						[<font color='#A0DB65'><execute expression='[""REMOVE_COPY_ACTION""] call %2;'>Disable copy loadout</execute></font>]
+						<br />  [<font color='#A0DB65'><execute expression='[""ADD_COPY_ACTION""] call %2;'>Copy loadout</execute></font>]
 						"
 						, SVAR(fnc_openArsenal)
 						, SVAR(fnc_manageLoadouts)
@@ -211,7 +210,10 @@ switch (toUpper _mode) do {
 						<br />
 						<br /><font color='#12C4FF' size='14'>SQUAD</font>
 						<br />[<font color='#A0DB65'><execute expression='[""BECOME_LEADER""] spawn %3;'>BECOME LEADER</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[""UNIT_ADD""] spawn %3;'>ADD UNIT</execute></font>]                                          
+						[<font color='#A0DB65'><execute expression='[""JOIN_TO_ACTION_ADD""] spawn %3;'>JOIN TO</execute></font>]        
+						[<font color='#A0DB65'><execute expression='[""LEAVE_GROUP""] spawn %3;'>LEAVE GROUP</execute></font>]  
+						<br />
+						<br />[<font color='#A0DB65'><execute expression='[""UNIT_ADD""] spawn %3;'>ADD UNIT</execute></font>]                                          
 						[<font color='#AB483E'><execute expression='[""UNIT_REMOVE"", units player] spawn %3;'>Delete Group</execute></font>]
 						<br />
 						<br />[<font color='#A0DB65'><execute expression='[""UNIT_HEAL"", units player] spawn %3;'>Heal All</execute></font>] 

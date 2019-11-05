@@ -15,6 +15,8 @@ Description:
 		- teleport all AI units to player position "UNIT_RALLY"
 		- individual actions "UNIT_HEAL_EXECUTE", "UNIT_REARM_EXECUTE", "UNIT_RALLY_EXECUTE"
 		- manage group menu action "MENU_SHOW"
+		- leave group "LEAVE_GROUP"
+		- add join to group/join unit to group actions "JOIN_TO_ACTION_ADD", "JOIN_TO_ACTION_REMOVE", "JOIN_UNIT", "JOINT_UNIT_EXECUTE" 
 
 Parameters:
 	_mode -- management modes <STRING>
@@ -103,7 +105,6 @@ switch (toUpper _mode) do {
 	case "BECOME_LEADER": {
 		_title = "Became leader";
 
-		(group player) selectLeader player;
 		private _grp = group player;
 		if (local _grp) then {
 			_grp selectLeader player;
@@ -112,6 +113,16 @@ switch (toUpper _mode) do {
 		};
 
 		[player, 26] call GVAR(fnc_logUserAction);
+	};
+	case "LEAVE_GROUP": {
+		_title = "Group leaved";
+
+		private _grp = createGroup (side player);
+		if (count units _grp == 1) exitWith {};
+
+		[player] joinSilent _grp;
+
+		[player, 33] call GVAR(fnc_logUserAction);
 	};
 	case "UNIT_ADD": {
 		_title = "Unit added";
@@ -123,6 +134,65 @@ switch (toUpper _mode) do {
 		_u setVariable [SVAR(UnitLoadout), _loadout];
 
 		[player, 27] call GVAR(fnc_logUserAction);
+	};
+	case "JOIN_TO_ACTION_ADD": {
+		openMap false;
+		closeDialog 2;
+		["JOIN_TO_ACTION_REMOVE"] call SELF;
+		
+		private _joinToID = player addAction [
+			"<t color='#FF0000'>Join to UNIT'S GROUP</t>"
+			, {	["JOIN_TO_UNIT"] call SELF; }
+			, "", 6, true, true
+		];
+		private _joinUnitID = player addAction [
+			"<t color='#FF0000'>Join unit to MY GROUP</t>"
+			, {	["JOIN_UNIT_TO"] call SELF; }
+			, "", 6, true, true
+		];
+		private _removeID = player addAction [
+			"<t color='#FF3333'># remove actions #</t>"
+			, {	["JOIN_TO_ACTION_REMOVE"] call SELF; }
+			, "", 6, true, true
+		];
+
+		player setVariable [SVAR(JoinToActionsID), [_joinToID,_joinUnitID, _removeID]];
+
+		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>To join unit/to group</t><br /><br />Point to unit and use action!";
+	};
+	case "JOIN_TO_ACTION_REMOVE": {
+		private _actionIDs = player getVariable [SVAR(JoinToActionsID), []];
+		if (_actionIDs isEqualTo []) exitWith {};
+
+		{ player removeAction _x; } forEach _actionIDs;
+		hint "Join actions disabled";
+	};
+	case "JOIN_TO_UNIT": {
+		private _u = cursorObject;
+		if (isNull _u || {!(_u isKindOf "CAManBase")}) exitWith { hint "No unit under the cursor!"; };
+
+		[player] join (group _u);
+
+		["JOIN_TO_ACTION_REMOVE"] call SELF;
+
+		_title = "Joined to unit's group!";
+		[player, 34] call GVAR(fnc_logUserAction);
+	};
+	case "JOIN_UNIT_TO": {
+		private _u = cursorObject;
+		if (isNull _u || {!(_u isKindOf "CAManBase")}) exitWith { hint "No unit under the cursor!"; };
+
+		private _grp = group player;
+
+		if (local _u) then {
+			[_u] join _grp;
+		} else {
+			[[_u], _grp] remoteExec ["join", cursorTarget];
+		};
+		["JOIN_TO_ACTION_REMOVE"] call SELF;
+
+		_title = "Unit joined to my group!";
+		[player, 35] call GVAR(fnc_logUserAction);
 	};
 
 	// --- Envelope 
@@ -153,24 +223,23 @@ switch (toUpper _mode) do {
 				// --- Apply loadout of first unit to other
 				private _loadout = getUnitLoadout (GVAR(UnitArsenalTarget) # 0);
 				{
-					private _unit = GVAR(UnitArsenalTarget) # _i;
-					[_unit, _loadout] call GVAR(fnc_applyLoadoutToUnit);
+					[_x, _loadout] call GVAR(fnc_applyLoadoutToUnit);
 				} forEach GVAR(UnitArsenalTarget);
 
 				// --- Nulify vars
 				[missionNamespace, "arsenalClosed", GVAR(UnitArsenalEH)] call BIS_fnc_removeScriptedEventHandler;
 				GVAR(UnitArsenalTarget) = nil;
-				GVAR(UnitArsenalEH) = nil;			
+				GVAR(UnitArsenalEH) = nil;
 			}] call BIS_fnc_addScriptedEventHandler;
 		};
 
 		["Open", [true, objNull, _units # 0]] spawn BIS_fnc_arsenal;
-		[player, 32] call GVAR(fnc_logUserAction);
+		[player, 36] call GVAR(fnc_logUserAction);
 	};
 	case "UNIT_REMOVE": {
 		_title = "Units removed";
 		{ ["UNIT_REMOVE_EXECUTE", _x] call SELF; } forEach _units;
-		[player, 33] call GVAR(fnc_logUserAction);
+		[player, 32] call GVAR(fnc_logUserAction);
 	};
 
 	// --- Per each unit execution
@@ -229,7 +298,6 @@ switch (toUpper _mode) do {
 			(vehicle _u) deleteVehicleCrew _u;
 		};
 	};
-
 };
 
 

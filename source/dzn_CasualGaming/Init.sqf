@@ -74,6 +74,10 @@ if (isServer) then {
         , /* 30 */ "Group AI Loadouts applied"
         , /* 31 */ "Group AI Loadouts restored / rearmed"
         , /* 32 */ "Group AI Units removed"
+        , /* 33 */ "Group leaved"
+        , /* 34 */ "Joined to group"
+        , /* 35 */ "Unit joined to player's group"
+        , /* 36 */ "Group AI Arsenal applied"
     ];
 };
 

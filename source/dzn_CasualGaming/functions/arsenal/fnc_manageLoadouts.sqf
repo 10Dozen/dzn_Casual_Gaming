@@ -65,19 +65,20 @@ switch (toUpper _mode) do {
 	};
 
 	case "COPY_LOADOUT_FROM": {
-		if (isNull cursorTarget) exitWith { hint "No unit under the cursor!"; };
+		private _u = cursorObject;
+		if (isNull _u || {!(_u isKindOf "CAManBase")}) exitWith { hint "No unit under the cursor!"; };
 
-		player setUnitLoadout (getUnitLoadout cursorTarget);
+		player setUnitLoadout (getUnitLoadout _u);
 		["REMOVE_COPY_ACTION"] call SELF;
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied from unit!</t>";
 		[player, 10] call GVAR(fnc_logUserAction);
 	};
 	case "COPY_LOADOUT_TO": {
-		if (isNull cursorTarget) exitWith { hint "No unit under the cursor!"; };
-		if !(cursorTarget isKindOf "CAManBase") exitWith {};
+		private _u = cursorObject;
+		if (isNull _u || {!(_u isKindOf "CAManBase")}) exitWith { hint "No unit under the cursor!"; };
 
-		[cursorTarget, getUnitLoadout player] call GVAR(fnc_applyLoadoutToUnit);
+		[_u, getUnitLoadout player] call GVAR(fnc_applyLoadoutToUnit);
 		["REMOVE_COPY_ACTION"] call SELF;
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied to unit!</t>";
@@ -98,8 +99,13 @@ switch (toUpper _mode) do {
 			, {	["COPY_LOADOUT_TO"] call SELF; }
 			, "", 6, true, true
 		];
+		private _removeID = player addAction [
+			"<t color='#FF3333'># remove actions #</t>"
+			, {	["REMOVE_COPY_ACTION"] call SELF; }
+			, "", 6, true, true
+		];
 
-		player setVariable [SVAR(CopyLoadoutActionsID), [_copyFromID,_copyToID]];
+		player setVariable [SVAR(CopyLoadoutActionsID), [_copyFromID,_copyToID,_removeID]];
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>To copy loadout</t><br /><br />Point to unit and use action!";
 	};
