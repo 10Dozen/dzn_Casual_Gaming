@@ -24,6 +24,15 @@ All functions are available from map menu (diary topic 'dzn Casual Gaming').
 #### CBA Keybind
 Mod allows to bind most of the functions to hotkeys (like heal, set/deplot to rallypoint, vehicle land/hover, group AI features). Check (Options - Controls - Addon Controls - dzn Casual Gaming). 
 
+#### Hover On/Off feature
+Forces vehicle to hover mid-air (even planes). You won't be able to control vehicle, but at least it won't fall while you away.
+
+#### Change seat feature
+Allows to switch between seats of vehicle. Can be used to swtich between helicopter pilot/gunner/door gunner while in flight/hovered.
+
+#### Group AI - Manage group - Arsenal
+When Arsenal is opened with several units selected - each unit will get selected gear once arsenal become closed.
+
 ### Settings
 #### Authorized users (names/UIDs)
 You can configure authorization settings on your server to prevent anyone except admins to use this mod. 
