@@ -27,8 +27,8 @@ params ["_showHint"];
 player setDamage 0;
 
 // --- ACE Healing
-if (!isNil "ace_medical_fnc_treatmentAdvanced_fullHealLocal") then {
-	[player ,player] call ace_medical_fnc_treatmentAdvanced_fullHealLocal;
+if (!isNil "ace_medical_treatment_fnc_fullHealLocal") then {
+	[player] call ace_medical_treatment_fnc_fullHealLocal;
 };
 
 // --- BIS Revive

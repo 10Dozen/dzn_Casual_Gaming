@@ -131,10 +131,11 @@ switch (toUpper _mode) do {
 			if (isNil SVAR(VehicleMenu)) then {
 				GVAR(VehicleMenu) = [
 					["RELEASE SPEED", true]
-					,["0 kph", [2],"",-5,[["expression",format["['HOVER_RELEASE', 0] call %1", QSELF]]], "1","1"]
-					,["50 kph", [3],"",-5,[["expression",format["['HOVER_RELEASE', 50] call %1", QSELF]]], "1","1"]
-					,["200 kph", [4],"",-5,[["expression",format["['HOVER_RELEASE', 200] call %1", QSELF]]], "1","1"]
-					,["400 kph", [5],"",-5,[["expression",format["['HOVER_RELEASE', 400] call %1", QSELF]]], "1","1"]
+					,["100 kph", [2],"",-5,[["expression",format["['HOVER_RELEASE', 100] call %1", QSELF]]], "1","1"]
+					,["0 kph", [3],"",-5,[["expression",format["['HOVER_RELEASE', 0] call %1", QSELF]]], "1","1"]
+					,["50 kph", [4],"",-5,[["expression",format["['HOVER_RELEASE', 50] call %1", QSELF]]], "1","1"]
+					,["200 kph", [5],"",-5,[["expression",format["['HOVER_RELEASE', 200] call %1", QSELF]]], "1","1"]
+					,["400 kph", [6],"",-5,[["expression",format["['HOVER_RELEASE', 400] call %1", QSELF]]], "1","1"]
 				];
 			};
 
