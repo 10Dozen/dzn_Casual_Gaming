@@ -4,19 +4,27 @@
  *	 Addon Settings
  */
 private _add = {
-	params ["_var","_desc","_tooltip","_type","_val",["_exp", "No Expression"],["_subcat", ""],["_isGlobal", false]];	
-	 
-	private _arr = [
-		FORMAT_VAR(_var)
-		, _type
-		, [_desc, _tooltip]
-		, if (_subcat == "") then { TITLE } else { [TITLE, _subcat] }
-		, _val
-		, _isGlobal
+	params [
+		"_varName",
+		"_desc",
+		"_tooltip",
+		"_type",
+		"_val",
+		["_script", nil],
+		["_isGlobal", false],
+		["_needRestart", false]
 	];
-	
-	if !(typename _exp == "STRING" && { _exp == "No Expression" }) then { _arr pushBack _exp; };
-	_arr call CBA_Settings_fnc_init;
+
+	[
+		FORMAT_VAR(_varName),
+		_type,
+		[_desc, _tooltip],
+		TITLE,
+		_val,
+		_isGlobal,
+		if (isNil "_script") then { nil } else { _script },
+		_needRestart
+	] call CBA_fnc_addSetting;
 };
 
 [
@@ -28,6 +36,8 @@ private _add = {
 	, {
 		GVAR(AuthorizedUsers) = call compile ("[" + _this + "]");
 	}
+	, true
+	, true
 ] call _add;
 
 [
@@ -39,6 +49,8 @@ private _add = {
 	, {
 		GVAR(AuthorizedUIDs) = call compile ("[" + _this + "]");
 	}
+	, true
+	, true
 ] call _add;
 
 [
@@ -47,6 +59,8 @@ private _add = {
 	, "Logs usage of CG to server .rpt file as [dzn_CG][Username UID]<Action>"
 	, "CHECKBOX"
 	, false
+	, nil
+	, true
 ] call _add;
 
 [
@@ -59,6 +73,7 @@ private _add = {
 		if (["CHECK_EXISTS"] call GVAR(fnc_addTopic)) exitWith {};
         ["ADD_ALL"] call GVAR(fnc_addTopic);
 	}
+	, 2
 ] call _add;
 
 

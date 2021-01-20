@@ -143,7 +143,12 @@ switch (toUpper _mode) do {
 						[<font color='#A0DB65'><execute expression='[""REARM""] call %1;'>REARM</execute></font>]
 						<br />
 						<br />  [<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT""] call %1;'>SET IN FLIGHT</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[""LAND""] call %1;'>LAND</execute></font>]           
+						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",500] call %1;'>50m</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",1000] call %1;'>50m</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",3000] call %1;'>3000m</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",5000] call %1;'>5000m</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",10000] call %1;'>10000m</execute></font>] 
+						<br />  [<font color='#A0DB65'><execute expression='[""LAND""] call %1;'>LAND</execute></font>]           
 						[<font color='#A0DB65'><execute expression='[""HOVER_TOGGLE""] call %1;'>HOVER ON/OFF</execute></font>] 
 						<br />
 						<br />Move to seat:

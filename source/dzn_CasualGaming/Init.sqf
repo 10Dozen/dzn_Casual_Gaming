@@ -1,36 +1,37 @@
 #include "macro.hpp"
 
 /*
-    TODO:
-    - Re-adding topics during the game (via CBA Settings)
-    - Add rating restore (to be > 0)
-    - CBA Keybind for features 
+F - Use addSettings function instead of initSetting
+F - Make server settings global 
 
-    - Player group AI manager:
-        [Set Positive Rating]
+F - Vehicle: Change set in flight logic to actually move in flight 
+F - Vehicle: Add option to set in flight at high altitude (5000 and 10000)
+F - Vehicle: Land should hover over sea
+F - Vehicle: Hover on should save tilt of the craft
 
-        Squad:
-            [BECOME LEADER] [ADD UNIT] (red)[REMOVE ALL](red) 
-            
-            [Heal All][Rearm All][Rally Up]
-            
-        Selected units:
-            [Heal][Gear][Rally Up]  (red)[Remove](red)
+F - Vehicle: Garage: Add UI button and spawn vehicle only when this button clicked (remove vehicle otherwise)
+
+- Wallhack distance options 100, 300, 500, 1000
+- Test whitelist/blacklist settings 
+
+- Disable individual functions option... via cba setting?
+
+- Vehicle shortcut:
+  a) 5 slots for vehicles that player can access during mission
+  b) Player is able to save his current vehicle to this slot 
+  c) Player is able to then Disable the vehicle - it will be removed from the game (hidden/disableSimul)
+  d) On disable vehicle saves current mission position & velocity (for arial)
+  e) On disable vehicle - player seat is saved, player (and other players) become moved out and teleported to Rallypoint or to the ground at vehicle position
+  f) On disable vehicle - AI units become disabled and hidden if needed
+  g) Player is able to then Enable the vehicle: vehicle will be shown and enableSimul
+  h) On enable: player will be moved in driver or whatever place he was
+  j) On enable: ai in the vehicle will be enabled
+  i) On enable: vehicle restore it's position, for aerial vehicles in air -- restore velocity and engine state 
+
 */
 
 call compile preprocessFileLineNumbers format ["%1\Functions.sqf", PATH];
-// call compile preprocessFileLineNumbers format ["%1\Settings.sqf", PATH];
-
-// Exit at dedicated or headless client
-if !(hasInterface) exitWith {};
-
-// --- Init variables 
-
-// Rallypoint: Rally point object class
-GVAR(RallyPointClass) = "Pole_F";
-
-// Wallhack module
-GVAR(WallhackEnabled) = false;
+call compile preprocessFileLineNumbers format ["%1\Settings.sqf", PATH];
 
 if (isServer) then {
     GVAR(LogReasons) = [
@@ -81,10 +82,18 @@ if (isServer) then {
     ];
 };
 
+// Exit at dedicated or headless client
+if !(hasInterface) exitWith {};
+
+// --- Init variables 
+// Rallypoint: Rally point object class
+GVAR(RallyPointClass) = "Pole_F";
+
+// Wallhack module
+GVAR(WallhackEnabled) = false;
 
 
 // --- Init
-
 // --- Exit if not authorized
 if !(call GVAR(fnc_checkUserAuthorized)) exitWith {};
 [player, 0] call GVAR(fnc_logUserAction);

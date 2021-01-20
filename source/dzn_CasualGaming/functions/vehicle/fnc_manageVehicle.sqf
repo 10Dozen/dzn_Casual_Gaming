@@ -12,7 +12,7 @@ Description:
 		- full rearm "REARM"
 		- add AI driver "DRIVER_ADD"
 		- remove AI driver "DRIVER_REMOVE"
-		- set in flight "SET_IN_FLIGHT"
+		- set in flight "SET_IN_FLIGHT" in different altitudes
 		- land "LAND"
 		- hover "HOVER_TOGGLE"
 		- switch between seats "CHANGE_SEAT_ACTION_ADD"/"CHANGE_SEAT_ACTION_REMOVE"
@@ -38,6 +38,8 @@ params ["_mode", ["_args",[]]];
 private _title = "";
 private _veh = vehicle player;
 private _result = -1;
+
+["Invoked. Mode: %1, Params: %2", _mode, _args] call CGV_Log;
 
 if (_veh isEqualTo player) exitWith {
 	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Player is not in vehicle!";
@@ -93,12 +95,32 @@ switch (toUpper _mode) do {
 	case "SET_IN_FLIGHT": {
 		openMap false;
 
+		private _altitude = [_args, 50] select (_args isEqualTo []);
+		private _velocity = velocityModelSpace _veh;
+		private _pos = getPos _veh;
+		private _currentAltitude = _pos # 2;
+		private _terrainHeight = getTerrainHeightASL _pos;
+
+		_pos set [2, _altitude];
+
 		_veh engineOn true;
-		[_veh, 200, 2] call CBA_fnc_setHeight;
-		if (getPosASL _veh # 2 < 10) exitWith { _title = "Set In Flight -- Aborted"; };
+		_veh setVehiclePosition [_pos, [], 0, "FLY"];
+		_veh setPos _pos;
+
+		if (getPos _veh # 2 < 10) exitWith { 
+			// --- Avoid adding speed if something gone wrong during setting altitude
+			_title = "Set In Flight -- Aborted"; 
+		};
 		
-		_veh setVelocityModelSpace [0, if (_veh isKindOf "Plane") then { 150 } else { 30 }, 0];
-	
+		private _minVelocity = ([80, 300] select (_veh isKindOf "Plane")) * 1000/3600;
+		if (_currentAltitude < 20 || (_velocity # 1) < _minVelocity) then {
+			// --- Update velocity if wasn't in air
+			_veh setVelocityModelSpace [0, (_velocity # 1) + _minVelocity, 0];
+		} else {
+			// --- Restore velocity if already in air
+			_veh setVelocityModelSpace _velocity;
+		};
+
 		_title = "Set In Flight";
 		[player, 16] call GVAR(fnc_logUserAction);
 	};
@@ -107,9 +129,11 @@ switch (toUpper _mode) do {
 
 		_veh allowDamage false;
 		_veh setVelocityModelSpace [0, 0, 0];
-		[_veh, 0.5, 2] call CBA_fnc_setHeight;
 
-		[{vehicle player allowDamage true}, [], 1] call CBA_fnc_waitAndExecute;
+		private _pos = getPos _veh;
+		_veh setPos [_pos # 0, _pos # 1, 2];
+
+		[{_this allowDamage true}, _veh, 1] call CBA_fnc_waitAndExecute;
 
 		_title = "Landed";
 		[player, 21] call GVAR(fnc_logUserAction);
@@ -120,12 +144,18 @@ switch (toUpper _mode) do {
 		if (isNil SVAR(VehicleHover_PFH)) then {
 			_title = "Auto-hover is ON";
 
+			private _modelPos = getPosASL _veh; 
+			private _modelVector = [vectorDir _veh, vectorUp _veh];
+
+			["Model alt: %1, Model vector: %2", _modelPos, _modelVector] call CGV_Log;
+
 			GVAR(VehicleHover_PFH) = [{
-				private _veh = vehicle player;
+				(_this # 0) params ["_veh","_pos","_vector"];
 				
-				[_veh, getPosATL _veh # 2, 2] call CBA_fnc_setHeight;
-				_veh setVelocityModelSpace [0, 0, 0];
-			}] call CBA_fnc_addPerFrameHandler;
+				_veh setPosASL _modelPos;
+				_veh setVectorDirAndUp _vector;
+				_veh setVelocity [0, 0, 0];
+			}, nil, [_veh, _modelPos, _modelVector]] call CBA_fnc_addPerFrameHandler;
 		} else {
 			_title = "Auto-hover is OFF";
 			if (isNil SVAR(VehicleMenu)) then {
@@ -147,10 +177,15 @@ switch (toUpper _mode) do {
 	case "HOVER_RELEASE": {
 		// --- Conversion from KPH to M/S
 		private _velocity = _args * 1000 / 3600;
+
 		[GVAR(VehicleHover_PFH)] call CBA_fnc_removePerFrameHandler;
 		GVAR(VehicleHover_PFH) = nil;
+
 		[{
-			(vehicle player) setVelocityModelSpace [0, _this, 2];
+			private _veh = vehicle player;
+			// --- Removes vehicle flip and adds speed
+			_veh setPos (getPos _veh);
+			_veh setVelocityModelSpace [0, _this, 2];
 		}, _velocity] call CBA_fnc_execNextFrame;
 	};
 	case "CHANGE_SEAT_MENU": {
