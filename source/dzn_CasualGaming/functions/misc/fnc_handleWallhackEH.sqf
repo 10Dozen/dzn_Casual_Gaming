@@ -52,4 +52,4 @@ if (!GVAR(WallhackEnabled)) exitWith {};
 
 	drawIcon3D ['', _color, _posV, 0, 0, 0, _mark, 2, 0.035, 'puristaMedium'];
 	drawIcon3D ['', _color, _textPos, 0, 0, 0, _text , 2, 0.035, 'puristaMedium'];
-} forEach (player nearEntities [["CAManBase", "Air", "Car", "Motorcycle", "Tank"], 300]);
+} forEach (player nearEntities [["CAManBase", "Air", "Car", "Motorcycle", "Tank"], GVAR(WallhackRange)]);

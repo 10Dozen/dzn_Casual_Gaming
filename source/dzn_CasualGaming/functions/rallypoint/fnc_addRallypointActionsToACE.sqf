@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+#include "defines.hpp"
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_addRallypointActionsToACE
@@ -37,9 +38,9 @@ private _actionFormat = [_player, 1, ["ACE_SelfActions",SVAR(RallypointNode)]];
 	private _action = _x call ace_interact_menu_fnc_createAction;
 	(+_actionFormat + [_action]) call ace_interact_menu_fnc_addActionToClass;
 } forEach [
-	[SVAR(SetRallypointNode), "Set Rallypoint", "", { [0] call GVAR(fnc_setRallypoint) }, {true}]
-	, [SVAR(GoToMyRallypointNode), "Deploy to My Rallypoint", "", { [0] spawn GVAR(fnc_moveToRallypoint) }, {call GVAR(fnc_isRallypointExist) # 0}]
-	, [SVAR(GoToSquadRallypointNode), "Deploy to Squad Rallypoint", "", { [1] spawn GVAR(fnc_moveToRallypoint) }, {call GVAR(fnc_isRallypointExist) # 1} ]
+	[SVAR(SetRallypointNode), "Set Rallypoint", "", { ["SET", RP_CUSTOM] call SELF }, {true}]
+	, [SVAR(GoToMyRallypointNode), "Deploy to My Rallypoint", "", { ["DEPLOY_TO", RP_CUSTOM] call SELF; }, { ["CHECK", RP_CUSTOM] call SELF }]
+	, [SVAR(GoToSquadRallypointNode), "Deploy to Squad Rallypoint", "", { ["DEPLOY_TO", RP_SQUAD] call SELF; }, { ["CHECK", RP_SQUAD] call SELF} ]
 ];
 
 true

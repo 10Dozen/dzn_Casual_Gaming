@@ -23,16 +23,16 @@ Author:
 
 params ["_functionName"];
 
-// --- Exit if _functionName not exists
-if (isNil compile _functionName) exitWith { false };
-
 // --- Check that _functionName will not be published again from same source
 if (isNil SVAR(PublishedList)) then {
 	GVAR(PublishedList) = [];
 };
 
 // --- Exit if already published
-if (_functionName in GVAR(PublishedList)) exitWith { true }; 
+if (GVAR(PublishedList) findIf {_x == _functionName} > -1) exitWith { true }; 
+
+// --- Exit if _functionName not exists
+if (isNil compile _functionName) exitWith { false };
 
 // --- Publish list to avoid repeated publishing of functions
 GVAR(PublishedList) pushBack _functionName;

@@ -1,6 +1,9 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_manageVehicle)
-#define QSELF SVAR(fnc_manageVehicle)
+#include "..\rallypoint\defines.hpp"
+#include "..\main\reasons.hpp"
+
+#define SELF FUNC(manageVehicle)
+#define QSELF QFUNC(manageVehicle)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_manageVehicle
@@ -33,6 +36,15 @@ Author:
 	10Dozen
 ---------------------------------------------------------------------------- */
 
+#define CHECK_FOR_VEHICLE_IN_ARGS  if (typename _args == typename objNull) then { _veh = _args; }
+#define PUBLIC_METHODS [ \
+	"GET_SEATS_OPTIONS", \
+	"GET_MOVEOUT_OPTIONS", \
+	"IS_HOVER_ENABLED", \
+	"HOVER_ENABLE", \
+	"HOVER_DISABLE" \
+]
+
 params ["_mode", ["_args",[]]];
 
 private _title = "";
@@ -41,7 +53,7 @@ private _result = -1;
 
 ["Invoked. Mode: %1, Params: %2", _mode, _args] call CGV_Log;
 
-if (_veh isEqualTo player) exitWith {
+if (_veh isEqualTo player && !(_mode in PUBLIC_METHODS)) exitWith {
 	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Player is not in vehicle!";
 };
 	
@@ -49,17 +61,17 @@ switch (toUpper _mode) do {
 	case "REPAIR": {
 		_title = "Repaired";
 		_veh setDamage 0;
-		[player, 12] call GVAR(fnc_logUserAction);
+		[player, REASON_VEHICLE_REPAIR] call FUNC(logUserAction);
 	};
 	case "REFUEL": {
 		_title = "Refueled";
 		_veh setFuel 1;
-		[player, 13] call GVAR(fnc_logUserAction);
+		[player, REASON_VEHICLE_REFUEL] call FUNC(logUserAction);
 	};
 	case "REARM": {
 		_title = "Rearmed";
 		_veh setVehicleAmmo 1;
-		[player, 14] call GVAR(fnc_logUserAction);
+		[player, REASON_VEHICLE_REARM] call FUNC(logUserAction);
 	};
 	case "DRIVER_ADD": {
 		if (!isNull (driver _veh)) exitWith {
@@ -74,7 +86,7 @@ switch (toUpper _mode) do {
 		_u moveInDriver _veh;
 		_veh setVariable [SVAR(AIDriver), _u];
 
-		[player, 15] call GVAR(fnc_logUserAction);
+		[player, REASON_VEHICLE_DRIVER_ADDED] call FUNC(logUserAction);
 	};
 	case "DRIVER_REMOVE": {
 		_title = "Driver removed";
@@ -90,7 +102,7 @@ switch (toUpper _mode) do {
 			_veh setVariable [SVAR(AIDriver), nil];
 		};
 
-		[player,20] call GVAR(fnc_logUserAction);
+		[player, REASON_VEHICLE_DRIVER_REMOVED] call FUNC(logUserAction);
 	};
 	case "SET_IN_FLIGHT": {
 		openMap false;
@@ -122,7 +134,7 @@ switch (toUpper _mode) do {
 		};
 
 		_title = "Set In Flight";
-		[player, 16] call GVAR(fnc_logUserAction);
+		[player, REASON_VEHICLE_SET_IN_AIR] call FUNC(logUserAction);
 	};
 	case "LAND": {
 		openMap false;
@@ -136,68 +148,135 @@ switch (toUpper _mode) do {
 		[{_this allowDamage true}, _veh, 1] call CBA_fnc_waitAndExecute;
 
 		_title = "Landed";
-		[player, 21] call GVAR(fnc_logUserAction);
+		[player, REASON_VEHICLE_LANDED] call FUNC(logUserAction);
 	};
 	case "HOVER_TOGGLE": {
 		openMap false;
 
-		if (isNil SVAR(VehicleHover_PFH)) then {
+		if (_veh getVariable [SVAR(Vehicle_HoverPFH), -1] < 0) then {
+			["HOVER_ENABLE", _veh] call SELF;
 			_title = "Auto-hover is ON";
-
-			private _modelPos = getPosASL _veh; 
-			private _modelVector = [vectorDir _veh, vectorUp _veh];
-
-			["Model alt: %1, Model vector: %2", _modelPos, _modelVector] call CGV_Log;
-
-			GVAR(VehicleHover_PFH) = [{
-				(_this # 0) params ["_veh","_pos","_vector"];
-				
-				_veh setPosASL _modelPos;
-				_veh setVectorDirAndUp _vector;
-				_veh setVelocity [0, 0, 0];
-			}, nil, [_veh, _modelPos, _modelVector]] call CBA_fnc_addPerFrameHandler;
 		} else {
-			_title = "Auto-hover is OFF";
-			if (isNil SVAR(VehicleMenu)) then {
-				GVAR(VehicleMenu) = [
-					["RELEASE SPEED", true]
-					,["100 kph", [2],"",-5,[["expression",format["['HOVER_RELEASE', 100] call %1", QSELF]]], "1","1"]
-					,["0 kph", [3],"",-5,[["expression",format["['HOVER_RELEASE', 0] call %1", QSELF]]], "1","1"]
-					,["50 kph", [4],"",-5,[["expression",format["['HOVER_RELEASE', 50] call %1", QSELF]]], "1","1"]
-					,["200 kph", [5],"",-5,[["expression",format["['HOVER_RELEASE', 200] call %1", QSELF]]], "1","1"]
-					,["400 kph", [6],"",-5,[["expression",format["['HOVER_RELEASE', 400] call %1", QSELF]]], "1","1"]
-				];
+			private _storedSpeed = _veh getVariable [SVAR(Vehicle_SpeedBeforeHover), -999];
+			private _options = [];
+			if (_storedSpeed != -999) then {
+				_options pushBack round(_storedSpeed);
 			};
+			_options = _options + [0, 50, 100, 200, 400];
 
-			showCommandingMenu format ["#USER:%1", SVAR(VehicleMenu)];
+			[
+				"RELEASE SPEED",
+				'["HOVER_DISABLE", _args] call ' + QSELF,
+				_options apply { format ["%1 kph", _x] },
+				_options apply { [_veh, _x] }
+			] call FUNC(vehicle_showMenu);
+
+			_title = "Auto-hover is OFF";
 		};
 		
-		[player, 22] call GVAR(fnc_logUserAction);
-	};
-	case "HOVER_RELEASE": {
-		// --- Conversion from KPH to M/S
-		private _velocity = _args * 1000 / 3600;
-
-		[GVAR(VehicleHover_PFH)] call CBA_fnc_removePerFrameHandler;
-		GVAR(VehicleHover_PFH) = nil;
-
-		[{
-			private _veh = vehicle player;
-			// --- Removes vehicle flip and adds speed
-			_veh setPos (getPos _veh);
-			_veh setVelocityModelSpace [0, _this, 2];
-		}, _velocity] call CBA_fnc_execNextFrame;
+		[player, REASON_VEHICLE_HOVER_TOGGLED] call FUNC(logUserAction);
 	};
 	case "CHANGE_SEAT_MENU": {
-		// --- Get all empty seats
-		private _seats = ["GET_EMPTY_SEATS"] call SELF;
+		CHECK_FOR_VEHICLE_IN_ARGS;
 
-		// --- Format menu
-		GVAR(ChangeSeatsMenu) = [["CHANGE SEAT", true]];
+		private _options = ["GET_SEATS_OPTIONS", _veh] call SELF;
+		[
+			"CHANGE SEAT",
+			'["CHANGE_SEAT", _args] call ' + QSELF,
+			_options apply { _x # 0 },
+			_options
+		] call FUNC(vehicle_showMenu);
+
+		_title = "Select seat!";
+	};
+	case "LEAVE_VEHICLE": {
+		private _options = ["GET_MOVEOUT_OPTIONS", _veh] call SELF;
+		
+		[
+			"MOVE OUT TO",
+			'["SELECT_MOVEOUT_MENU_ACTION", _args] call ' + QSELF,
+			_options apply { _x # 1 },
+			_options
+		] call FUNC(vehicle_showMenu);
+
+		_title = "Select position to leave.<br />Note: Hovering will be disabled!";
+	};
+
+	case "IS_HOVER_ENABLED": {
+		_veh = _args;
+
+		_result = _veh getVariable [SVAR(Vehicle_HoverPFH), -1] > -1;
+	};
+	case "HOVER_ENABLE": {
+		_veh = _args;
+
+		// --- Exit if already in hover 
+		if (["IS_HOVER_ENABLED", _veh] call SELF) exitWith {};
+
+		// --- Save position and tilt
+		private _modelPos = getPosASL _veh; 
+		private _modelVector = [vectorDir _veh, vectorUp _veh];
+
+		// --- Save default release velocity
+		_veh setVariable [SVAR(Vehicle_SpeedBeforeHover), speed _veh, true];
+
+		private _pfh = [{
+			// --- "Freezes" vehicle in the same position/tilt each frame
+			(_this # 0) params ["_veh","_pos","_vector"];
+			_veh setPosASL _modelPos;
+			_veh setVectorDirAndUp _vector;
+			_veh setVelocity [0, 0, 0];
+		}, nil, [_veh, _modelPos, _modelVector]] call CBA_fnc_addPerFrameHandler;
+		_veh setVariable [SVAR(Vehicle_HoverPFH), _pfh];
+	};
+	case "HOVER_DISABLE": {
+		_args params [
+			"_veh", 
+			["_releaseSpeed", (_args # 0) getVariable [SVAR(Vehicle_SpeedBeforeHover), 0]]
+		];
+
+		// --- Remove per frame handler
+		private _pfhID = _veh getVariable [SVAR(Vehicle_HoverPFH), -1];
+		if (_pfhID < 0) exitWith {};
+
+		[_pfhID] call CBA_fnc_removePerFrameHandler;
+		_veh setVariable [SVAR(Vehicle_HoverPFH), nil];
+
+		// --- Conversion from KPH to M/S
+		private _speed = _releaseSpeed * 1000 / 3600;
+		[{
+			_this params ["_veh","_speed"];
+			// --- Removes vehicle flip and adds speed
+			_veh setPos (getPos _veh);
+			_veh setVelocityModelSpace [0, _speed, 0];
+		}, [_veh, _speed]] call CBA_fnc_execNextFrame;
+	};
+	case "CHANGE_SEAT": {
+		_args params ["_title", "_vehicle", "_role", "_cargoID", "_turretID"];
+
+		[_vehicle, _role, _cargoID, _turretID] call FUNC(vehicle_changeSeat);
+
+		_title = format ["Seat changed to [%1]!", _title];
+	};
+	case "SELECT_MOVEOUT_MENU_ACTION": {
+		_args params ["_veh", "", "_pos"];
+
+		["HOVER_DISABLE", [_veh]] call SELF;
+		[player, _pos] call FUNC(safeMove);
+
+		// --- Report LEAVE action
+		[player, REASON_VEHICLE_LEAVED] call FUNC(logUserAction);
+	};
+
+	case "GET_SEATS_OPTIONS": {
+		_veh = _args;
+		private _seats = [_veh] call FUNC(vehicle_getEmptySeats);
+		
+		_result = [];
 		{
 			_x params ["","_role","_cargoID","_turretID","_isFFV"];
+			private _actionTitle = "";
 
-			private ["_actionTitle"];
 			if (_cargoID > -1) then {
 				// --- Cargo
 				if (_isFFV) then {
@@ -214,78 +293,27 @@ switch (toUpper _mode) do {
 					_actionTitle = format ["%1 %2", toUpper _role, _turretID];
 				};
 			};
-			private _actionArgs = [_role, _cargoID, _turretID];
-
-			GVAR(ChangeSeatsMenu) pushBack [
-				_actionTitle
-				, [2 + _forEachIndex]
-				,"",-5
-				,[["expression", format ["['CHANGE_SEAT', %2] call %1", QSELF, _actionArgs]]]
-				,"1"
-				,"1"
-			];
+			_result pushBack [_actionTitle, _veh, _role, _cargoID, _turretID];
 		} forEach _seats;
-
-		showCommandingMenu format ["#USER:%1", SVAR(ChangeSeatsMenu)];
-		_title = "Select seat!";
 	};
-	case "CHANGE_SEAT": {
-		_args params ["_role", "_cargoID", "_turretID"];
+	case "GET_MOVEOUT_OPTIONS": {
+		_veh = _args;
+		_result = [];
 
-		// -- Get empty seats and verify that seat selected by player is still empty
-		private _seats = ["GET_EMPTY_SEATS"] call SELF;
-		private _hasTargetSeat = _seats findIf {
-			_x params ["","_xrole","_xcid","_xtid"];
-			_xrole isEqualTo _role && _xcid isEqualTo _cargoID && _xtid isEqualTo _turretID
-		};
+		// --- Current position or current position, but at 0m
+		_result pushBack [_veh, "Current position 0m",  { private _pos = getPos (call CBA_fnc_currentUnit); [_pos # 0, _pos # 1, 0] }];
+		_result pushBack [_veh, "Eject", { getPos (call CBA_fnc_currentUnit) }];
 
-		if (_hasTargetSeat < 0) exitWith {
-			_title = "Selected seat is OCCUPIED!";
-		};
-
-		// --- Move out and move in player
-		GVAR(vehicleEngineOn) = isEngineOn _veh;
-		openMap false;
-		player allowDamage false;
-		moveOut player;
-
-		// --- Move in
-		[
-			{
-				_this params ["_veh","_args"];
-				_args params ["_role", "_cargoID", "_turretID"];
-
-				switch (toLower _role) do {
-					case "driver": { player moveInDriver _veh; };
-					case "cargo": { player moveInCargo [_veh, _cargoID] };
-					case "gunner";
-					case "turret": { 
-						if (_turretID isEqualTo []) then {
-							player moveInGunner _veh;
-						} else {
-							player moveInTurret [_veh, _turretID]; 
-						};
-					};
-				};
-
-				if (GVAR(vehicleEngineOn)) then {
-					_veh engineOn true;
-				};
-
-				[{player allowDamage false;}, 0.5] call CBA_fnc_execNextFrame;
-			}
-			, [_veh, _args]
-		] call CBA_fnc_execNextFrame;
-		
-		_title = "Seat changed!";
-	};
-	case "GET_EMPTY_SEATS": {
-		_result = []
-			+ fullCrew [_veh, "driver", true] 
-			+ fullCrew [_veh, "gunner", true]
-			+ fullCrew [_veh, "turret", true]
-			+ fullCrew [_veh, "cargo", true] 
-			- fullCrew _veh;
+		// -- Rallypoint positions 
+		{
+			if (["CHECK_EXISTS", _x # 1] call FUNC(manageRallypoint)) then {
+				_result pushBack [_veh, _x # 0, getPos (["GET", _x # 1] call FUNC(manageRallypoint))];
+			};
+		} forEach [
+			["My rallypoint", RP_CUSTOM],
+			["Squad rallypoint", RP_SQUAD],
+			["Global rallypoint", RP_GLOBAL]
+		];
 	};
 };
 

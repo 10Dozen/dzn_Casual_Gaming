@@ -1,8 +1,8 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_addTopic)
+#define SELF FUNC(manageTopics)
 
 /* ----------------------------------------------------------------------------
-Function: dzn_CasualGaming_fnc_addTopic
+Function: dzn_CasualGaming_fnc_manageTopics
 
 Description:
 	Adds briefing topics.
@@ -19,7 +19,7 @@ Returns:
 
 Examples:
     (begin example)
-		["AUTOHEAL"] call dzn_CasualGaming_fnc_addTopic
+		["AUTOHEAL"] call dzn_CasualGaming_fnc_manageTopics
     (end)
 
 Author:
@@ -36,7 +36,7 @@ switch (toUpper _mode) do {
 	};
 	case "ADD": {
 		if !(["CHECK_EXISTS"] call SELF) then { 
-			player createDiarySubject [SVAR(Page),"dzn Casual Gaming"];
+			player createDiarySubject [SVAR(Page), "dzn Casual Gaming"];
 		};
 
 		// --- Get topic text and remove all whitespaces and carriage return symbols
@@ -143,8 +143,8 @@ switch (toUpper _mode) do {
 						[<font color='#A0DB65'><execute expression='[""REARM""] call %1;'>REARM</execute></font>]
 						<br />
 						<br />  [<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT""] call %1;'>SET IN FLIGHT</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",500] call %1;'>50m</execute></font>] 
-						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",1000] call %1;'>50m</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",500] call %1;'>500m</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",1000] call %1;'>1000m</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",3000] call %1;'>3000m</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",5000] call %1;'>5000m</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""SET_IN_FLIGHT"",10000] call %1;'>10000m</execute></font>] 
@@ -152,7 +152,8 @@ switch (toUpper _mode) do {
 						[<font color='#A0DB65'><execute expression='[""HOVER_TOGGLE""] call %1;'>HOVER ON/OFF</execute></font>] 
 						<br />
 						<br />Move to seat:
-						<br />  [<font color='#A0DB65'><execute expression='[""CHANGE_SEAT_MENU""] call %1;'>CHANGE SEAT</execute></font>]
+						<br />  [<font color='#A0DB65'><execute expression='[""CHANGE_SEAT_MENU""] call %1;'>CHANGE SEAT</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""LEAVE_VEHICLE""] call %1;'>LEAVE VEHICLE</execute></font>]
 						<br />
 						<br />AI driver:
 						<br />  [<font color='#A0DB65'><execute expression='[""DRIVER_ADD""] call %1;'>ADD DRIVER</execute></font>] 
@@ -160,32 +161,69 @@ switch (toUpper _mode) do {
 						<br />
 						<br /><font color='#12C4FF' size='14'>Garage</font>
 						<br />[<font color='#A0DB65'><execute expression='[] spawn %2;'>Open Garage</execute></font>]
+						<br />
+						<br />Pinned vehicles -------------------
+						<br />  Vehicle 1 [<font color='#A0DB65'><execute 
+						                                expression='[""PIN"",     1] call %3;'>PIN</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNPIN"",   1] call %3;'>UNPIN</execute></font>]    
+						[<font color='#A0DB65'><execute expression='[""USE"",     1] call %3;'>USE</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""DISABLE"", 1] call %3;'>OFF</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""INFO"",    1] call %3;'>INFO</execute></font>] 
+						<br />  Vehicle 2 [<font color='#A0DB65'><execute 
+						                                expression='[""PIN"",     2] call %3;'>PIN</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNPIN"",   2] call %3;'>UNPIN</execute></font>]    
+						[<font color='#A0DB65'><execute expression='[""USE"",     2] call %3;'>USE</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""DISABLE"", 2] call %3;'>OFF</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""INFO"",    2] call %3;'>INFO</execute></font>] 
+						<br />  Vehicle 3 [<font color='#A0DB65'><execute 
+						                                expression='[""PIN"",     3] call %3;'>PIN</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNPIN"",   3] call %3;'>UNPIN</execute></font>]    
+						[<font color='#A0DB65'><execute expression='[""USE"",     3] call %3;'>USE</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""DISABLE"", 3] call %3;'>OFF</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""INFO"",    3] call %3;'>INFO</execute></font>] 
+						<br />  Vehicle 4 [<font color='#A0DB65'><execute 
+						                                expression='[""PIN"",     4] call %3;'>PIN</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNPIN"",   4] call %3;'>UNPIN</execute></font>]    
+						[<font color='#A0DB65'><execute expression='[""USE"",     4] call %3;'>USE</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""DISABLE"", 4] call %3;'>OFF</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""INFO"",    4] call %3;'>INFO</execute></font>] 
+						<br />  Vehicle 5 [<font color='#A0DB65'><execute 
+						                                expression='[""PIN"",     5] call %3;'>PIN</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""UNPIN"",   5] call %3;'>UNPIN</execute></font>]    
+						[<font color='#A0DB65'><execute expression='[""USE"",     5] call %3;'>USE</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""DISABLE"", 5] call %3;'>OFF</execute></font>] 
+						[<font color='#A0DB65'><execute expression='[""INFO"",    5] call %3;'>INFO</execute></font>] 
+						<br /><br /><font color='#888888'>Note: UNPIN and USE enables vehicle that was turned off, you can not turn OFF vehicles with other players inside</font>
 						"
-						, SVAR(fnc_manageVehicle)
-						, SVAR(fnc_openGarage)
+						, QFUNC(manageVehicle)
+						, QFUNC(openGarage)
+						, QFUNC(managePinnedVehicle)
 					]
 				];
 			};
+
+			#include "..\rallypoint\defines.hpp"
 			case "RALLYPOINT": {
 				_result = [
 					"Rallypoint"
 					, format [
 						"<font color='#12C4FF' size='14'>Rallypoint</font>
-						<br />[<font color='#A0DB65'><execute expression='[0] spawn %1;'>Set Rallypoint</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='[""SET"", ""%2""] call %1;'>Set Rallypoint</execute></font>]
 						<br />
-						<br />[<font color='#A0DB65'><execute expression='[0] spawn %2;'>Deploy to My Rallypoint</execute></font>]
-						<br />[<font color='#A0DB65'><execute expression='[1] spawn %2;'>Deploy to Squad Rallypoint</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='[""DEPLOY_TO"", ""%2""] call %1;'>Deploy to My Rallypoint</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='[""DEPLOY_TO"", ""%4""] call %1;'>Deploy to Squad Rallypoint</execute></font>]
 						<br />
-						<br />[<font color='#A0DB65'><execute expression='[2] spawn %1;'>Set Global Rallypoint</execute></font>]
-						<br />[<font color='#A0DB65'><execute expression='[2] spawn %2;'>Deploy to Global Rallypoint</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='[""SET"", ""%3""] call %1;'>Set Global Rallypoint</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='[""DEPLOY_TO"", ""%3""] call %1;'>Deploy to Global Rallypoint</execute></font>]
 						<br />
 						<br /> ----------
-						<br />[<font color='#ab483e'><execute expression='[0] spawn %3;'>Delete My Rallypoint</execute></font>]
-						<br />[<font color='#ab483e'><execute expression='[2] spawn %3;'>Delete Global Rallypoint</execute></font>]
+						<br />[<font color='#ab483e'><execute expression='[""REMOVE"", ""%2""] call %1;'>Delete My Rallypoint</execute></font>]
+						<br />[<font color='#ab483e'><execute expression='[""REMOVE"", ""%3""] call %1;'>Delete Global Rallypoint</execute></font>]
 						"
-						, SVAR(fnc_setRallypoint)
-						, SVAR(fnc_moveToRallypoint)
-						, SVAR(fnc_removeRallypoint)
+						, QFUNC(manageRallypoint)
+						, RP_CUSTOM
+						, RP_GLOBAL
+						, RP_SQUAD
 					]
 				];
 			};
@@ -197,10 +235,15 @@ switch (toUpper _mode) do {
 						<br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn BIS_fnc_camera; [player, 18] call %1;'>Open Splendid Camera</execute></font>]
 						<br />[<font color='#A0DB65'><execute expression='openMap false; closeDialog 2; [] spawn { createDialog ""%3"" }; [player, 19] call %1;'>Open Console</execute></font>]
 						<br />
-						<br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn %2;'>Toggle Wallhack (300m)</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='openMap false; [""TOGGLE""] spawn %2;'>Toggle Wallhack</execute></font>]
+						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 100] spawn %2;'>100m</execute></font>]
+						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 300] spawn %2;'>300m</execute></font>]
+						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 500] spawn %2;'>500m</execute></font>]
+						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 1000] spawn %2;'>1000m</execute></font>]
+						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 3000] spawn %2;'>3000m</execute></font>]
 						"
 						, SVAR(fnc_logUserAction)
-						, SVAR(fnc_toggleWallhack)
+						, SVAR(fnc_manageWallhack)
 						, SVAR(Console_Group)
 					]
 				];
