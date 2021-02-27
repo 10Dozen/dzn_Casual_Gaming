@@ -1,5 +1,5 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_setAuthoHealHandler)
+#define SELF FUNC(setAuthoHealHandler)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_setAuthoHealHandler
@@ -38,7 +38,7 @@ switch (toUpper _mode) do {
 	};
 	case "START": {
 		GVAR(AutoHeal_Handler) = [
-			{ if (GVAR(AutoHealEnabled)) then { [false] call GVAR(fnc_heal); }; }
+			{ if (GVAR(AutoHealEnabled)) then { [false] call FUNC(heal); }; }
 			, GVAR(AutoHealTimer)
 		] call CBA_fnc_addPerFrameHandler;
 	};

@@ -1,5 +1,7 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_openGarage)
+#include "..\main\reasons.hpp"
+
+#define SELF FUNC(openGarage)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_openGarage
@@ -38,7 +40,7 @@ switch (toUpper _mode) do {
 	};
 	case "OPEN": {
 		closeDialog 2;
-		[player, 9] call GVAR(fnc_logUserAction);
+		[player, REASON_GARAGE_OPENED] call FUNC(logUserAction);
 
 		BIS_fnc_garage_center = createVehicle ["Land_HelipadEmpty_F", player getPos [20,getDir player], [], 0, "CAN_COLLIDE"];
 
@@ -100,4 +102,3 @@ switch (toUpper _mode) do {
 		] call CBA_fnc_execNextFrame;
 	};
 };
-

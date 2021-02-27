@@ -4,7 +4,7 @@
 Function: dzn_CasualGaming_fnc_vehicle_changeSeat
 
 Description:
-	Return list of empty positions in vehicle
+	Moves player out from vehicle and move in to given vehicle's seat
 
 Parameters:
 	_vehicle -- vehicle to change seat in <OBJECT>

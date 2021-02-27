@@ -32,6 +32,7 @@ MAP_REASON(REASON_VEHICLE_DRIVER_REMOVED,    "[Vehicle] Driver removed");
 MAP_REASON(REASON_PINNED_VEHICLE_PINNED,     "[Pinned Vehicle] Vehicle pinned");
 MAP_REASON(REASON_PINNED_VEHICLE_USED,       "[Pinned Vehicle] Vehicle used");
 MAP_REASON(REASON_PINNED_VEHICLE_DISABLED,   "[Pinned Vehicle] Vehicle disabled");
+MAP_REASON(REASON_PINNED_VEHICLE_ENABLED,    "[Pinned Vehicle] Vehicle enabled");
 
 MAP_REASON(REASON_WALLHACK_TOGGLED,          "[Wallhack] Wallhack toggled");
 MAP_REASON(REASON_WALLHACK_RANGE_CHANGED,    "[Wallhack] Range changed");

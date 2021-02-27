@@ -1,6 +1,7 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_manageWallhack)
-#define QSELF SVAR(fnc_manageWallhack)
+#include "..\main\reasons.hpp"
+#define SELF FUNC(manageWallhack)
+#define QSELF QFUNC(manageWallhack)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_manageWallhack
@@ -42,20 +43,20 @@ switch toUpper(_mode) do {
 			["ENABLE"] call SELF;
 		};
 
-		[player, 17] call GVAR(fnc_logUserAction);
+		[player, REASON_WALLHACK_TOGGLED] call FUNC(logUserAction);
 	};
 	case "SET_RANGE": {
 		GVAR(WallhackRange) = _args;
 
 		if (GVAR(WallhackEnabled)) then {
 			_title = format ["Range %1 m", GVAR(WallhackRange)];
-			[player, 37] call GVAR(fnc_logUserAction);
+			[player, REASON_WALLHACK_RANGE_CHANGED] call FUNC(logUserAction);
 		} else {
 			["ENABLE"] call SELF;
 		};
 	};
 	case "ENABLE": {
-		GVAR(Wallhack_PFH) = [GVAR(fnc_handleWallhackEH)] call CBA_fnc_addPerFrameHandler;
+		GVAR(Wallhack_PFH) = [FUNC(handleWallhackEH)] call CBA_fnc_addPerFrameHandler;
 		GVAR(WallhackEnabled) = true;
 
 		_title = format ["Enabled [%1 m]", GVAR(WallhackRange)];

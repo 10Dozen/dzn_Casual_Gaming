@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+#include "..\main\reasons.hpp"
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_toggleFatigue
@@ -42,4 +43,4 @@ hint parseText format [
 	, if (_enable) then { "ON" } else { "OFF" }
 ];
 
-[player, 3] call GVAR(fnc_logUserAction);
+[player, REASON_FATIGUE_TOGGLED] call FUNC(logUserAction);

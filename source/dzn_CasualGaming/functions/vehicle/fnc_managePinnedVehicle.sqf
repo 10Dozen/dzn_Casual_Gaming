@@ -12,8 +12,7 @@ Description:
 		- Pin vehicle
 		- Clear pin
 		- Use vehicle
-		- Disable vehicle
-		- Enable vehicle
+		- Enable/Disable vehicle
 		- Show vehicle info
 		- inner functions
 
@@ -67,11 +66,12 @@ F  - In purpose to make feature MP-compatible - all variables related to slot sh
 
 */
 
-/* TESTIG:
+/* TESTING:
 
 */
 
 #define SLOTS_COUNT 5
+#define DISABLED_VEHICLE_SAFE_POS [-1000,-1000,30000]
 #define IS_SLOTID_VALID(SLOTID) (SLOTID > 0 && SLOTID <= SLOTS_COUNT)
 
 #define EXIT_SLOTID_INVALID(SLOTID) if !IS_SLOTID_VALID(SLOTID) exitWith { ["Exit. Invalid slot id!"] call CVP_Log; }
@@ -88,7 +88,6 @@ private _slotId = -1;
 private _result = -1;
 
 ["Invoked. Mode: %1, Params: %2", _mode, _args] call CVP_Log;
-
 
 switch toUpper(_mode) do {
 	case "INIT": {
@@ -115,7 +114,7 @@ switch toUpper(_mode) do {
 		GVAR(PV_Slots) set [_slotId - 1, _veh];
 
 		// --- Grab vehicle static info 
-		if (isNil {_veh getVariable SVAR(PV_NAME)}) then {
+		if (isNil {_veh getVariable SVAR(PV_Name)}) then {
 			private _class = typeof _veh;
 			private _name = getText (configFile >> "CfgVehicles" >> _class >> "displayName"); 
 			private _type = getText (configFile >> "CfgVehicles" >> _class >> "textSingular");
@@ -182,6 +181,10 @@ switch toUpper(_mode) do {
 			// --- Move out player via menu and then disable
 			["SHOW_MOVE_OUT_MENU", _veh] call SELF;
 		} else {
+			// --- Move vehicle in safe position
+			["SAVE_VEHICLE_STATE", _veh] call SELF;			
+			_veh setPos DISABLED_VEHICLE_SAFE_POS;
+
 			// --- Disable vehicle
 			["DISABLE_VEHICLE_AND_CREW", _veh] call SELF;
 
@@ -197,6 +200,29 @@ switch toUpper(_mode) do {
 
 		_title = ["GET_INFO", [_veh, true]] call SELF;
 		["MARK_VEHICLE", _veh] call SELF;
+	};
+	case "QUICK_MENU": {
+		private _options = [];
+		private _displayOptions = [];
+
+		// --- Compose menu from slots with pinned vehicles
+		for "_i" from 1 to SLOTS_COUNT do {
+			private _veh = ["GET", _i] call SELF;
+			if !(isNull _veh) then {
+				_displayOptions pushBack format ["#%1 (%2)", _i, _veh getVariable [SVAR(PV_Name), ""]];
+				_options pushBack _i;
+			} else {
+				_displayOptions pushBack format ["#%1 (empty)", _i];
+				_options pushBack (-1);
+			};
+		};
+
+		[
+			"SELECT SLOT",
+			'["QUICK_MENU_ACTION", _args] call ' + QSELF,
+			_displayOptions,
+			_options
+		] call FUNC(vehicle_showMenu);
 	};
 
 	// -- Private methods 
@@ -215,24 +241,7 @@ switch toUpper(_mode) do {
 		_veh lock false;
 
 		// --- Restore velocity and engine state
-		if ((getPos _veh # 2) > 10) then {
-			[{
-				if (_this getVariable [SVAR(PV_IsHovering), false]) then {
-					// --- If was on hover before disabling -- restore pre-hover velocity
-					private _velocity = (_this getVariable [SVAR(Vehicle_SpeedBeforeHover), 0]) * 1000 / 3600;
-					_this setPos (getPos _veh);
-					_this setVelocityModelSpace [0,_velocity,0];
-
-					_this setVariable [SVAR(Vehicle_SpeedBeforeHover), nil, true];
-					_this setVariable [SVAR(PV_IsHovering), nil, true];
-				} else {
-					// --- Restore pre-disabled velocity
-					_this setVelocityModelSpace (_this getVariable [SVAR(PV_Velocity), [0,0,0]]);
-				};
-
-				_this engineOn (_this getVariable [SVAR(PV_EngineOn), false]);
-			}, _veh] call CBA_fnc_execNextFrame;
-		};
+		["RESTORE_VEHICLE_STATE", _veh] call SELF;
 
 		_veh setVariable [SVAR(PV_Enabled), true, true];
 
@@ -284,27 +293,32 @@ switch toUpper(_mode) do {
 		_args params ["_veh", "", "_pos"];
 
 		// --- Get vehicle engine state/velocity before leaving it (if player is driver - engine is turned off on player exit)
-		_veh setVariable [SVAR(PV_EngineOn), isEngineOn _veh, true];
-		_veh setVariable [SVAR(PV_Velocity), velocityModelSpace _veh, true];
-		_veh setVariable [SVAR(PV_IsHovering), ["IS_HOVER_ENABLED", _veh] call FUNC(manageVehicle), true];
-
-		// --- 'Freeze' vehicle during caching 
-		["HOVER_ENABLE", _veh] call FUNC(manageVehicle);
-
+		["SAVE_VEHICLE_STATE", _veh] call SELF;
 		[player, _pos] call FUNC(safeMove);
 
 		// --- Wait for move out and Disable vehicle
 		[
 			{ vehicle player !=  _this }, 
 			{
+				_veh = _this;
+
+				// --- Restore vehicle engine state on player exit
+				if (_veh getVariable SVAR(PV_EngineOn)) then {
+					_veh engineOn true;
+				};
+
+				// --- 'Freeze' vehicle during caching 
+				_veh setPos DISABLED_VEHICLE_SAFE_POS;
+				["HOVER_ENABLE", _veh] call FUNC(manageVehicle);
+
 				[
 					{
 						// --- Unfreeze vehicle and cache it
 						["HOVER_DISABLE", [_this]] call FUNC(manageVehicle);
 						["DISABLE_VEHICLE_AND_CREW", _this] call SELF; 
 					},
-					_this,
-					1.25
+					_veh,
+					1.5
 				] call CBA_fnc_waitAndExecute;
 			},
 			_veh
@@ -316,7 +330,7 @@ switch toUpper(_mode) do {
 	case "SELECT_SELECTSEAT_MENU_ACTION": {
 		_args params ["_title", "_vehicle", "_role", "_cargoID", "_turretID"];
 
-		// --- Enable vehicle
+		// --- Enable vehicle and restore vehicle position
 		["ENABLE_VEHICLE_AND_CREW", _vehicle] call SELF;
 
 		// --- Change seat
@@ -335,6 +349,37 @@ switch toUpper(_mode) do {
 			[QFUNC(vehicle_toggleCache)] call FUNC(publishFunction);
 			[_entity, _doCache] remoteExec [QFUNC(vehicle_toggleCache), _x];
 		};
+	};
+	case "QUICK_MENU_ACTION": {
+		EXIT_SLOTID_INVALID(_args);
+
+		// --- Wait 1 frame for previous menu to be closed
+		[{
+			private _slotID = _this;
+			private _displayOptions = ["USE VEHICLE", "TURN OFF", "LEAVE VEHICLE", "SHOW INFO"];
+			private _options = ["USE", "DISABLE", { ["LEAVE_VEHICLE"] call FUNC(manageVehicle) }, "INFO"];
+
+			[
+				"PINNED VEHICLE",
+				'["QUICK_MENU_SUB_ACTION", _args] call ' + QSELF,
+				_displayOptions,
+				_options apply { [_x, _slotID] }
+			] call FUNC(vehicle_showMenu);
+		}, _args] call CBA_fnc_execNextFrame;
+	};
+	case "QUICK_MENU_SUB_ACTION": {
+		// --- Wait 1 frame for previous menu to be closed
+		[{
+			_this params ["_method","_slotID"];
+			
+			if (_method isEqualType "") then {
+				// --- Execute pinned vehicle function 
+				[_method, _slotID] call SELF;
+			} else {
+				// --- Execute code as is
+				call _method;
+			};
+		}, _args] call CBA_fnc_execNextFrame;
 	};
 	
 	case "GET": {
@@ -389,7 +434,7 @@ switch toUpper(_mode) do {
 		["UNMARK_VEHICLE", _veh] call SELF;
 
 		// --- Adds marker on the map
-		private _mrk = createMarkerLocal [SVAR(PV_VehicleMarker), getPos _veh];
+		private _mrk = createMarkerLocal [SVAR(PV_VehicleMarker), _veh getVariable [SVAR(PV_Position), getPos _veh]];
 		_mrk setMarkerColorLocal "ColorBLUFOR";
 		_mrk setMarkerShapeLocal "icon";
 		_mrk setMarkerTypeLocal "hd_dot";
@@ -419,16 +464,64 @@ switch toUpper(_mode) do {
 	};
 	case "DRAW_3D": {
 		private _veh = _args;
+		if (isNull _veh) exitWith {};
+
+		private _vehPos = _veh getVariable [SVAR(PV_Position), getPos _veh];
 		
-		private _d = player distance _veh;
+		private _d = player distance _vehPos;
 		private _name = (_veh getVariable [SVAR(PV_Name), ""]);
 		private _text = format ["%1 (%2 m)", _name, str(round _d)];
 		private _color = [1,0.83,0.05,1];
-		private _posV = getPosATL _veh;
+		private _posV = _vehPos; // getPosATL _veh;
 		private _textPos = [_posV # 0, _posV # 1, (_posV # 2) + 2 + 0.025 * _d];
 	
 		drawIcon3D ['', _color, _posV, 0, 0, 0, "^", 2, 0.035, 'puristaMedium'];
 		drawIcon3D ['', _color, _textPos, 0, 0, 0, _text , 2, 0.035, 'puristaMedium'];
+	};
+	case "SAVE_VEHICLE_STATE": {
+		_veh = _args;
+
+		// --- Saves vehicle engine state/velocity/position before disable 
+		_veh setVariable [SVAR(PV_EngineOn), isEngineOn _veh, true];
+		_veh setVariable [SVAR(PV_Velocity), velocityModelSpace _veh, true];
+		_veh setVariable [SVAR(PV_Position), getPos _veh, true];
+		_veh setVariable [SVAR(PV_IsHovering), ["IS_HOVER_ENABLED", _veh] call FUNC(manageVehicle), true];
+	};
+	case "RESTORE_VEHICLE_STATE": {
+		_veh = _args;
+
+		private _isEngineOn = _veh getVariable [SVAR(PV_EngineOn), false];
+		private _velocity = _veh getVariable [SVAR(PV_Velocity), [0,0,0]];
+		private _pos = _veh getVariable [SVAR(PV_Position), [0,0,0]];
+		private _isHovering = _veh getVariable [SVAR(PV_IsHovering), false];
+
+		[
+			{
+				params ["_veh", "_isEngineOn", "_velocity", "_pos", "_isHovering"];
+
+				if (_isEngineOn) then { _veh engineOn _isEngineOn; };
+				_veh setPos _pos;
+
+				if (_isHovering) then {		
+					["HOVER_ENABLE", _veh] call FUNC(manageVehicle);
+				} else {
+					// --- Restore speed only for non hovering vehicle in air
+					if (_pos # 2 > 10) then {
+						_veh setVelocityModelSpace _velocity;
+					};
+				};
+			}, [_veh, _isEngineOn, _velocity, _pos, _isHovering]
+		] call CBA_fnc_execNextFrame;
+
+		// --- Drop variables
+		[
+			SVAR(PV_EngineOn),
+			SVAR(PV_Velocity),
+			SVAR(PV_Position),
+			SVAR(PV_IsHovering)
+		] apply {
+			_veh setVariable [_x, nil, true];
+		};
 	};
 
 	case "SELECT_SEAT": {
@@ -485,5 +578,6 @@ if !(_title isEqualTo "") then {
 	];
 };
 
+["Finished. Mode: %1, Params: %2, Result: %3", _mode, _args, [_result, "Success"] select (_result isEqualTo -1)] call CVP_Log;
 
 _result

@@ -1,7 +1,9 @@
 #include "..\..\macro.hpp"
+#include "..\main\reasons.hpp"
 #include "defines.hpp"
-#define SELF GVAR(fnc_manageRallypoint)
-#define QSELF SVAR(fnc_manageRallypoint)
+
+#define SELF FUNC(manageRallypoint)
+#define QSELF QFUNC(manageRallypoint)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_manageRallypoint
@@ -56,7 +58,7 @@ switch toUpper(_mode) do {
 			, mapGridPosition _pos
 		];
 
-		[player, 5] call GVAR(fnc_logUserAction);
+		[player, REASON_RALLYPOINT_SET] call FUNC(logUserAction);
 	};
 	case "CREATE": {
 		private _pos = _args # 0;
@@ -102,7 +104,7 @@ switch toUpper(_mode) do {
 			, ["GET_NAME_BY_TYPE", _type] call SELF
 		];
 
-		[player, 23] call GVAR(fnc_logUserAction);
+		[player, REASON_RALLYPOINT_REMOVED] call FUNC(logUserAction);
 	};
 
 	case "DEPLOY_TO": {
@@ -117,7 +119,7 @@ switch toUpper(_mode) do {
 		};
 
 		[call CBA_fnc_currentUnit, getPos _rp] spawn FUNC(safeMove);
-		[player, 4] call GVAR(fnc_logUserAction);
+		[player, REASON_RALLYPOINT_DEPLOYED] call FUNC(logUserAction);
 	};
 	case "CHECK_EXISTS": {
 		private _type = _args;

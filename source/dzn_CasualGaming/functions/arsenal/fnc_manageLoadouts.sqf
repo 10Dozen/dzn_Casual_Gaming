@@ -1,5 +1,6 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_manageLoadouts)
+#include "..\main\reasons.hpp"
+#define SELF FUNC(manageLoadouts)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_manageLoadouts
@@ -41,7 +42,7 @@ switch (toUpper _mode) do {
 		_namespace setVariable [format ["%1_%2", SVAR(Loadout), _slotID], getUnitLoadout player];
 		hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>%1</t>", _msg];
 
-		[player, 7] call GVAR(fnc_logUserAction);
+		[player, REASON_LOADOUT_SAVED] call FUNC(logUserAction);
 	};
 	case "LOAD": {
 		private ["_namespace","_msg"];
@@ -58,7 +59,7 @@ switch (toUpper _mode) do {
 		if !(_loadout isEqualTo []) then {
 			hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>%1</t>", _msg];
 			player setUnitLoadout _loadout;
-			[player, 8] call GVAR(fnc_logUserAction);
+			[player, REASON_LOADOUT_APPLIED] call FUNC(logUserAction);
 		} else {
 			hint parseText "<t size='1.5' color='#FFFFFF' shadow='1'>Loadout is empty</t>";
 		};
@@ -72,17 +73,17 @@ switch (toUpper _mode) do {
 		["REMOVE_COPY_ACTION"] call SELF;
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied from unit!</t>";
-		[player, 10] call GVAR(fnc_logUserAction);
+		[player, REASON_LOADOUT_COPIED] call FUNC(logUserAction);
 	};
 	case "COPY_LOADOUT_TO": {
 		private _u = cursorObject;
 		if (isNull _u || {!(_u isKindOf "CAManBase")}) exitWith { hint "No unit under the cursor!"; };
 
-		[_u, getUnitLoadout player] call GVAR(fnc_applyLoadoutToUnit);
+		[_u, getUnitLoadout player] call FUNC(applyLoadoutToUnit);
 		["REMOVE_COPY_ACTION"] call SELF;
 
 		hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied to unit!</t>";
-		[player, 10] call GVAR(fnc_logUserAction);
+		[player, REASON_LOADOUT_COPIED] call FUNC(logUserAction);
 	};
 	case "ADD_COPY_ACTION": {
 		openMap false;

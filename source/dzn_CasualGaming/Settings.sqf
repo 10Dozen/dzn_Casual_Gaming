@@ -70,15 +70,18 @@ private _add = {
 	, "CHECKBOX"
 	, false
 	, {
-		if (["CHECK_EXISTS"] call GVAR(fnc_addTopic)) exitWith {};
-        ["ADD_ALL"] call GVAR(fnc_addTopic);
+		if (["CHECK_EXISTS"] call FUNC(manageTopics)) exitWith {};
+        ["ADD_ALL"] call FUNC(manageTopics);
 	}
 	, 2
 ] call _add;
 
 
+
+
 /*
- *	 Keybindings
+ *   Keybindings
+ *
  */
 private _addKey = {
 	params["_var","_str","_downCode",["_defaultKey", nil],["_upCode", { true }]];
@@ -99,7 +102,7 @@ private _addKey = {
 [
 	"Key_Heal"
 	, "Heal player"
-	, { [true] call GVAR(fnc_heal); true }
+	, { [true] call FUNC(heal); true }
 ] call _addKey;
 
 // --- Set rallypoint
@@ -107,12 +110,12 @@ private _addKey = {
 [
 	"Key_SetRallypoint"
 	, "Set My rallypoint"
-	, { [0] call GVAR(fnc_setRallypoint); true }
+	, { [0] call FUNC(setRallypoint); true }
 ] call _addKey;
 [
 	"Key_DeployToRallypoint"
 	, "Deploy To My rallypoint"
-	, { [0] spawn GVAR(fnc_moveToRallypoint); true }
+	, { [0] spawn FUNC(moveToRallypoint); true }
 ] call _addKey;
 
 // --- Arsenal 
@@ -120,17 +123,17 @@ private _addKey = {
 [
 	"Key_OpenArsenal_BIS"
 	, "Open BIS Arsenal"
-	, { ["BIS"] call GVAR(fnc_openArsenal); true }
+	, { ["BIS"] call FUNC(openArsenal); true }
 ] call _addKey;
 [
 	"Key_OpenArsenal_ACE"
 	, "Open ACE Arsenal"
-	, { ["ACE"] call GVAR(fnc_openArsenal); true }
+	, { ["ACE"] call FUNC(openArsenal); true }
 ] call _addKey;
 [
 	"Key_OpenGarage"
 	, "Open Garage"
-	, { [] call GVAR(fnc_openGarage); true }
+	, { [] call FUNC(openGarage); true }
 ] call _addKey;
 
 // --- Repair/refuel/rearm vehicle 
@@ -141,33 +144,39 @@ private _addKey = {
 	"Key_VehicleService"
 	, "Vehicle: Refuel/Rearm/Repair"
 	, { 
-		["REPAIR"] call GVAR(fnc_manageVehicle);
-		["REFUEL"] call GVAR(fnc_manageVehicle);
-		["REARM"] call GVAR(fnc_manageVehicle);
+		["REPAIR"] call FUNC(manageVehicle);
+		["REFUEL"] call FUNC(manageVehicle);
+		["REARM"] call FUNC(manageVehicle);
 		true 
 	}
 ] call _addKey;
 [
 	"Key_VehicleHover"
 	, "Vehicle: Toggle hover"
-	, { ["HOVER_TOGGLE"] call GVAR(fnc_manageVehicle); true }
+	, { ["HOVER_TOGGLE"] call FUNC(manageVehicle); true }
 ] call _addKey;
 [
 	"Key_VehicleLand"
 	, "Vehicle: Land"
-	, { ["LAND"] call GVAR(fnc_manageVehicle); true }
+	, { ["LAND"] call FUNC(manageVehicle); true }
 ] call _addKey;
 [
 	"Key_VehicleFly"
 	, "Vehicle: Set in flight"
-	, { ["SET_IN_FLIGHT"] call GVAR(fnc_manageVehicle); true }
+	, { ["SET_IN_FLIGHT"] call FUNC(manageVehicle); true }
 ] call _addKey;
 [
 	"Key_VehicleChangeSeat"
 	, "Vehicle: Change seat"
-	, { ["CHANGE_SEAT_MENU"] call GVAR(fnc_manageVehicle); true }
+	, { ["CHANGE_SEAT_MENU"] call FUNC(manageVehicle); true }
 ] call _addKey;
 
+// --- Pinned vehicle quick menu 
+[
+	"Key_PinnedVehicle_QuickMenu"
+	, "Pinned Vehicle: Quick Menu"
+	, { ["QUICK_MENU"] call FUNC(managePinnedVehicle); true }
+] call _addKey;
 
 
 // --- Manage group 
@@ -177,22 +186,22 @@ private _addKey = {
 [
 	"Key_GroupAIManage"
 	, "Group AI: Manage group"
-	, { ["MENU_SHOW"] call GVAR(fnc_manageGroup); true }
+	, { ["MENU_SHOW"] call FUNC(manageGroup); true }
 ] call _addKey;
 [
 	"Key_GroupAIHealAll"
 	, "Group AI: Heal group"
-	, { ["UNIT_HEAL", units player] call GVAR(fnc_manageGroup); true }
+	, { ["UNIT_HEAL", units player] call FUNC(manageGroup); true }
 ] call _addKey;
 [
 	"Key_GroupAIRallyAll"
 	, "Group AI: Rally group"
-	, { ["UNIT_RALLY", units player] call GVAR(fnc_manageGroup); true }
+	, { ["UNIT_RALLY", units player] call FUNC(manageGroup); true }
 ] call _addKey;
 [
 	"Key_GroupAIRearmAll"
 	, "Group AI: Rearm group"
-	, { ["UNIT_REARM", units player] call GVAR(fnc_manageGroup); true }
+	, { ["UNIT_REARM", units player] call FUNC(manageGroup); true }
 ] call _addKey;
 
 // --- Console 
@@ -203,14 +212,8 @@ private _addKey = {
 		openMap false; 
 		closeDialog 2; 
 		[] spawn { createDialog SVAR(Console_Group) };
-		[player, 19] call GVAR(fnc_logUserAction);
+		[player, 19] call FUNC(logUserAction);
 		true 
 	}
 ] call _addKey;
-
-
-
-
-
-
 

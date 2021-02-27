@@ -1,4 +1,5 @@
 #include "macro.hpp"
+#include "functions\main\reasons.hpp"
 
 /*
 F - Use addSettings function instead of initSetting
@@ -115,8 +116,8 @@ if !(hasInterface) exitWith {};
 
 // --- Init
 // --- Exit if not authorized
-if !(call GVAR(fnc_checkUserAuthorized)) exitWith {};
-[player, 0] call GVAR(fnc_logUserAction);
+if !(call FUNC(checkUserAuthorized)) exitWith {};
+[player, REASON_AUTHORIZED] call FUNC(logUserAction);
 
 // --- Save default mission loadout to mission loadout 1
 missionNamespace setVariable [format ["%1_%2", SVAR(Loadout), 1], getUnitLoadout player];

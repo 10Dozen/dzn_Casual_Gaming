@@ -19,8 +19,14 @@ Returns:
 
 Examples:
     (begin example)
-		["CHANGE SEAT", '["CHANGE_SEAT", _args] call fnc_manageVehicle", ["Pilot","Gunner"], [[_veh, "pilot"], [_veh, "gunner"]]] call dzn_CasualGaming_fnc_vehicle_showMenu;
+		[
+			"CHANGE SEAT", // Menu  title
+			'["CHANGE_SEAT", _args] call fnc_manageVehicle", // Callback 
+			["Pilot","Gunner"], // Display options 
+			[[_veh, "pilot"], [_veh, "gunner"]] // Values for options
+		] call dzn_CasualGaming_fnc_vehicle_showMenu;
     (end)
+
 
 Author:
 	10Dozen
@@ -41,7 +47,5 @@ GVAR(MenuOptions) = _optionsArgList;
 		"1"
 	];
 } forEach _displayOptions;
-
-
 
 showCommandingMenu format ["#USER:%1", SVAR(Menu)];

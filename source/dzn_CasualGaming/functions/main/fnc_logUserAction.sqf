@@ -31,5 +31,5 @@ if (isServer) then {
 	diag_log parseText _msg;
 	systemChat _msg;
 } else {
-	_this remoteExec [SVAR(fnc_logUserAction), 2];
+	_this remoteExec [QFUNC(logUserAction), 2];
 };

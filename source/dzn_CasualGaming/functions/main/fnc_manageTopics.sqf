@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+
 #define SELF FUNC(manageTopics)
 
 /* ----------------------------------------------------------------------------
@@ -86,10 +87,10 @@ switch (toUpper _mode) do {
 						<br /> [<font color='#A0DB65'><execute expression='true call %4'>Turn On</execute></font>] 
 						[<font color='#A0DB65'><execute expression='false call %4'>Turn Off</execute></font>]
 						"
-						, SVAR(fnc_setAutoHealSettings)
-						, SVAR(fnc_heal)
-						, SVAR(fnc_healAll)
-						, SVAR(fnc_toggleFatigue)
+						, QFUNC(setAutoHealSettings)
+						, QFUNC(heal)
+						, QFUNC(healAll)
+						, QFUNC(toggleFatigue)
 					]
 				];
 			};
@@ -101,7 +102,7 @@ switch (toUpper _mode) do {
 						<br />[<font color='#A0DB65'><execute expression='[""SET_TIME"",15] call %1;'>Turn On (15)</execute></font>]  [
 						<font color='#A0DB65'><execute expression='[""SET_TIME"",999999] call %1;'>Turn Off</execute></font>]
 						"
-						, SVAR(fnc_respawnManager)
+						, QFUNC(respawnManager)
 					]
 				];
 			};
@@ -127,8 +128,8 @@ switch (toUpper _mode) do {
 						<br />Get unit loadout:
 						<br />  [<font color='#A0DB65'><execute expression='[""ADD_COPY_ACTION""] call %2;'>Copy loadout</execute></font>]
 						"
-						, SVAR(fnc_openArsenal)
-						, SVAR(fnc_manageLoadouts)
+						, QFUNC(openArsenal)
+						, QFUNC(manageLoadouts)
 					]
 				];
 			};
@@ -136,7 +137,10 @@ switch (toUpper _mode) do {
 				_result = [
 					"Vehicle"
 					, format [
-						"<font color='#12C4FF' size='14'>Vehicle Service</font>
+						"<font color='#12C4FF' size='14'>Garage</font>
+						<br />[<font color='#A0DB65'><execute expression='[] spawn %2;'>Open Garage</execute></font>]
+						<br />
+						<br /><font color='#12C4FF' size='14'>Vehicle Service</font>
 						<br />Apply for player's vehicle:
 						<br />  [<font color='#A0DB65'><execute expression='[""REPAIR""] call %1;'>REPAIR</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""REFUEL""] call %1;'>REFUEL</execute></font>] 
@@ -159,10 +163,7 @@ switch (toUpper _mode) do {
 						<br />  [<font color='#A0DB65'><execute expression='[""DRIVER_ADD""] call %1;'>ADD DRIVER</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""DRIVER_REMOVE""] call %1;'>REMOVE DRIVER</execute></font>]
 						<br />
-						<br /><font color='#12C4FF' size='14'>Garage</font>
-						<br />[<font color='#A0DB65'><execute expression='[] spawn %2;'>Open Garage</execute></font>]
-						<br />
-						<br />Pinned vehicles -------------------
+						<br /><font color='#12C4FF' size='14'>Pinned vehicles</font>
 						<br />  Vehicle 1 [<font color='#A0DB65'><execute 
 						                                expression='[""PIN"",     1] call %3;'>PIN</execute></font>] 
 						[<font color='#A0DB65'><execute expression='[""UNPIN"",   1] call %3;'>UNPIN</execute></font>]    
@@ -227,13 +228,15 @@ switch (toUpper _mode) do {
 					]
 				];
 			};
+
+			#include "reasons.hpp"
 			case "MISC": {
 				_result = [
 					"Misc"
 					, format [
 						"<font color='#12C4FF' size='14'>Camera</font>
-						<br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn BIS_fnc_camera; [player, 18] call %1;'>Open Splendid Camera</execute></font>]
-						<br />[<font color='#A0DB65'><execute expression='openMap false; closeDialog 2; [] spawn { createDialog ""%3"" }; [player, 19] call %1;'>Open Console</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='openMap false; [] spawn BIS_fnc_camera; [player, %4] call %1;'>Open Splendid Camera</execute></font>]
+						<br />[<font color='#A0DB65'><execute expression='openMap false; closeDialog 2; [{createDialog ""%3""}] call CBA_fnc_execNextFrame;'>Open Console</execute></font>]
 						<br />
 						<br />[<font color='#A0DB65'><execute expression='openMap false; [""TOGGLE""] spawn %2;'>Toggle Wallhack</execute></font>]
 						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 100] spawn %2;'>100m</execute></font>]
@@ -242,9 +245,10 @@ switch (toUpper _mode) do {
 						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 1000] spawn %2;'>1000m</execute></font>]
 						[<font color='#A0DB65'><execute expression='openMap false; [""SET_RANGE"", 3000] spawn %2;'>3000m</execute></font>]
 						"
-						, SVAR(fnc_logUserAction)
-						, SVAR(fnc_manageWallhack)
+						, QFUNC(logUserAction)
+						, QFUNC(manageWallhack)
 						, SVAR(Console_Group)
+						, REASON_CAMERA_OPENED
 					]
 				];
 			};
@@ -273,9 +277,9 @@ switch (toUpper _mode) do {
 						<br /><font color='#888888'>Note: Open manage menu, select group members and then choose action to apply from manage menu</font>
 						
 						"
-						, SVAR(fnc_ratingFix)
-						, SVAR(fnc_ratingFixAll)
-						, SVAR(fnc_manageGroup)
+						, QFUNC(ratingFix)
+						, QFUNC(ratingFixAll)
+						, QFUNC(manageGroup)
 
 					]
 				];

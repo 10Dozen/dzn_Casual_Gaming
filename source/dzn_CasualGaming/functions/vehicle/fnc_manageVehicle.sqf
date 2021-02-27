@@ -321,4 +321,7 @@ if !(_title isEqualTo "") then {
 	hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />%1", _title];
 };
 
+
+["Finished. Mode: %1, Params: %2, Result: %3", _mode, _args, [_result, "Success"] select (_result isEqualTo -1)] call CGV_Log;
+
 _result
