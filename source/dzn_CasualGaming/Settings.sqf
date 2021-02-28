@@ -1,8 +1,8 @@
 #include "macro.hpp"
 
-/*
- *	 Addon Settings
- */
+//
+//	 Addon Settings
+//
 private _add = {
 	params [
 		"_varName",
@@ -79,10 +79,9 @@ private _add = {
 
 
 
-/*
- *   Keybindings
- *
- */
+//
+//   Keybindings
+//
 private _addKey = {
 	params["_var","_str","_downCode",["_defaultKey", nil],["_upCode", { true }]];
 
@@ -106,16 +105,17 @@ private _addKey = {
 ] call _addKey;
 
 // --- Set rallypoint
-// --- Deploy to rallypoint 
+// --- Deploy to rallypoint
+#include "functions\rallypoint\defines.hpp"
 [
 	"Key_SetRallypoint"
 	, "Set My rallypoint"
-	, { [0] call FUNC(setRallypoint); true }
+	, { ["SET", RP_CUSTOM] call FUNC(manageRallypoint); true }
 ] call _addKey;
 [
 	"Key_DeployToRallypoint"
 	, "Deploy To My rallypoint"
-	, { [0] spawn FUNC(moveToRallypoint); true }
+	, { ["DEPLOY_TO", RP_CUSTOM] call FUNC(manageRallypoint); true }
 ] call _addKey;
 
 // --- Arsenal 
@@ -133,7 +133,7 @@ private _addKey = {
 [
 	"Key_OpenGarage"
 	, "Open Garage"
-	, { [] call FUNC(openGarage); true }
+	, { ["OPEN"] call FUNC(openGarage); true }
 ] call _addKey;
 
 // --- Repair/refuel/rearm vehicle 
