@@ -1,5 +1,7 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_respawnManager)
+#include "..\main\reasons.hpp"
+
+#define SELF FUNC(respawnManager)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_respawnManager
@@ -42,6 +44,6 @@ switch (toUpper _mode) do {
 			, _payload
 		];
 
-		[player, 11] call GVAR(fnc_logUserAction);
+		[player, REASON_RESPAWN_TIMER_CHANGED] call FUNC(logUserAction);
 	};
 };

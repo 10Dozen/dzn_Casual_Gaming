@@ -1,6 +1,8 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_manageGroup)
-#define QSELF SVAR(fnc_manageGroup)
+#include "..\main\reasons.hpp"
+
+#define SELF FUNC(manageGroup)
+#define QSELF QFUNC(manageGroup)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_manageGroup
@@ -64,6 +66,7 @@ switch (toUpper _mode) do {
 			["APPLY LOADOUT", true]
 			,["Arsenal", [2],"",-5,[["expression",format["['UNIT_ARSENAL', groupSelectedUnits player] call %1", QSELF]]], "1","1"]
 		];
+
 		{
 			_x params ["_namespace","_from","_to"];
 
@@ -112,7 +115,7 @@ switch (toUpper _mode) do {
 			[_grp, player] remoteExec ["selectLeader", groupOwner _grp];
 		};
 
-		[player, 26] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_LEADERSHIP_TAKEN] call FUNC(logUserAction);
 	};
 	case "LEAVE_GROUP": {
 		_title = "Group leaved";
@@ -122,7 +125,7 @@ switch (toUpper _mode) do {
 
 		[player] joinSilent _grp;
 
-		[player, 33] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_LEAVED] call FUNC(logUserAction);
 	};
 	case "UNIT_ADD": {
 		_title = "Unit added";
@@ -133,7 +136,7 @@ switch (toUpper _mode) do {
 		_u setUnitLoadout _loadout;
 		_u setVariable [SVAR(UnitLoadout), _loadout];
 
-		[player, 27] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_ADDED] call FUNC(logUserAction);
 	};
 	case "JOIN_TO_ACTION_ADD": {
 		openMap false;
@@ -176,7 +179,7 @@ switch (toUpper _mode) do {
 		["JOIN_TO_ACTION_REMOVE"] call SELF;
 
 		_title = "Joined to unit's group!";
-		[player, 34] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_JOINED] call FUNC(logUserAction);
 	};
 	case "JOIN_UNIT_TO": {
 		private _u = cursorObject;
@@ -192,29 +195,29 @@ switch (toUpper _mode) do {
 		["JOIN_TO_ACTION_REMOVE"] call SELF;
 
 		_title = "Unit joined to my group!";
-		[player, 35] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_JOINED] call FUNC(logUserAction);
 	};
 
 	// --- Envelope 
 	case "UNIT_HEAL": {
 		_title = "Units healed";
 		{ ["UNIT_HEAL_EXECUTE", _x] call SELF; } forEach _units;
-		[player, 28] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_HEALED] call FUNC(logUserAction);
 	};
 	case "UNIT_RALLY": {
 		_title = "Units rallied up";
 		{ ["UNIT_RALLY_EXECUTE", _x] call SELF; } forEach _units;
-		[player, 29] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_RALLIED] call FUNC(logUserAction);
 	};
 	case "UNIT_APPLY_LOADOUT": {
 		_title = "Units loadout applied";
 		{ ["UNIT_APPLY_LOADOUT_EXECUTE", _x, _args2] call SELF; } forEach _units;
-		[player, 30] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_LOADOUT_APPLIED] call FUNC(logUserAction);
 	};
 	case "UNIT_REARM": {
 		_title = "Units loadout restored";
 		{ ["UNIT_REARM_EXECUTE", _x] call SELF; } forEach _units;
-		[player, 31] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_REARMED] call FUNC(logUserAction);
 	};
 	case "UNIT_ARSENAL": {
 		if (count _units > 1) then {
@@ -223,7 +226,7 @@ switch (toUpper _mode) do {
 				// --- Apply loadout of first unit to other
 				private _loadout = getUnitLoadout (GVAR(UnitArsenalTarget) # 0);
 				{
-					[_x, _loadout] call GVAR(fnc_applyLoadoutToUnit);
+					[_x, _loadout] call FUNC(applyLoadoutToUnit);
 				} forEach GVAR(UnitArsenalTarget);
 
 				// --- Nulify vars
@@ -234,12 +237,12 @@ switch (toUpper _mode) do {
 		};
 
 		["Open", [true, objNull, _units # 0]] spawn BIS_fnc_arsenal;
-		[player, 36] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_ARSENAL_APPLIED] call FUNC(logUserAction);
 	};
 	case "UNIT_REMOVE": {
 		_title = "Units removed";
 		{ ["UNIT_REMOVE_EXECUTE", _x] call SELF; } forEach _units;
-		[player, 32] call GVAR(fnc_logUserAction);
+		[player, REASON_GROUP_UNIT_REMOVED] call FUNC(logUserAction);
 	};
 
 	// --- Per each unit execution
@@ -277,7 +280,7 @@ switch (toUpper _mode) do {
 
 		private _loadout = call compile format ["%1 getVariable ['%2',[]]", _namespace, _loadoutName];
 
-		[_u, _loadout] call GVAR(fnc_applyLoadoutToUnit);
+		[_u, _loadout] call FUNC(applyLoadoutToUnit);
 	};
 	case "UNIT_REARM_EXECUTE": {
 		private _u = _args;
@@ -299,7 +302,6 @@ switch (toUpper _mode) do {
 		};
 	};
 };
-
 
 if !(_title isEqualTo "") then {
 	hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Group AI</t><br /><br />%1", _title];

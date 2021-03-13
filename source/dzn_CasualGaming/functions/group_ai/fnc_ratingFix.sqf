@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+#include "..\main\reasons.hpp"
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_ratingFix
@@ -31,4 +32,4 @@ if (_ratingToAdd > 0) exitWith {
 if (_showHint) then {
 	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Rating fixed</t>";
 };
-[player, 24] call GVAR(fnc_logUserAction);
+[player, REASON_RATING_FIXED] call FUNC(logUserAction);

@@ -1,5 +1,7 @@
 #include "..\..\macro.hpp"
-#define SELF GVAR(fnc_handleConsole)
+#include "..\main\reasons.hpp"
+
+#define SELF FUNC(handleConsole)
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_handleConsole
@@ -31,6 +33,8 @@ switch (toUpper _mode) do {
 		["UPDATE_PLAYER_LIST"] call SELF;
 		["RESTORE_LAST"] call SELF;
 		["WATCH"] call SELF;
+
+		[player, REASON_CONSOLE_OPENED] call FUNC(logUserAction);
 	};
 	case "UPDATE_PLAYER_LIST": {
 		private _list = call BIS_fnc_listPlayers;
