@@ -7,6 +7,9 @@ MAP_REASON(REASON_AUTHORIZED,               "Authorized");
 MAP_REASON(REASON_HEALING,                  "Healing used");
 MAP_REASON(REASON_HEALING_GLOBAL,           "Global Healing used");
 MAP_REASON(REASON_FATIGUE_TOGGLED,          "Fatigue toggled");
+MAP_REASON(REASON_WEAPON_SWAY_CHANGED,      "Weapon Sway changed");
+MAP_REASON(REASON_WEAPON_RECOIL_CHANGED,    "Weapon Recoil changed");
+
 MAP_REASON(REASON_RESPAWN_TIMER_CHANGED,    "Respawn timer changed");
 
 MAP_REASON(REASON_ARSENAL_OPENED,            "Accessing Arsenal");

@@ -24,9 +24,9 @@ Author:
 
 params ["_showHint"];
 
-private _ratingToAdd = 2000 - (rating player);
-if (_ratingToAdd > 0) exitWith {
-	player addRating _ratingToAdd;
+private _curRating = rating player;
+if (_curRating <= 0) exitWith {
+	player addRating (15 + abs _curRating);
 };
 
 if (_showHint) then {

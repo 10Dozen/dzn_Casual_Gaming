@@ -31,45 +31,6 @@ Examples:
 Author:
 	10Dozen
 ---------------------------------------------------------------------------- */
-
-
-/*
-- Vehicle shortcut:
-+  - 5 slots for vehicles that player can access during mission
-+  - Player is able to save (PIN) his current vehicle to this slot 
-+  - Player is able to unpin vehicle from slot
-+  - Player is able to then Disable the vehicle - it will be removed from the game (hidden/disableSimul)
-  - On disable vehicle:
-+  -  saves current mission position & velocity (for arial) (simply disables simulation and hides - vic remains the same position)
-F  -  abort if there are other players in vehicle
-+  -  if player is currently in the vehicle pinned to slot - player become moved out 
-+  -  on move out - show menu with options: teleport to my rally, to squad rally, to global rally, no teleport, to ground position under 
-+  -  AI units become disabled and hidden if needed
-  - Player is able to then Enable the vehicle: vehicle will be shown and enableSimul
-  - On enable: 
-+  -  ai in the vehicle will be enabled
-+  -  before enabling player will be promted with menu of change seat
-+  -  vehicle restore it's position, for aerial vehicles in air -- restore velocity and engine state 
-+  - Player is able to select USE action for slot - on select, user will be promted with Change seat menu
-+  - Player is able to select INFO action for slot - ons select user will see vehicle icon on the map and see brief info hint
-+  - Each time user interact with slot - brief vehicle info will be shown in hint, including:
-+  -  Vehicle display name
-+  -  Vehicle type name (e.g. Car, APC, IPC, etc.)
-+  -  Ammo, HP and Fuel values
-+  -  For aerial vics: is vehicle is mid air or not
-
-F  - In purpose to make feature MP-compatible - all variables related to slot should be stored in vehicle's object namespace and shared on network
-    (so several users may use vehicle, enable or disable it without collision)
-+  - Log user actions: USE, ENABLE, DISABLE
-
-  - Fix all TODOs
-
-*/
-
-/* TESTING:
-
-*/
-
 #define SLOTS_COUNT 5
 #define DISABLED_VEHICLE_SAFE_POS [-1000,-1000,30000]
 #define IS_SLOTID_VALID(SLOTID) (SLOTID > 0 && SLOTID <= SLOTS_COUNT)

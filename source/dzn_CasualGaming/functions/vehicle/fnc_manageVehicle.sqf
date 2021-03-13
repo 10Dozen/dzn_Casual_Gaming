@@ -77,14 +77,31 @@ switch (toUpper _mode) do {
 		if (!isNull (driver _veh)) exitWith {
 			_title = "Driver NOT added. Driver place is already occupied!";
 		};
+		if (side player isEqualTo sideEnemy) exitWith {
+			_title = "Driver NOT added. Player's rating is too low!";
+		};
 
 		_title = "Driver added";
+
 		private _grp = createGroup (side player);
 		private _u = _grp createUnit [typeof player, getPos _veh, [], 0, "FORM"];
-		_u setUnitLoadout (getUnitLoadout player);
 		_u assignAsDriver _veh;
 		_u moveInDriver _veh;
-		_veh setVariable [SVAR(AIDriver), _u];
+
+		[
+			{
+				params ["_veh","_u"];
+				if (driver _veh isEqualTo _u) then {
+					_veh setVariable [SVAR(AIDriver), _u];
+					_u setUnitLoadout (getUnitLoadout player);
+				} else {
+					deleteVehicle _u;
+					deleteGroup _grp;
+					hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Failed to add driver (no seat?)"; 
+				};
+			},
+			[_veh, _u, _grp]
+		] call CBA_fnc_execNextFrame;
 
 		[player, REASON_VEHICLE_DRIVER_ADDED] call FUNC(logUserAction);
 	};

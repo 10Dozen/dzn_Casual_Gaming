@@ -25,3 +25,4 @@
 #define LOCALIZE_FORMAT_STR_desc(X) localize format ["STR_%1_%2_desc", ADDON, X]
 
 #define COMPILE_FUNCTION(SUBPATH,NAME) GVAR(NAME) = compile preprocessFileLineNumbers format ["%1%2\%3.sqf", FNC_PATH, QUOTE(SUBPATH), QUOTE(NAME)]
+#define COMPILE_FILE(FILE) call compile preprocessFileLineNumbers format ["%1\%2", PATH, FILE]

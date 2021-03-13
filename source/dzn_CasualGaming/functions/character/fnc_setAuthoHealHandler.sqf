@@ -27,7 +27,9 @@ params [["_mode","SET"]];
 switch (toUpper _mode) do {
 	case "INIT": {
 		GVAR(AutoHealEnabled) = true;
-		GVAR(AutoHealTimer) = 30;
+		if (isNil SVAR(AutoHealTimer)) then {
+			GVAR(AutoHealTimer) = 30;
+		};
 		GVAR(AutoHeal_Handler) = -1;
 	};
 	case "SET": {
