@@ -115,7 +115,7 @@ private _addProfileFeatureSetting = {
 	"AuthProfile1_UIDsSetting"
 	, SETTING_EDITBOX
 	, "Users (UIDs)"
-	, "List of users to apply authorization profile settings by player UID (admin is always authorized). In format: ""UID1"",""UID2""."
+	, "List of users to apply authorization profile settings by player UID (admin is always authorized). In format: ""UID1"",""UID2"". Use ""All"" to apply profile options to all users except listed in Authorized users lists."
 	, SETTING_PROFILE_CATEGORY
 	, ""
 	, SETTING_GLOBAL

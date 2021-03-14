@@ -3,8 +3,9 @@
 #include "functions\main\reasons.hpp"
 
 // Comment for addon
-call compile preprocessFileLineNumbers format ["%1\Settings.sqf", PATH];
-sleep 2;
+//call compile preprocessFileLineNumbers format ["%1\Settings.sqf", PATH];
+//sleep 2;
+// ----
 
 call compile preprocessFileLineNumbers format ["%1\Functions.sqf", PATH]; 
 

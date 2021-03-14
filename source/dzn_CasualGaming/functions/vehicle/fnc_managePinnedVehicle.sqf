@@ -35,10 +35,10 @@ Author:
 #define DISABLED_VEHICLE_SAFE_POS [-1000,-1000,30000]
 #define IS_SLOTID_VALID(SLOTID) (SLOTID > 0 && SLOTID <= SLOTS_COUNT)
 
-#define EXIT_SLOTID_INVALID(SLOTID) if !IS_SLOTID_VALID(SLOTID) exitWith { ["Exit. Invalid slot id!"] call CVP_Log; }
-#define EXIT_NOT_IN_VEHICLE if (vehicle player == player) exitWith { ["Exit. Not in vehicle!"] call CVP_Log; }		
-#define EXIT_NULL_SLOT if (isNull _veh) exitWith { _title = "Slot is empty"; ["Exit. Null object"] call CVP_Log;}
-#define EXIT_NOT_ALIVE(VEH) if (!alive VEH) exitWith { _title = "Vehicle destroyed"; ["Exit. Destroyed"] call CVP_Log; }
+#define EXIT_SLOTID_INVALID(SLOTID) if !IS_SLOTID_VALID(SLOTID) exitWith { /*["Exit. Invalid slot id!"] call CVP_Log;*/ }
+#define EXIT_NOT_IN_VEHICLE if (vehicle player == player) exitWith { /*["Exit. Not in vehicle!"] call CVP_Log;*/ }		
+#define EXIT_NULL_SLOT if (isNull _veh) exitWith { _title = "Slot is empty"; /*["Exit. Null object"] call CVP_Log;*/ }
+#define EXIT_NOT_ALIVE(VEH) if (!alive VEH) exitWith { _title = "Vehicle destroyed"; /*["Exit. Destroyed"] call CVP_Log;*/ }
 
 #define SET_TITLE_INFO_MESSAGE(VEH, MSG) _title = format ["%1<br/>%2", ["GET_INFO",[VEH]] call SELF, MSG]
 
@@ -48,7 +48,7 @@ private _title = "";
 private _slotId = -1;
 private _result = -1;
 
-["Invoked. Mode: %1, Params: %2", _mode, _args] call CVP_Log;
+// ["Invoked. Mode: %1, Params: %2", _mode, _args] call CVP_Log;
 
 switch toUpper(_mode) do {
 	case "INIT": {
@@ -198,9 +198,6 @@ switch toUpper(_mode) do {
 		// --- Disable vehicle 
 		["TOGGLE_ENTITY_CACHE", [_veh, false]] call SELF;
 
-		// --- Unlock vehicle and apply vehicle states
-		_veh lock false;
-
 		// --- Restore velocity and engine state
 		["RESTORE_VEHICLE_STATE", _veh] call SELF;
 
@@ -308,7 +305,7 @@ switch toUpper(_mode) do {
 			[_entity, _doCache] call FUNC(vehicle_toggleCache);
 		} else {
 			[QFUNC(vehicle_toggleCache)] call FUNC(publishFunction);
-			[_entity, _doCache] remoteExec [QFUNC(vehicle_toggleCache), _x];
+			[_entity, _doCache] remoteExec [QFUNC(vehicle_toggleCache), _entity];
 		};
 	};
 	case "QUICK_MENU_ACTION": {
@@ -454,21 +451,33 @@ switch toUpper(_mode) do {
 		private _isEngineOn = _veh getVariable [SVAR(PV_EngineOn), false];
 		private _velocity = _veh getVariable [SVAR(PV_Velocity), [0,0,0]];
 		private _pos = _veh getVariable [SVAR(PV_Position), [0,0,0]];
-		private _isHovering = _veh getVariable [SVAR(PV_IsHovering), false];
+		private _isHovering = _veh getVariable [SVAR(PV_IsHovering), false];		
 
 		[
 			{
 				params ["_veh", "_isEngineOn", "_velocity", "_pos", "_isHovering"];
-
-				if (_isEngineOn) then { _veh engineOn _isEngineOn; };
 				_veh setPos _pos;
+
+				// --- Unlock vehicle and restore engine state
+				if (local _veh) then {
+					_veh lock false;
+					if (_isEngineOn) then { _veh engineOn true; };
+				} else {
+					[_veh, false] remoteExec ["lock", _veh];
+					if (_isEngineOn) then { [_veh, true] remoteExec ["engineOn", _veh]; };
+					{ ExecOn = clientOwner; publicVariable "ExecOn"; } remoteExec ["call", _veh];
+				};
 
 				if (_isHovering) then {		
 					["HOVER_ENABLE", _veh] call FUNC(manageVehicle);
 				} else {
 					// --- Restore speed only for non hovering vehicle in air
 					if (_pos # 2 > 10) then {
-						_veh setVelocityModelSpace _velocity;
+						if (local _veh) then {
+							_veh setVelocityModelSpace _velocity;
+						} else {
+							[_veh, _velocity] remoteExec ["setVelocityModelSpace", veh];
+						};
 					};
 				};
 			}, [_veh, _isEngineOn, _velocity, _pos, _isHovering]
@@ -539,6 +548,6 @@ if !(_title isEqualTo "") then {
 	];
 };
 
-["Finished. Mode: %1, Params: %2, Result: %3", _mode, _args, [_result, "Success"] select (_result isEqualTo -1)] call CVP_Log;
+// ["Finished. Mode: %1, Params: %2, Result: %3", _mode, _args, [_result, "Success"] select (_result isEqualTo -1)] call CVP_Log;
 
 _result

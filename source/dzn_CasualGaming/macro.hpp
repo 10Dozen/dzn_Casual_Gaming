@@ -2,7 +2,7 @@
 #define	gADDON CasualGaming
 #define	gADDON_NAME dzn_##gADDON
 
-#define gADDON_PATH gADDON_NAME
+#define gADDON_PATH \##gADDON_NAME
 #define gFNC_PATH gADDON_PATH##\functions\##
 
 #define QUOTE(s) #s
@@ -25,4 +25,3 @@
 #define LOCALIZE_FORMAT_STR_desc(X) localize format ["STR_%1_%2_desc", ADDON, X]
 
 #define COMPILE_FUNCTION(SUBPATH,NAME) GVAR(NAME) = compile preprocessFileLineNumbers format ["%1%2\%3.sqf", FNC_PATH, QUOTE(SUBPATH), QUOTE(NAME)]
-#define COMPILE_FILE(FILE) call compile preprocessFileLineNumbers format ["%1\%2", PATH, FILE]

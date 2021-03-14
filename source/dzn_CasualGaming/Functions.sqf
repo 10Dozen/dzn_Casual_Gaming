@@ -40,6 +40,8 @@ COMPILE_FUNCTION(vehicle,fnc_vehicle_changeSeat);
 COMPILE_FUNCTION(vehicle,fnc_vehicle_getEmptySeats);
 COMPILE_FUNCTION(vehicle,fnc_vehicle_toggleCache);
 COMPILE_FUNCTION(vehicle,fnc_vehicle_showMenu);
+COMPILE_FUNCTION(vehicle,fnc_vehicle_addHoverPFH);
+COMPILE_FUNCTION(vehicle,fnc_vehicle_releaseHover);
 
 // --- Group AI
 COMPILE_FUNCTION(group_ai,fnc_ratingFix);

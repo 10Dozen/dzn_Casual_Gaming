@@ -90,9 +90,7 @@ switch (toUpper _mode) do {
 	case "GET_AUTH_LEVEL": {
 		// --- Returns user's auth level 
 		// --- Player is admin -> full access
-
-		// @TODO: Uncomment for release
-		// if ((serverCommandAvailable "#logout") || !(isMultiplayer) || isServer) exitWith { _result = AUTH_FULL; };
+		if ((serverCommandAvailable "#logout") || !(isMultiplayer) || isServer) exitWith { _result = AUTH_FULL; };
 
 		// --- Return full access if all names and UIDs lists are empty -> full access
 		private _isProfileListEmpty = GVAR(AuthProfile1_UIDs) isEqualTo [];
