@@ -9,7 +9,7 @@ class GVAR(Console_Group): RscControlsGroup
 	w = 0.354265 * safezoneW;
 	h = 0.532079 * safezoneH;
 	colorBackground[] = {0,0,0,.75};
-	onLoad = "[] spawn { uiSleep 0.01; ['OPEN'] call dzn_CasualGaming_fnc_handleConsole; };"
+	onLoad = "[] spawn { uiSleep 0.01; ['OPEN'] call dzn_CasualGaming_fnc_handleConsole; };";
 	
 	class controls
 	{

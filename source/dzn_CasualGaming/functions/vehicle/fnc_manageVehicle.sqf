@@ -51,7 +51,7 @@ private _title = "";
 private _veh = vehicle player;
 private _result = -1;
 
-["Invoked. Mode: %1, Params: %2", _mode, _args] call CGV_Log;
+// ["Invoked. Mode: %1, Params: %2", _mode, _args] call CGV_Log;
 
 if (_veh isEqualTo player && !(_mode in PUBLIC_METHODS)) exitWith {
 	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Player is not in vehicle!";
@@ -77,14 +77,31 @@ switch (toUpper _mode) do {
 		if (!isNull (driver _veh)) exitWith {
 			_title = "Driver NOT added. Driver place is already occupied!";
 		};
+		if (side player isEqualTo sideEnemy) exitWith {
+			_title = "Driver NOT added. Player's rating is too low!";
+		};
 
 		_title = "Driver added";
+
 		private _grp = createGroup (side player);
 		private _u = _grp createUnit [typeof player, getPos _veh, [], 0, "FORM"];
-		_u setUnitLoadout (getUnitLoadout player);
 		_u assignAsDriver _veh;
 		_u moveInDriver _veh;
-		_veh setVariable [SVAR(AIDriver), _u];
+
+		[
+			{
+				params ["_veh","_u"];
+				if (driver _veh isEqualTo _u) then {
+					_veh setVariable [SVAR(AIDriver), _u];
+					_u setUnitLoadout (getUnitLoadout player);
+				} else {
+					deleteVehicle _u;
+					deleteGroup _grp;
+					hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Failed to add driver (no seat?)"; 
+				};
+			},
+			[_veh, _u, _grp]
+		] call CBA_fnc_execNextFrame;
 
 		[player, REASON_VEHICLE_DRIVER_ADDED] call FUNC(logUserAction);
 	};
@@ -199,7 +216,7 @@ switch (toUpper _mode) do {
 			_options
 		] call FUNC(vehicle_showMenu);
 
-		_title = "Select position to leave.<br />Note: Hovering will be disabled!";
+		_title = "Select position to leave.<br />Note: Hovering will NOT be disabled!";
 	};
 
 	case "IS_HOVER_ENABLED": {
@@ -217,17 +234,15 @@ switch (toUpper _mode) do {
 		private _modelPos = getPosASL _veh; 
 		private _modelVector = [vectorDir _veh, vectorUp _veh];
 
-		// --- Save default release velocity
+		// --- Save velocity
 		_veh setVariable [SVAR(Vehicle_SpeedBeforeHover), speed _veh, true];
 
-		private _pfh = [{
-			// --- "Freezes" vehicle in the same position/tilt each frame
-			(_this # 0) params ["_veh","_pos","_vector"];
-			_veh setPosASL _modelPos;
-			_veh setVectorDirAndUp _vector;
-			_veh setVelocity [0, 0, 0];
-		}, nil, [_veh, _modelPos, _modelVector]] call CBA_fnc_addPerFrameHandler;
-		_veh setVariable [SVAR(Vehicle_HoverPFH), _pfh];
+		if (local _veh) then {
+			[_veh, _modelPos, _modelVector] call FUNC(vehicle_addHoverPFH);
+		} else {
+			[QFUNC(vehicle_addHoverPFH)] call FUNC(publishFunction);
+			[_veh, _modelPos, _modelVector] remoteExec [QFUNC(vehicle_addHoverPFH), _veh];
+		};
 	};
 	case "HOVER_DISABLE": {
 		_args params [
@@ -239,17 +254,22 @@ switch (toUpper _mode) do {
 		private _pfhID = _veh getVariable [SVAR(Vehicle_HoverPFH), -1];
 		if (_pfhID < 0) exitWith {};
 
-		[_pfhID] call CBA_fnc_removePerFrameHandler;
-		_veh setVariable [SVAR(Vehicle_HoverPFH), nil];
+		private _pfhOwner = _veh getVariable [SVAR(Vehicle_HoverPFH_Owner), clientOwner];
+		if (_pfhOwner isEqualTo clientOwner) then {
+			[_pfhID] call CBA_fnc_removePerFrameHandler;
+		} else {
+			[_pfhID] remoteExec ["CBA_fnc_removePerFrameHandler", _pfhOwner];
+		};
+		_veh setVariable [SVAR(Vehicle_HoverPFH), nil, true];
 
 		// --- Conversion from KPH to M/S
 		private _speed = _releaseSpeed * 1000 / 3600;
-		[{
-			_this params ["_veh","_speed"];
-			// --- Removes vehicle flip and adds speed
-			_veh setPos (getPos _veh);
-			_veh setVelocityModelSpace [0, _speed, 0];
-		}, [_veh, _speed]] call CBA_fnc_execNextFrame;
+		if (local _veh) then {
+			[_veh, _speed] call FUNC(vehicle_releaseHover);
+		} else {
+			[QFUNC(vehicle_releaseHover)] call FUNC(publishFunction);
+			[_veh, _speed] remoteExec [QFUNC(vehicle_releaseHover), _veh];
+		};
 	};
 	case "CHANGE_SEAT": {
 		_args params ["_title", "_vehicle", "_role", "_cargoID", "_turretID"];
@@ -260,8 +280,6 @@ switch (toUpper _mode) do {
 	};
 	case "SELECT_MOVEOUT_MENU_ACTION": {
 		_args params ["_veh", "", "_pos"];
-
-		["HOVER_DISABLE", [_veh]] call SELF;
 		[player, _pos] call FUNC(safeMove);
 
 		// --- Report LEAVE action
@@ -322,6 +340,6 @@ if !(_title isEqualTo "") then {
 };
 
 
-["Finished. Mode: %1, Params: %2, Result: %3", _mode, _args, [_result, "Success"] select (_result isEqualTo -1)] call CGV_Log;
+// ["Finished. Mode: %1, Params: %2, Result: %3", _mode, _args, [_result, "Success"] select (_result isEqualTo -1)] call CGV_Log;
 
 _result
