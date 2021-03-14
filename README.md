@@ -11,7 +11,7 @@ Small cheat-mod to make any mission playable and fun if it isn't (e.g. not enoug
 - Fast loadout save/load, persistant loadouts (saved between games), loadout copycat
 - Garage (MP-compatible)
 - Vehicle service (Repair, Rearm, Refuel) and various features: Add/Remove AI driver, Set In Flight, Instant land, Switch seats, Forced hover for helis/planes
-- Pinned vehicles: ability to 'pin' up to 5 vehicles and be able to get in at any time, vehicles can also be disabled and hidden when not needed
+- Pinned vehicles
 - Individual, Squad and Global Rallypoint for fast move
 - Group AI features: Adding/deleting AI, manage equipment (Arsenal or copy loadouts, re-arm), heal/teleport, ability to leave and join groups, join specific unit to your group
 - Splendid camera
@@ -32,6 +32,9 @@ Forces vehicle to hover mid-air (even planes). You won't be able to control vehi
 #### Change seat / Leave vehicle feature
 Allows to switch between seats of vehicle. Can be used to swtich between helicopter pilot/gunner/door gunner while in flight/hovered. 
 It's also possible to safely leave vehicle in any circumstances and teleport to position on ground or to rallypoint if set.
+
+#### Pinned Vehicles
+Ability to 'pin' up to 5 vehicles and be able to get in at any time, vehicles can also be disabled and hidden when not needed. Basically you can pin and use several vehicles during mission without accessing Zeus - switch to artillery, fire few rounds, switch to A-10 and make some brrrrrrttt and then return to rallypoint and continue to play as infantry.
 
 #### Group AI - Manage group - Arsenal
 When Arsenal is opened with several units selected - each unit will get selected gear once arsenal become closed.
