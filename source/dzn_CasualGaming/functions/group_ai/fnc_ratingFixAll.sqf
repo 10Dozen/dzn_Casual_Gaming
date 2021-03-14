@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+#include "..\main\reasons.hpp"
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_ratingFixAll
@@ -22,14 +23,14 @@ Author:
 	10Dozen
 ---------------------------------------------------------------------------- */
 
-[SVAR(fnc_ratingFix)] call GVAR(fnc_publishFunction);
+[QFUNC(ratingFix)] call FUNC(publishFunction);
 
-[true] call GVAR(fnc_ratingFix);
+[true] call FUNC(ratingFix);
 
 {
-	[true] remoteExec [SVAR(fnc_ratingFix), _x];
+	[true] remoteExec [QFUNC(ratingFix), _x];
 	sleep 0.5;
 } forEach (call BIS_fnc_listPlayers);
 	
 hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Global Rating fix done</t>";
-[player, 25] call GVAR(fnc_logUserAction);
+[player, REASON_RATING_FIXED_GLOBAL] call FUNC(logUserAction);

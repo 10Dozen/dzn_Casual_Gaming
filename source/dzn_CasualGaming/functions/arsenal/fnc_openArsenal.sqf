@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+#include "..\main\reasons.hpp"
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_openArsenal
@@ -38,4 +39,4 @@ switch (toUpper _mode) do {
 	};
 };
 
-[player, 6] call GVAR(fnc_logUserAction);
+[player, REASON_ARSENAL_OPENED] call FUNC(logUserAction);

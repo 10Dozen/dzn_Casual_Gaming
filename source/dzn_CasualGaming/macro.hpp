@@ -15,6 +15,8 @@
 #define GVAR(X) gADDON_NAME##_##X
 #define SVAR(X) QUOTE(GVAR(X))
 #define FORMAT_VAR(X) format ["%1_%2", ADDON_NAME, X]
+#define FUNC(X) gADDON_NAME##_fnc_##X
+#define QFUNC(X) QUOTE(FUNC(X))
 
 #define gSTR_NAME(X) STR_##gADDON##_##X
 #define STR_NAME(X) QUOTE(gSTR_NAME(X))

@@ -1,4 +1,5 @@
 #include "..\..\macro.hpp"
+#include "..\main\reasons.hpp"
 
 /* ----------------------------------------------------------------------------
 Function: dzn_CasualGaming_fnc_heal
@@ -39,4 +40,4 @@ player setVariable ["#rev", 1, true];
 if (_showHint) then {
 	hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Healed</t>";
 };
-[player, 1] call GVAR(fnc_logUserAction);
+[player, REASON_HEALING] call FUNC(logUserAction);
