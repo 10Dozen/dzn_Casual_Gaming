@@ -29,4 +29,4 @@ params ["_player", "_actionID"];
 private _name = name _player;
 private _UID = getPlayerUID _player;
 
-[_name, _UID, _actionID] remoteExec [QFUNC(logUserActionServer), 2];
+[_name, _UID, _actionID] remoteExec [QFUNC(logActionRemote), 2];
