@@ -9,7 +9,7 @@
 Function: dzn_CasualGaming_fnc_manageAuth
 
 Description:
-	Class for authentication checks 
+	Class for authentication checks
 
 Parameters:
 	_mode -- modes <STRING>
@@ -20,7 +20,7 @@ Returns:
 
 Examples:
     (begin example)
-		[""] call dzn_CasualGaming_fnc_manageAuth; 
+		[""] call dzn_CasualGaming_fnc_manageAuth;
     (end)
 
 Author:
@@ -34,7 +34,7 @@ private _result = -1;
 
 switch (toUpper _mode) do {
 	case "INIT": {
-		// --- Generates permission map 
+		// --- Generates permission map
 		if (isNil SVAR(PermissionMap)) then {
 			GVAR(PermissionMap) = ["GET_PERMISSION_MAP"] call SELF;
 		};
@@ -44,6 +44,8 @@ switch (toUpper _mode) do {
 		// Returns True if user authorized with any level of access (full or limited)
 		private _authLevel = ["GET_AUTH_LEVEL"] call SELF;
 		_result = _authLevel isNotEqualTo AUTH_NONE;
+
+		diag_log parseText format ["dzn_CasualGaming :: CHECK_AUTHORIZED: %1; AUTH_LEVEL: %2", _result, _authLevel];
 	};
 	case "CHECK_PERMISSION": {
 		// Returns True if feature permitted for user (or all features are permitted)
@@ -88,18 +90,18 @@ switch (toUpper _mode) do {
 		};
 	};
 	case "GET_AUTH_LEVEL": {
-		// --- Returns user's auth level 
+		// --- Returns user's auth level
 		// --- Player is admin -> full access
 		if ((serverCommandAvailable "#logout") || !(isMultiplayer) || isServer) exitWith { _result = AUTH_FULL; };
 
 		// --- Return full access if all names and UIDs lists are empty -> full access
 		private _isProfileListEmpty = GVAR(AuthProfile1_UIDs) isEqualTo [];
 		if (
-			GVAR(AuthorizedUsers) isEqualTo [] 
+			GVAR(AuthorizedUsers) isEqualTo []
 			&& GVAR(AuthorizedUIDs) isEqualTo []
 			&& _isProfileListEmpty
-		) exitWith { 
-			_result = AUTH_FULL; 
+		) exitWith {
+			_result = AUTH_FULL;
 		};
 
 		private _name = toLower name player;
@@ -114,10 +116,10 @@ switch (toUpper _mode) do {
 		// --- Player is not in main list and auth profile is not set -> no access
 		if (_isProfileListEmpty) exitWith { _result = AUTH_NONE; };
 
-		// --- Auth Profile is set to "all" -> limited access 
+		// --- Auth Profile is set to "all" -> limited access
 		if ("all" in GVAR(AuthProfile1_UIDs)) exitWith { _result = AUTH_LIMITED; };
 
-		// --- Player's UID is listed in Auth Profile -> limited access 
+		// --- Player's UID is listed in Auth Profile -> limited access
 		if (_uid in GVAR(AuthProfile1_UIDs)) exitWith { _result = AUTH_LIMITED; };
 
 		_result = AUTH_NONE;

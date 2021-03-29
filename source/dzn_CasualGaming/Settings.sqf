@@ -16,7 +16,7 @@
 private _add = {
 	params [
 		"_settingName",
-		"_type",		
+		"_type",
 		"_title",
 		"_tooltip",
 		"_category",
@@ -250,7 +250,7 @@ private _addKey = {
 	_settings call CBA_fnc_addKeybind;
 };
 
-// --- Healing 
+// --- Healing
 [
 	"Key_Heal"
 	, "Heal player"
@@ -271,8 +271,8 @@ private _addKey = {
 	, { ["KEY_RALLYPOINT", ["DEPLOY_TO", RP_CUSTOM]] call FUNC(handleHotkey) }
 ] call _addKey;
 
-// --- Arsenal 
-// --- Garage 
+// --- Arsenal
+// --- Garage
 [
 	"Key_OpenArsenal_BIS"
 	, "Open BIS Arsenal"
@@ -289,10 +289,10 @@ private _addKey = {
 	, { ["KEY_GARAGE"] call FUNC(handleHotkey) }
 ] call _addKey;
 
-// --- Repair/refuel/rearm vehicle 
+// --- Repair/refuel/rearm vehicle
 // --- Land vehicle
-// --- Move in flight 
-// --- Toggle hover 
+// --- Move in flight
+// --- Toggle hover
 [
 	"Key_VehicleService"
 	, "Vehicle: Refuel/Rearm/Repair"
@@ -319,7 +319,7 @@ private _addKey = {
 	, { ["KEY_VEHICLE_CONTROL", "CHANGE_SEAT_MENU"] call FUNC(handleHotkey) }
 ] call _addKey;
 
-// --- Pinned vehicle quick menu 
+// --- Pinned vehicle quick menu
 [
 	"Key_PinnedVehicle_QuickMenu"
 	, "Pinned Vehicle: Quick Menu"
@@ -327,9 +327,9 @@ private _addKey = {
 ] call _addKey;
 
 
-// --- Manage group 
-// --- Heal All 
-// --- Rally All 
+// --- Manage group
+// --- Heal All
+// --- Rally All
 // --- Rearm All
 [
 	"Key_GroupAIManage"
@@ -352,7 +352,7 @@ private _addKey = {
 	, { ["KEY_GROUP_AI", "UNIT_REARM"] call FUNC(handleHotkey) }
 ] call _addKey;
 
-// --- Console 
+// --- Console
 [
 	"Key_Console"
 	, "Open Console"
