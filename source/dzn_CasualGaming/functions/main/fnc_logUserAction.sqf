@@ -4,7 +4,7 @@
 Function: dzn_CasualGaming_fnc_logUserAction
 
 Description:
-	Logs usage of CasualGaming actions to RPT on server side.
+	Invoke server to log user's action.
 
 Parameters:
 	_player -- player used action <OBJECT>
@@ -24,14 +24,9 @@ Author:
 
 if !(GVAR(Log)) exitWith {};
 
-if (isServer) then {
-	params ["_name", "_UID", "_actionID"];
-	private _msg = format ["[dzn_CG][%1 %2] %3", _name, _UID, GVAR(LogReasons) # _actionID];
-	diag_log parseText _msg;
-	systemChat _msg;
-} else {
-	params ["_player", "_actionID"];
-	private _name = name _player;
-	private _UID = getPlayerUID _player;
-	[_name, _UID, _actionID] remoteExec [QFUNC(logUserAction), 2];
-};
+params ["_player", "_actionID"];
+
+private _name = name _player;
+private _UID = getPlayerUID _player;
+
+[_name, _UID, _actionID] remoteExec [QFUNC(logUserActionServer), 2];

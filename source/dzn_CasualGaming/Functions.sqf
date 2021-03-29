@@ -6,6 +6,7 @@ COMPILE_FUNCTION(auth,fnc_manageAuth);
 // --- Main
 COMPILE_FUNCTION(main,fnc_init);
 COMPILE_FUNCTION(main,fnc_logUserAction);
+COMPILE_FUNCTION(main,fnc_logActionRemote);
 COMPILE_FUNCTION(main,fnc_publishFunction);
 COMPILE_FUNCTION(main,fnc_manageTopics);
 COMPILE_FUNCTION(main,fnc_handleHotkey);
