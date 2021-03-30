@@ -1,5 +1,5 @@
 # dzn Casual Gaming
-##### Version: 5.2
+##### Version: 5.3
 
 Small cheat-mod to make any mission playable and fun if it isn't (e.g. not enough assets to complete the mission, absence of ACE Medical items, broken vehicles or scripts and so on). 
 
