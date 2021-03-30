@@ -1,10 +1,12 @@
 #include "macro.hpp"
 
-// --- Auth 
+// --- Auth
 COMPILE_FUNCTION(auth,fnc_manageAuth);
 
 // --- Main
+COMPILE_FUNCTION(main,fnc_init);
 COMPILE_FUNCTION(main,fnc_logUserAction);
+COMPILE_FUNCTION(main,fnc_logActionRemote);
 COMPILE_FUNCTION(main,fnc_publishFunction);
 COMPILE_FUNCTION(main,fnc_manageTopics);
 COMPILE_FUNCTION(main,fnc_handleHotkey);
@@ -18,20 +20,20 @@ COMPILE_FUNCTION(character,fnc_toggleFatigue);
 COMPILE_FUNCTION(character,fnc_setWeaponSway);
 COMPILE_FUNCTION(character,fnc_setWeaponRecoil);
 
-// --- Rallypoint component 
+// --- Rallypoint component
 COMPILE_FUNCTION(rallypoint,fnc_manageRallypoint);
 COMPILE_FUNCTION(rallypoint,fnc_addRallypointActionsToACE);
 COMPILE_FUNCTION(rallypoint,fnc_safeMove);
 
-// --- Arsenal & Garage component 
+// --- Arsenal & Garage component
 COMPILE_FUNCTION(arsenal,fnc_openArsenal);
 COMPILE_FUNCTION(arsenal,fnc_manageLoadouts);
 COMPILE_FUNCTION(arsenal,fnc_applyLoadoutToUnit);
 
-// --- Respawn component 
+// --- Respawn component
 COMPILE_FUNCTION(respawn,fnc_respawnManager);
 
-// --- Vehicle  
+// --- Vehicle
 COMPILE_FUNCTION(vehicle,fnc_manageVehicle);
 COMPILE_FUNCTION(vehicle,fnc_openGarage);
 COMPILE_FUNCTION(vehicle,fnc_managePinnedVehicle);

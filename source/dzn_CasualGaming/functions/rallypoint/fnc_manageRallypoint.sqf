@@ -1,5 +1,6 @@
 #include "..\..\macro.hpp"
 #include "..\main\reasons.hpp"
+#include "..\auth\permission_map.hpp"
 #include "defines.hpp"
 
 #define SELF FUNC(manageRallypoint)
@@ -24,7 +25,7 @@ Returns:
 Examples:
     (begin example)
 		// creates global rallypoint
-		["CREATE", "global"] call dzn_CasualGaming_fnc_manageRallypoint; 
+		["CREATE", "global"] call dzn_CasualGaming_fnc_manageRallypoint;
     (end)
 
 Author:
@@ -39,11 +40,12 @@ private _result = -1;
 switch toUpper(_mode) do {
 	case "INIT": {
 		GVAR(RallyPointClass) = "Pole_F";
+		if !(["CHECK_PERMISSION", PERM_RALLYPOINT] call FUNC(manageAuth)) exitWith {};
 		[] call FUNC(addRallypointActionsToACE);
 	};
 	case "SET": {
 		private _type = _args;
-		private _pos = getPos call CBA_fnc_currentUnit;
+		private _pos = getPos (call CBA_fnc_currentUnit);
 		private _settings = ["GET_SETTINGS", _type] call SELF;
 
 		if (["CHECK_EXISTS", _type] call SELF) then {
@@ -51,7 +53,7 @@ switch toUpper(_mode) do {
 		} else {
 			["CREATE", [_pos, _settings]] call SELF;
 		};
-		
+
 		_title = format [
 			"<t color='#FFD033' shadow='1'>%1</t> set at grid %2"
 			, ["GET_NAME_BY_TYPE", _type] call SELF
@@ -76,7 +78,7 @@ switch toUpper(_mode) do {
 			, if (_public) then { "" } else { "Local" }
 			, _rpMarkerName
 			, _rpDisplayName
-		];		
+		];
 	};
 	case "UPDATE": {
 		private _pos = _args # 0;
@@ -90,7 +92,7 @@ switch toUpper(_mode) do {
 		private _settings = ["GET_SETTINGS", _type] call SELF;
 		_settings params ["", "_namespace", "_rpMarkerName", "_rpVarName"];
 
-		// --- Nulify rallypoint related info 
+		// --- Nulify rallypoint related info
 		if !(isNull (_namespace getVariable [_rpVarName, objNull])) then {
 			deleteVehicle (_namespace getVariable _rpVarName);
 			_namespace setVariable [_rpVarName, nil, true];
@@ -169,7 +171,7 @@ switch toUpper(_mode) do {
 	};
 	case "GET_NAME_BY_TYPE": {
 		_result = format [
-			"%1 Rallypoint", 
+			"%1 Rallypoint",
 			switch toLower(_args) do {
 				case RP_GLOBAL: { "Global" };
 				case RP_SQUAD: { "Squad" };

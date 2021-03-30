@@ -10,7 +10,7 @@ class GVAR(Console_Group): RscControlsGroup
 	h = 0.532079 * safezoneH;
 	colorBackground[] = {0,0,0,.75};
 	onLoad = "[] spawn { uiSleep 0.01; ['OPEN'] call dzn_CasualGaming_fnc_handleConsole; };";
-	
+
 	class controls
 	{
 		class GVAR(Console_DisplayMain): RscFrame
@@ -31,7 +31,7 @@ class GVAR(Console_Group): RscControlsGroup
 			w = 0.341144 * safezoneW;
 			h = 0.280042 * safezoneH;
 			style= 16;
-			
+
 			font = "PuristaMedium";
 			colorBackground[] = {0,0,0,0.75};
 		};
@@ -44,7 +44,7 @@ class GVAR(Console_Group): RscControlsGroup
 			w = 0.111528 * safezoneW;
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
-			
+
 			onButtonClick = "['HANDLE','SERVER'] call dzn_CasualGaming_fnc_handleConsole";
 		};
 		class GVAR(Console_GlobalExecBtn): RscButtonMenu
@@ -56,7 +56,7 @@ class GVAR(Console_Group): RscControlsGroup
 			w = 0.111528 * safezoneW;
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
-			
+
 			onButtonClick = "['HANDLE','GLOBAL'] call dzn_CasualGaming_fnc_handleConsole";
 		};
 		class GVAR(Console_LocalExecBtn): RscButtonMenu
@@ -78,7 +78,7 @@ class GVAR(Console_Group): RscControlsGroup
 			w = 0.229616 * safezoneW;
 			h = 0.0280042 * safezoneH;
 			colorBackground[] = {0,0,0,1};
-			onSetFocus = "['UPDATE_PLAYER_LIST'] call dzn_CasualGaming_fnc_handleConsole";			
+			onSetFocus = "['UPDATE_PLAYER_LIST'] call dzn_CasualGaming_fnc_handleConsole";
 		};
 		class GVAR(Console_PlayerExecBtn): RscButtonMenu
 		{
