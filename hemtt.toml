@@ -1,0 +1,11 @@
+name = "dzn Casual Gaming"
+prefix = ""
+author = "10Dozen"
+files = [
+    "mod.cpp"
+]
+exclude = [
+    "*.psd",
+    "*.png",
+    "*.tga"
+]
