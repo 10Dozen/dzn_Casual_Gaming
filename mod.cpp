@@ -1,0 +1,10 @@
+name = "dzn Casual Gaming";
+actionName = "WEBSITE";
+action = "";
+tooltip = "dzn Casual Gaming";
+overview = "";
+author = "10Dozen";
+description = "dzn CG - Version 5.4";
+logo = "mod.paa";
+logoOver = "mod.paa";
+overviewPicture = "mod.paa";
