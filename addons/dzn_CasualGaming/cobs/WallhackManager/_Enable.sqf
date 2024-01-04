@@ -8,4 +8,8 @@ private _pfh = [{
 self_SET(PFH, _pfh);
 self_SET(Enabled, true);
 
-[HINT_TEMPLATE_BASIC, "Enabled [%1 m]", self_GET(Range)] call FUNC(hint);
+[
+    HINT_WALLHACK,
+    format ["Enabled [%1 m]", self_GET(Range)],
+    HINT_WALLHACK_SETTINGS_INFO
+] call FUNC(hint);

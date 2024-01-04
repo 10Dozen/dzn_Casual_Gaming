@@ -52,7 +52,8 @@ COMPILE_FUNCTION(group_ai,fnc_ratingFixAll);
 COMPILE_FUNCTION(group_ai,fnc_manageGroup);
 
 // --- Misc component
-// COMPILE_FUNCTION(misc,fnc_manageWallhack);
-COMPILE_FUNCTION(misc,fnc_filterWallhackObjects);
-COMPILE_FUNCTION(misc,fnc_handleWallhackEH);
 COMPILE_FUNCTION(misc,fnc_handleConsole);
+
+// Component Objects
+COMPILE_COB(ToggleHandler);
+COMPILE_COB(WallhackManager);

@@ -27,10 +27,16 @@ Author:
 ---------------------------------------------------------------------------- */
 
 if (!self_GET(Enabled)) exitWith {};
+if (isGamePaused) exitWith {};
 
 private _range = self_GET(Range) * 1.1;
-private _objects = (player nearEntities [GVAR(WallhackClasslist), _range]) select {
-    self_CALL_WITH(FilterObjects) _x VARSET;
+
+private _typeFilter = cob_CALL(self_GET(TypeFilter), GetValue); // call ["getValue"];
+private _sideFilter = cob_CALL(self_GET(SideFilter), GetValue); // self_GET(SideFilter) call ["getValue"];
+private _selectedHUD = cob_CALL(self_GET(DetailLevel), GetValue); // self_GET(DetailLevel) call ["getValue"];
+
+private _objects = (player nearEntities [_typeFilter, _range]) select {
+    self_CALL_WITH(FilterObjects) [_x, _sideFilter] VARSET
 };
 
 {
@@ -71,9 +77,16 @@ private _objects = (player nearEntities [GVAR(WallhackClasslist), _range]) selec
         case civilian:   { [0.6, 0, 0.8, _textAlpha] };
     };
 
-    drawIcon3D [
-        _icon, _color, _iconPos, _iconW, _iconH, 0, _distanceText, 2, 0.035,
-        'puristaMedium', 'center', true, 0, -0.05
-    ];
-    drawIcon3D ['', _color, _pos, 0, 0, 0, _mark , 2, 0.035, 'puristaMedium'];
+    if !(HUD_RANGE in _selectedHUD) then { _distanceText = ''; };
+    if !(HUD_ICON in _selectedHUD) then { _icon = ''; };
+
+    if (_icon != '' || _distanceText != '') then {
+        drawIcon3D [
+            _icon, _color, _iconPos, _iconW, _iconH, 0, _distanceText, 2, 0.035,
+            'puristaMedium', 'center', false, 0, -0.05
+        ];
+    };
+    if (HUD_MARK in _selectedHUD) then {
+        drawIcon3D ['', _color, _pos, 0, 0, 0, _mark , 2, 0.035, 'puristaMedium', 'center', true];
+    };
 } forEach _objects;

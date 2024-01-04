@@ -9,4 +9,7 @@ _pfh call CBA_fnc_removePerFrameHandler;
 self_SET(PFH, nil);
 self_SET(Enabled, false);
 
-[HINT_TEMPLATE_BASIC, "Disabled"] call FUNC(hint);
+[
+    HINT_WALLHACK,
+    "Disabled"
+] call FUNC(hint);

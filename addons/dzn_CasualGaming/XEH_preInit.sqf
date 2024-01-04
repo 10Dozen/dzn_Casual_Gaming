@@ -3,7 +3,7 @@
 #include "XEH_PREP.hpp"
 #include "initSettings.sqf"
 
-GVAR(WallhackClasslist) = [];
+GVAR(COB_Cache) = createHashMap;
 GVAR(WallhackFilterCallable) = {true};
 
 ["CBA_settingsInitialized", {

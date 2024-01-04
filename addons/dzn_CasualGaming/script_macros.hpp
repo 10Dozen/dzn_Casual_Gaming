@@ -27,3 +27,11 @@
 #define COMPILE_FILE(FILE) compile preprocessFileLineNumbers 'gADDON_PATH\##FILE.sqf'
 
 #define COMPILE_FUNCTION(SUBPATH,NAME) GVAR(NAME) = compile preprocessFileLineNumbers format ["%1%2\%3.sqf", FNC_PATH, QUOTE(SUBPATH), QUOTE(NAME)]
+
+// --- Colors for templating
+#define COLOR_GRAY QUOTE(#AAAAAA)
+
+#define COLOR_HINT_TITLE QUOTE(#FFD000)
+#define COLOR_HEADER QUOTE(#12C4FF)
+#define COLOR_BTN QUOTE(#A0DB65)
+#define COLOR_NOTE QUOTE(#888888)

@@ -23,7 +23,12 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-!(isObjectHidden _this)
-&& simulationEnabled _this
-&& vehicle player != _this
-&& { _this call GVAR(WallhackFilterCallable) }
+params ["_obj", "_sideFilter"];
+
+!(isObjectHidden _obj)
+&& simulationEnabled _obj
+&& vehicle player != _obj
+&& {
+    side _obj in _sideFilter
+    && { _obj call GVAR(WallhackFilterCallable) }
+}

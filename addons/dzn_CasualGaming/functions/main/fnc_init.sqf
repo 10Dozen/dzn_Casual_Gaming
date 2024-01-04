@@ -36,10 +36,9 @@ missionNamespace setVariable [format ["%1_%2", SVAR(Loadout), 1], getUnitLoadout
 // --- Init modules
 ["INIT"] call FUNC(manageAuth);
 ["INIT"] call FUNC(manageRallypoint);
-//["INIT"] call FUNC(manageWallhack);
 ["INIT"] call FUNC(managePinnedVehicle);
 
-PREP_COB(WallhackManager);
+[] call COB_CONSTRUCTOR(WallhackManager);
 
 // --- Adds topics handler
 [SVAR(AddTopicsEvent), {
