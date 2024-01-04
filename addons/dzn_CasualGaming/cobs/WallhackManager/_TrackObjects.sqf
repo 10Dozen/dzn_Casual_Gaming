@@ -2,14 +2,12 @@
 #include "WallhackManager.h"
 
 /* ----------------------------------------------------------------------------
-!!:TBD:!!
-
-Function: dzn_CasualGaming_fnc_handleWallhackEH
+Function: trackObjects
 
 Description:
-    Draw icon for each unit on screen, on each frame.
-    Filters list of units/vehicles by in-game visibility and enable status.
-    Also applies custom SQF code to filter specific conditions.
+Draw icon for each unit on screen, on each frame.
+Filters list of units/vehicles by in-game visibility and enable status.
+Also applies custom SQF code to filter specific conditions.
 
 Parameters:
     none
@@ -19,7 +17,7 @@ Returns:
 
 Examples:
     (begin example)
-        [dzn_CasualGaming_fnc_handleWallhackEH] call CBA_fnc_addPerFrameHandler;
+        dzn_CasualGaming_cob_WallhackManager call ["trackobjects"];
     (end)
 
 Author:

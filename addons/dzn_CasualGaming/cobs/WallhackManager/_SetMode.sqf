@@ -1,6 +1,30 @@
 #include "..\script_component.hpp"
 #include "WallhackManager.h"
-// COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_DETAILS, HUD_ICON]]
+
+/* ----------------------------------------------------------------------------
+Function: setMode
+
+Description:
+    Changes mode of the filters or HUD settings. Each mode is handled by
+    ToggleHandler COB.
+    Enables Wallhack if it is not enabled yet.
+    Shows hint with current state of the Wallhack feature settings.
+
+Parameters:
+    0: _modeHandlerID - toggleHandler enum value from WallhackManager.h <ENUM>
+    1: _modeKey - identifier of the switch to change in ToggleHandler <ENUM>
+
+Returns:
+    none
+
+Examples:
+    (begin example)
+        dzn_CasualGaming_cob_WallhackManager call ["setmode", [_modeHandlerID, _modeKey]];
+    (end)
+
+Author:
+    10Dozen
+---------------------------------------------------------------------------- */
 
 params ["_modeHandlerID", "_modeKey"];
 

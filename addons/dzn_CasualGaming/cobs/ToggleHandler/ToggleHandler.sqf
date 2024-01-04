@@ -8,6 +8,9 @@
     all active switches.
 
     On selecting/deselcting all switches - reset to 'all enabled'.
+
+    Parameters:
+        _this - constructor parameters (see #create.sqf)
 */
 
 private _declaration = GVAR(COB_Cache) getOrDefaultCall [

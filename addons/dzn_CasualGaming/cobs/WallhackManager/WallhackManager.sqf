@@ -4,9 +4,10 @@
 /*
     WallhackManager COB
 
+    Manager object that handles Wallhack feature state and settings.
     Is singleton.
 
-    Manager object that handles Wallhack feature state and settings.
+    No parameters.
 */
 if (!isNil QCOB_FQNAME) exitWith { COB_FQNAME };
 

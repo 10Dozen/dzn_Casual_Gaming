@@ -2,21 +2,22 @@
 #include "WallhackManager.h"
 
 /* ----------------------------------------------------------------------------
-Function: dzn_CasualGaming_fnc_filterWallhackObjects
+Function: filterObjects
 
 Description:
     Applies basic and custom filters to object. Returns true if object matches
     filter.
 
 Parameters:
-    _this - object to check <object>.
+    0: _obj - object to check against filters <OBJECT>
+    1: _sideFilter - allowed sides <ARRAY of Side>
 
 Returns:
-    _match - true if object matches filter <boolean>.
+    <BOOLEAN> True if object passes all filters, False otherwise.
 
 Examples:
     (begin example)
-        _isFiltered = _object call dzn_CasualGaming_fnc_filterWallhackObjects;
+        dzn_CasualGaming_cob_WallhackManager call ["filterobjects", [_obj, _sideFilter]];
     (end)
 
 Author:

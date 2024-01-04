@@ -90,19 +90,6 @@ private _add = {
 ] call _add;
 
 [
-    "WallhackClasses"
-    , SETTING_EDITBOX
-    , "Wallhack Classes"
-    , "List of comma separated class names to find by wallhack."
-    , SETTING_MAIN_CATEGORY
-    , '"CAManBase", "Air", "Car", "Motorcycle", "Tank", "StaticWeapon", "Ship"'
-    , SETTING_GLOBAL
-    , {
-        GVAR(WallhackClasslist) = (call compile ("[" + _this + "]")) apply { toLower _x };
-    }
-] call _add;
-
-[
     "WallhackFilter"
     , SETTING_EDITBOX
     , "Wallhack Filter"
