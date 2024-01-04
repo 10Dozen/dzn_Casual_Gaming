@@ -11,5 +11,5 @@ BR
 BTN_ ["SET", RP_GLOBAL] call FUNC(manageRallypoint) _WITH_TEXT(Set Global Rallypoint) BR
 BTN_ ["DEPLOY_TO", RP_GLOBAL] call FUNC(manageRallypoint) _WITH_TEXT(Deploy to Global Rallypoint) BR
 BR ---------- BR
-BTN_ ["REMOVE", RP_CUSTOM] call FUNC(manageRallypoint) _WITH_TEXT(Delete My Rallypoint) BR
-BTN_ ["REMOVE", RP_GLOBAL] call FUNC(manageRallypoint) _WITH_TEXT(Delete Global Rallypoint) BR
+BTN_ALERT_ ["REMOVE", RP_CUSTOM] call FUNC(manageRallypoint) _WITH_TEXT(Delete My Rallypoint) BR
+BTN_ALERT_ ["REMOVE", RP_GLOBAL] call FUNC(manageRallypoint) _WITH_TEXT(Delete Global Rallypoint)

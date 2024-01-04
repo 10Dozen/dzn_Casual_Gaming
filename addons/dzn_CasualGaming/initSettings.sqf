@@ -137,7 +137,7 @@ private _addProfileFeatureSettings = {
     , { GVAR(AuthProfile1_UIDs) = call compile ("[" + toLower _this + "]"); }
     , SETTING_RESTART_NEEDED
 ] call _add;
-["AuthProfile_1"] call _addProfileFeatureSettings;
+["AuthProfile1"] call _addProfileFeatureSettings;
 
 //
 //   Keybindings

@@ -8,5 +8,6 @@
 #define _EOL  </font>
 
 #define BTN_ [<font color=COLOR_BTN><execute expression='
+#define BTN_ALERT_ [<font color=COLOR_BTN_ALERT><execute expression='
 #define _WITH_TEXT(title) '>##title##</execute></font>]
 #define BR <br/>

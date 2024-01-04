@@ -2,12 +2,12 @@
 
 H1(AI units)
 BR
-BTN_ ["UNIT_ADD"] call FUNC(manageGroup) _WITH_TEXT(ADD UNIT)
-BTN_ ["UNIT_REMOVE", units player] call FUNC(manageGroup) _WITH_TEXT(Delete Group)
+BTN_ ["UNIT_ADD"] call FUNC(manageGroup) _WITH_TEXT(ADD UNIT)                                        WS
+BTN_ALERT_ ["UNIT_REMOVE", units player] call FUNC(manageGroup) _WITH_TEXT(Delete Group)
 BR
 BR
-BTN_ ["UNIT_HEAL", units player] call FUNC(manageGroup) _WITH_TEXT(Heal All)
-BTN_ ["UNIT_REARM", units player] call FUNC(manageGroup) _WITH_TEXT(Rearm All)
+BTN_ ["UNIT_HEAL", units player] call FUNC(manageGroup) _WITH_TEXT(Heal All) WS
+BTN_ ["UNIT_REARM", units player] call FUNC(manageGroup) _WITH_TEXT(Rearm All) WS
 BTN_ ["UNIT_RALLY", units player] call FUNC(manageGroup) _WITH_TEXT(Rally Up)
 BR
 BR

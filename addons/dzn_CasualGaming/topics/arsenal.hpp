@@ -2,7 +2,7 @@
 
 H1(Arsenal)
 BR
-BTN_ ["BIS"] spawn FUNC(openArsenal) _WITH_TEXT(Open Arsenal) | BTN_ ["ACE"] spawn FUNC(openArsenal) _WITH_TEXT(Open ACE Arsenal)
+BTN_ ["BIS"] spawn FUNC(openArsenal) _WITH_TEXT(Open Arsenal)  |  BTN_ ["ACE"] spawn FUNC(openArsenal) _WITH_TEXT(Open ACE Arsenal)
 BR  Loadout #1  BTN_ ["SAVE", 1] call FUNC(manageLoadouts) _WITH_TEXT(Save) BTN_ ["LOAD", 1] call FUNC(manageLoadouts) _WITH_TEXT(Load)
 BR  Loadout #2  BTN_ ["SAVE", 2] call FUNC(manageLoadouts) _WITH_TEXT(Save) BTN_ ["LOAD", 2] call FUNC(manageLoadouts) _WITH_TEXT(Load)
 BR  Loadout #3  BTN_ ["SAVE", 3] call FUNC(manageLoadouts) _WITH_TEXT(Save) BTN_ ["LOAD", 3] call FUNC(manageLoadouts) _WITH_TEXT(Load)

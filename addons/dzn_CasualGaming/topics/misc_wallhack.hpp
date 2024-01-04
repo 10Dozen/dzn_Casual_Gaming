@@ -6,13 +6,13 @@ BR
 BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(Toggle)] _WITH_TEXT(Toggle Wallhack)
 BR
 Range:     WS
+BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [50]] _WITH_TEXT(50m) WS
 BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [100]] _WITH_TEXT(100m) WS
-BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [200]] _WITH_TEXT(200m) WS
 BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [300]] _WITH_TEXT(300m) WS
 BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [500]] _WITH_TEXT(500m) WS
 BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [1000]] _WITH_TEXT(1000m) WS
 BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [3000]] _WITH_TEXT(3000m) WS
-BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [5000]] _WITH_TEXT(5000m)
+BTN_ openMap false; COB(WallhackManager) call [cob_QPAR(SetRange), [6000]] _WITH_TEXT(6000m)
 BR
 Details:    WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_DETAILS]] _WITH_TEXT(All) WS
@@ -35,4 +35,3 @@ BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_ARMORED]]
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_AERIAL]] _WITH_TEXT(Aerial) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_STATICS]] _WITH_TEXT(Statics) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_SHIP]] _WITH_TEXT(Ships) WS
-BR
