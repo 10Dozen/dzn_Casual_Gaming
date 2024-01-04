@@ -110,8 +110,8 @@ switch (toUpper _mode) do {
         private _driver = driver _veh;
         if (!isNull _driver && {!isPlayer _driver}) then {
             // --- Delete current AI driver of current vehicle
-            moveOut _driver;
             _veh deleteVehicleCrew _driver;
+            moveOut _driver;
         } else {
             // --- Delete AI unit if there is no AI on driver seat: unit was moved out for some reason
             private _assignedDriver = _veh getVariable [SVAR(AIDriver), objNull];

@@ -23,14 +23,7 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-[QFUNC(ratingFix)] call FUNC(publishFunction);
-
-[true] call FUNC(ratingFix);
-
-{
-    [true] remoteExec [QFUNC(ratingFix), _x];
-    sleep 0.5;
-} forEach (call BIS_fnc_listPlayers);
+[QFUNC(ratingFix), [true]] call FUNC(remoteExecAll);
 
 hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Global Rating fix done</t>";
 [player, REASON_RATING_FIXED_GLOBAL] call FUNC(logUserAction);

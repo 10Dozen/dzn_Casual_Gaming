@@ -13,5 +13,6 @@ BR
 BR
 BTN_ ["MENU_SHOW", units player] call FUNC(manageGroup) _WITH_TEXT(MANAGE GROUP)
 BR
-BR
-NOTE(Note: Open manage menu, select group members and then choose action to apply from manage menu)
+NOTE_
+Note: Open manage menu, select group members and then choose action to apply from manage menu
+_EOL

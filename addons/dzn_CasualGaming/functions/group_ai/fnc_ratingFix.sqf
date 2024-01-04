@@ -24,6 +24,8 @@ Author:
 
 params ["_showHint"];
 
+if (!hasInterface) exitWith {};
+
 private _curRating = rating player;
 if (_curRating <= 0) exitWith {
     player addRating (15 + abs _curRating);

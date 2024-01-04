@@ -22,7 +22,6 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-systemChat format ["ToggleHandler.reset(): Args: %1", _this];
 private _desiredState = if (isNil "_this") then { true } else { _this };
 {
     _y set [0, _desiredState]

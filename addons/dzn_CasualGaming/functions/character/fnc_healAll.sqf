@@ -23,14 +23,7 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-[QFUNC(heal)] call FUNC(publishFunction);
-
-[true] call FUNC(heal);
-
-{
-    [true] remoteExec [QFUNC(heal), _x];
-    sleep 0.5;
-} forEach (call BIS_fnc_listPlayers);
+[QFUNC(heal), [true]] call FUNC(remoteExecAll);
 
 hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Global Healing done</t>";
 [player, REASON_HEALING_GLOBAL] call FUNC(logUserAction);

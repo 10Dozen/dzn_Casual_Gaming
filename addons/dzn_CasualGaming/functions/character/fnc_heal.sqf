@@ -24,6 +24,8 @@ Author:
 
 params ["_showHint"];
 
+if (!hasInterface) exitWith {};
+
 // --- Vanilla healing
 player setDamage 0;
 
