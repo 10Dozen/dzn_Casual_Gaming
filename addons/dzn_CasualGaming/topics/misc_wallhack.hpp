@@ -34,5 +34,8 @@ BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_WHEELED]]
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_ARMORED]] _WITH_TEXT(Armored) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_AERIAL]] _WITH_TEXT(Aerial) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_STATICS]] _WITH_TEXT(Statics) WS
-BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_SHIP]] _WITH_TEXT(Ships) WS
-BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_CONTAINER]] _WITH_TEXT(Pickable) WS
+BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_SHIP]] _WITH_TEXT(Ships)
+BR
+Track loot:  BTN_ COB(WallhackManager) call [cob_QPAR(ToggleLootTrack)] _WITH_TEXT(Toggle) BR
+NOTE_
+Note: Selecting large ranges causes FPS to drop. Use filters to exclude unwanted sides and/or types of objects - that may improve performance. _EOL

@@ -4,6 +4,7 @@
 #define MODE_DETAILS 1
 #define MODE_SIDE 2
 #define MODE_TYPES 3
+#define MODE_LOOT 4
 
 #define HUD_RANGE 1
 #define HUD_MARK  2
@@ -37,4 +38,7 @@
     format ["<t align='right'>%1</t>", cob_CALL(self_GET(SideFilter), GetInfo)], \
     lineBreak, \
     '<t align="left" color=COLOR_GRAY>Types:</t>', \
-    format ["<t align='right'>%1</t>", cob_CALL(self_GET(TypeFilter), GetInfo)]
+    format ["<t align='right'>%1</t>", cob_CALL(self_GET(TypeFilter), GetInfo)], \
+    lineBreak, \
+    '<t align="left" color=COLOR_GRAY>Loot:</t>', \
+    format ["<t align='right'>%1</t>", ["No", "Yes"] select self_GET(LootTrackEnabled)]

@@ -22,16 +22,30 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-private _pfhTracker = [{
-    cob_CALL((_this # 0), Track);
-}, 0.2, _self] call CBA_fnc_addPerFrameHandler;
+#define ENTITY_TRACKER_TIMEOUT 0.3
+#define LOOT_TRACKER_TIMEOUT 1
 
-private _pfhRender = [{
-    cob_CALL((_this # 0), Render);
-}, nil, _self] call CBA_fnc_addPerFrameHandler;
+private _pfhEntityTracker = [
+    { cob_CALL((_this # 0), TrackEntities); },
+    ENTITY_TRACKER_TIMEOUT,
+    _self
+] call CBA_fnc_addPerFrameHandler;
 
-self_SET(TrackPFH, _pfhTracker);
-self_SET(RenderPFH, _pfhRender);
+private _pfhLootTracker = [
+    { cob_CALL((_this # 0), TrackLoot); },
+    LOOT_TRACKER_TIMEOUT,
+    _self
+] call CBA_fnc_addPerFrameHandler;
+
+private _pfhRenderer = [
+    { cob_CALL((_this # 0), Render); },
+    nil,
+    _self
+] call CBA_fnc_addPerFrameHandler;
+
+self_SET(EntityTrackerPFH, _pfhEntityTracker);
+self_SET(LootTrackerPFH, _pfhLootTracker);
+self_SET(RendererPFH, _pfhRenderer);
 self_SET(Enabled, true);
 
 [

@@ -22,16 +22,19 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-private _pfhTracker = self_GET(TrackPFH);
-private _pfhRender = self_GET(RenderPFH);
+private _pfhEntityTracker = self_GET(EntityTrackerPFH);
+private _pfhLootTracker = self_GET(LootTrackerPFH);
+private _pfhRenderer = self_GET(RendererPFH);
 
-if (isNil "_pfhTracker" && isNil "_pfhRender") exitWith {};
+if (isNil "_pfhEntityTracker") exitWith {};
 
-_pfhTracker call CBA_fnc_removePerFrameHandler;
-_pfhRender call CBA_fnc_removePerFrameHandler;
+_pfhEntityTracker call CBA_fnc_removePerFrameHandler;
+_pfhLootTracker call CBA_fnc_removePerFrameHandler;
+_pfhRenderer call CBA_fnc_removePerFrameHandler;
 
-self_SET(TrackPFH, nil);
-self_SET(RenderPFH, nil);
+self_SET(EntityTrackerPFH, nil);
+self_SET(LootTrackerPFH, nil);
+self_SET(RendererPFH, nil);
 self_SET(Enabled, false);
 
 [
