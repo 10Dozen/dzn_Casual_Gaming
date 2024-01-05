@@ -41,6 +41,7 @@ self_GET(TrackedObjects) params ["_objects", "_pickables"];
 {
     private _obj = _x;
     private _dist = player distance _obj;
+    if (_dist > _range) exitWith {}; // In case object was teleported out of range
     private _pos = getPosVisual _obj;
     _pos set [2, _pos # 2 + 2];
 
@@ -83,6 +84,7 @@ self_GET(TrackedObjects) params ["_objects", "_pickables"];
         case east:       { [0.8, 0, 0, _textAlpha] };
         case resistance: { [0, 0.8, 0, _textAlpha] };
         case civilian:   { [0.6, 0, 0.8, _textAlpha] };
+        default { [0,0,0,0] };
     };
     if !(HUD_ICON in _selectedHUD) then { _icon = ''; };
 

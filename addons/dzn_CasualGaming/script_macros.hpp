@@ -24,7 +24,7 @@
 #define LOCALIZE_FORMAT_STR(X) localize format ["STR_%1_%2", ADDON, X]
 #define LOCALIZE_FORMAT_STR_desc(X) localize format ["STR_%1_%2_desc", ADDON, X]
 
-#define COMPILE_FILE(FILE) compile preprocessFileLineNumbers 'gADDON_PATH\##FILE.sqf'
+#define COMPILE_FILE(FILE) compileScript ['gADDON_PATH\##FILE.sqf']
 
 #define COMPILE_FUNCTION(SUBPATH,NAME) GVAR(NAME) = compile preprocessFileLineNumbers format ["%1%2\%3.sqf", FNC_PATH, QUOTE(SUBPATH), QUOTE(NAME)]
 
