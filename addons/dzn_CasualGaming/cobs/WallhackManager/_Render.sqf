@@ -69,8 +69,8 @@ _iconH = ICON_INFANTRY_H;
 _iconW = ICON_INFANTRY_W;
 {
     _dist = player distance _x;
-    if (_dist > _range) exitWith {};
-    _markPos = _x modelToWorld (_x selectionPosition "head");
+    if (_dist > _range) then { continue; };
+    _markPos = _x modelToWorldVisual (_x selectionPosition "head");
     _icon = (_x getVariable SVAR(WallhackInfo)) # 1;
     _alpha = linearConversion [50, _range, _dist, 1, 0.1, true];
     _color = switch (side _x) do {
@@ -98,7 +98,7 @@ _iconH = ICON_VEHICLE_H;
 _iconW = ICON_VEHICLE_W;
 {
     _dist = player distance _x;
-    if (_dist > _range) exitWith {};
+    if (_dist > _range) then { continue; };
     _markPos = getPosVisual _x;
     _markPos set [2, _markPos # 2 + 2]; // put mark pos above the ground
     _icon = (_x getVariable SVAR(WallhackInfo)) # 1;
@@ -131,7 +131,7 @@ _iconW = _iconH * 1.1;
 
 {
     _dist = player distance _x;
-    if (_dist > _range) exitWith {};
+    if (_dist > _range) then { continue; };
     _markPos = getPosVisual _x;
     _markPos set [2, 0.1]; // put mark pos a little above the ground
     _alpha = linearConversion [50, _range, _dist, 1, 0.1, true];

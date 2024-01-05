@@ -26,20 +26,25 @@ Author:
 #define RANGE_MODIFIER 1.1
 
 if (!self_GET(Enabled)) exitWith {};
-if (isGamePaused) exitWith {};
-if (!isNull curatorCamera) exitWith {};
-
-private _range = self_GET(Range) * RANGE_MODIFIER;
+if (isGamePaused || !isNull curatorCamera) exitWith {};
 
 private _typeFilter = cob_CALL(self_GET(TypeFilter), GetValue);
+if (_typeFilter isEqualTo []) exitWith {
+    self_SET_WITH(TrackedEntities) [[], []] VARSET;
+};
+
 private _sideFilter = cob_CALL(self_GET(SideFilter), GetValue);
+private _range = self_GET(Range) * RANGE_MODIFIER;
+
 private _entities = (player nearEntities [_typeFilter, _range]) select {
     self_CALL_WITH(FilterObjects) [_x, _sideFilter] VARSET
 };
 
 private _infantry = [];
 private _vehicles = [];
+
 private ["_whInfo", "_isVehicle", "_icon"];
+
 {
     _whInfo = _x getVariable [SVAR(WallhackInfo), nil];
 

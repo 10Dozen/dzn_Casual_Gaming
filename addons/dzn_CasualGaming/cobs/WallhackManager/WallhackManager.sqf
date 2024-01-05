@@ -20,6 +20,8 @@ private _declaration = [
     [cob_PAR(EntityTrackerPFH), nil],
     [cob_PAR(LootTrackerPFH), nil],
     [cob_PAR(RendererPFH), nil],
+    [cob_PAR(LootTrackerScriptHandler), scriptNull],
+
     [cob_PAR(DetailLevel),
         ["HUD Mode",[
             [HUD_MARK, "Mark"],
@@ -45,7 +47,7 @@ private _declaration = [
             [F_TYPE_AERIAL, "Aerial", ["Air"]],
             [F_TYPE_STATICS, "Statics", ["StaticWeapon"]],
             [F_TYPE_SHIP, "Ships", ["Ship"]],
-            [F_TYPE_CONTAINER, "Loot", [], false]
+            [F_TYPE_NONE, "-", []]
         ],
         "All"] call COB_CONSTRUCTOR(ToggleHandler)
     ],

@@ -26,12 +26,29 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
+#define LOOT_TRACKER_TIMEOUT 20
+
 if (!self_GET(Enabled)) then {
     self_CALL(Enable);
 };
 
 private _newState = !self_GET(LootTrackEnabled);
 self_SET(LootTrackEnabled, _newState);
+
+if (_newState) then {
+    private _pfhLootTracker = [
+        { cob_CALL((_this # 0), TrackLoot); },
+        LOOT_TRACKER_TIMEOUT,
+        _self
+    ] call CBA_fnc_addPerFrameHandler;
+
+    self_SET(LootTrackerPFH, _pfhLootTracker);
+} else {
+    [self_GET(LootTrackerPFH)] call CBA_fnc_removePerFrameHandler;
+    self_SET(LootTrackerPFH, nil);
+    self_SET(LootTrackerScriptHandler, scriptNull);
+    self_SET(TrackedLoot, []);
+};
 
 [
     HINT_WALLHACK,

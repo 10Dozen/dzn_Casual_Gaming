@@ -25,17 +25,44 @@ Author:
 ---------------------------------------------------------------------------- */
 
 #define RANGE_MODIFIER 1.1
+#define PER_ITEM_DELAY 0.01
 
-if (!self_GET(Enabled)) exitWith {};
-if (isGamePaused) exitWith {};
-if (!isNull curatorCamera) exitWith {};
+if (isGamePaused || !isNull curatorCamera) exitWith {};
+if (!self_GET(Enabled) || !isNull self_GET(LootTrackerScriptHandler)) exitWith {};
 if !(self_GET(LootTrackEnabled)) exitWith {
     self_SET(TrackedLoot, []);
 };
 
+private _lootClasses = [
+    "WeaponHolderSimulated",
+    "WeaponHolder",
+    "ReammoBox_F"
+];
 private _range = self_GET(Range) * RANGE_MODIFIER;
-private _loot = (allDeadMen select { _x distance player <= _range }); // corpses
-_loot append (player nearObjects ["ReammoBox_F", _range]); // boxes
-_loot append (player nearObjects ["ReammoBox", _range]); // weapon holders
 
-self_SET(TrackedLoot, _loot);
+private _handle = [_range, _lootClasses] spawn {
+    params ["_range", "_lootClasses"];
+
+    private _loot = [];
+    private _currentLoot = cob_GET(COB(WallhackManager), TrackedLoot);
+    if (_currentLoot isEqualTo []) then {
+        _loot = _currentLoot;
+    };
+    // Fill loot list one by one
+    {
+        private _item = _x;
+        if (
+            (_item isKindOf "CAManBase" && !alive _item) ||
+            (_lootClasses findIf {_item isKindOf _x} > -1)
+        ) then {
+            _loot pushBack _item;
+        };
+
+        sleep PER_ITEM_DELAY;
+    } forEach (player nearSupplies _range);
+
+    cob_SET(COB(WallhackManager), LootTrackerScriptHandler, scriptNull);
+    cob_SET(COB(WallhackManager), TrackedLoot, _loot);
+};
+
+self_SET(LootTrackerScriptHandler, _handle);

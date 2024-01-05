@@ -21,7 +21,7 @@
 #define F_TYPE_AERIAL    4
 #define F_TYPE_STATICS   5
 #define F_TYPE_SHIP      6
-#define F_TYPE_CONTAINER 7
+#define F_TYPE_NONE      7
 
 #define HINT_WALLHACK '<t size="1.5" color=COLOR_HINT_TITLE shadow="1">Wallhack</t><br/><br/>'
 #define HINT_WALLHACK_SETTINGS_INFO \
