@@ -22,12 +22,16 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-private _pfh = self_GET(PFH);
-if (isNil "_pfh") exitWith {};
+private _pfhTracker = self_GET(TrackPFH);
+private _pfhRender = self_GET(RenderPFH);
 
-_pfh call CBA_fnc_removePerFrameHandler;
+if (isNil "_pfhTracker" && isNil "_pfhRender") exitWith {};
 
-self_SET(PFH, nil);
+_pfhTracker call CBA_fnc_removePerFrameHandler;
+_pfhRender call CBA_fnc_removePerFrameHandler;
+
+self_SET(TrackPFH, nil);
+self_SET(RenderPFH, nil);
 self_SET(Enabled, false);
 
 [

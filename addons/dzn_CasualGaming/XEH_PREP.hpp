@@ -1,5 +1,3 @@
-#include "script_component.hpp"
-
 // --- Auth
 COMPILE_FUNCTION(auth,fnc_manageAuth);
 

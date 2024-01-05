@@ -22,11 +22,16 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-private _pfh = [{
-    (_this # 0) call [cob_PAR(TrackObjects)];
+private _pfhTracker = [{
+    cob_CALL((_this # 0), Track);
+}, 0.2, _self] call CBA_fnc_addPerFrameHandler;
+
+private _pfhRender = [{
+    cob_CALL((_this # 0), Render);
 }, nil, _self] call CBA_fnc_addPerFrameHandler;
 
-self_SET(PFH, _pfh);
+self_SET(TrackPFH, _pfhTracker);
+self_SET(RenderPFH, _pfhRender);
 self_SET(Enabled, true);
 
 [

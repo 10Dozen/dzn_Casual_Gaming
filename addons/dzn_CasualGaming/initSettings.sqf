@@ -265,3 +265,9 @@ private _addKey = {
     , "Open Console"
     , { ["KEY_CONSOLE"] call FUNC(handleHotkey) }
 ] call _addKey;
+
+[
+    "Key_Wallhack"
+    , "Enable Wallhack"
+    , { ["KEY_WALLHACK"] call FUNC(handleHotkey) }
+] call _addKey;

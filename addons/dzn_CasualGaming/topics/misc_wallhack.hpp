@@ -20,7 +20,7 @@ BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_DETAILS, HUD_MARK]] _WI
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_DETAILS, HUD_RANGE]] _WITH_TEXT(Range) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_DETAILS, HUD_ICON]] _WITH_TEXT(Icon) WS
 BR
-By side:   WS
+By side:    WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_SIDE]] _WITH_TEXT(All) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_SIDE, F_SIDE_BLUFOR]] _WITH_TEXT(BLUFOR) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_SIDE, F_SIDE_OPFOR]] _WITH_TEXT(OPFOR) WS
@@ -35,3 +35,4 @@ BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_ARMORED]]
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_AERIAL]] _WITH_TEXT(Aerial) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_STATICS]] _WITH_TEXT(Statics) WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_SHIP]] _WITH_TEXT(Ships) WS
+BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_CONTAINER]] _WITH_TEXT(Pickable) WS

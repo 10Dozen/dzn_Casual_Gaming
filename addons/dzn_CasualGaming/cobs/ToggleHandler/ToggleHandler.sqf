@@ -31,7 +31,8 @@ private _declaration = GVAR(COB_Cache) getOrDefaultCall [
         self_PREP(Toggle),
         self_PREP(Reset),
         self_PREP(GetValue),
-        self_PREP(GetInfo)
+        self_PREP(GetInfo),
+        self_PREP(GetSwitch)
     ]},
     true
 ];

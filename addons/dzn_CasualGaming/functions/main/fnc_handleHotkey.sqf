@@ -76,6 +76,12 @@ switch (toUpper _mode) do {
         closeDialog 2;
         [{ createDialog SVAR(Console_Group) }] call CBA_fnc_execNextFrame;
     };
+    case "KEY_WALLHACK": {
+        EXIT_NOT_PERMITTED(PERM_WALLHACK);
+        openMap false;
+        closeDialog 2;
+        cob_CALL(COB(WallhackManager), Toggle);
+    };
 };
 
 _result
