@@ -28,6 +28,7 @@ Author:
 if (!self_GET(Enabled)) exitWith {};
 if (isGamePaused || !isNull curatorCamera) exitWith {};
 
+private _player = [] call CBA_fnc_currentUnit;
 private _typeFilter = cob_CALL(self_GET(TypeFilter), GetValue);
 if (_typeFilter isEqualTo []) exitWith {
     self_SET_WITH(TrackedEntities) [[], []] VARSET;
@@ -36,14 +37,14 @@ if (_typeFilter isEqualTo []) exitWith {
 private _sideFilter = cob_CALL(self_GET(SideFilter), GetValue);
 private _range = self_GET(Range) * RANGE_MODIFIER;
 
-private _entities = (player nearEntities [_typeFilter, _range]) select {
-    self_CALL_WITH(FilterObjects) [_x, _sideFilter] VARSET
+private _entities = (_player nearEntities [_typeFilter, _range]) select {
+    self_CALL_WITH(FilterObjects) [_x, _sideFilter, _player] VARSET
 };
 
 private _infantry = [];
 private _vehicles = [];
 
-private ["_whInfo", "_isVehicle", "_icon"];
+private ["_whInfo", "_isVehicle", "_icon", "_picture"];
 
 {
     _whInfo = _x getVariable [SVAR(WallhackInfo), nil];
@@ -57,16 +58,18 @@ private ["_whInfo", "_isVehicle", "_icon"];
 
     if (_isVehicle) then {
         _vehicles pushBack _x;
-        _icon = getText (configfile >> "CfgVehicles" >> (typeOf _x) >> "picture");
-        if (_icon isEqualTo "") then {
-            _icon = getText (configfile >> "CfgVehicles" >> (typeOf _x) >> "icon");;
+        _picture = getText (configfile >> "CfgVehicles" >> (typeOf _x) >> "picture");
+        _icon = getText (configfile >> "CfgVehicles" >> (typeOf _x) >> "icon");
+        if (_picture isEqualTo "") then {
+            _picture = _icon;
         };
     } else {
         _infantry pushBack _x;
         _icon = getText (configfile >> "CfgVehicles" >> (typeOf _x) >> "icon");
+        _picture = _icon;
     };
 
-    _x setVariable [SVAR(WallhackInfo), [_isVehicle, _icon]];
+    _x setVariable [SVAR(WallhackInfo), [_isVehicle, _picture, _icon]];
 } forEach _entities;
 
 self_SET_WITH(TrackedEntities) [_infantry, _vehicles] VARSET;

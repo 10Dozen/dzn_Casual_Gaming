@@ -11,8 +11,7 @@ Description:
     Shows hint with current state of the Wallhack feature settings.
 
 Parameters:
-    0: _modeHandlerID - toggleHandler enum value from WallhackManager.h <ENUM>
-    1: _modeKey - identifier of the switch to change in ToggleHandler <ENUM>
+    none
 
 Returns:
     none

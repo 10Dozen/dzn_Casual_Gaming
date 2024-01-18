@@ -24,11 +24,13 @@ Author:
 
 params ["_coefChange"];
 
+private _player = [] call CBA_fnc_currentUnit;
+
 // --- Save default recoil coef
-private _coef = player getVariable [SVAR(DefaultRecoilCoef), -99];
+private _coef = _player getVariable [SVAR(DefaultRecoilCoef), -99];
 if (_coef < 0) then {
-    _coef = unitRecoilCoefficient player;
-    player setVariable [SVAR(DefaultRecoilCoef), _coef];
+    _coef = unitRecoilCoefficient _player;
+    _player setVariable [SVAR(DefaultRecoilCoef), _coef];
 };
 
 if (_coefChange != 0) then {
@@ -36,7 +38,7 @@ if (_coefChange != 0) then {
 };
 
 // --- Update recoil coef
-player setUnitRecoilCoefficient _coef;
+_player setUnitRecoilCoefficient _coef;
 
 hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Recoil changed</t><br />%1%2", _coefChange, "%"];
 [player, REASON_WEAPON_RECOIL_CHANGED] call FUNC(logUserAction);
