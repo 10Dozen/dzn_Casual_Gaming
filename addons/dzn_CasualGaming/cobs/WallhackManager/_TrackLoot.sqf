@@ -43,6 +43,7 @@ private _range = self_GET(Range) * RANGE_MODIFIER;
 private _handle = [_range, _lootClasses] spawn {
     params ["_range", "_lootClasses"];
 
+    private _player = [] call CBA_fnc_currentUnit;
     private _loot = [];
     private _currentLoot = cob_GET(COB(WallhackManager), TrackedLoot);
     if (_currentLoot isEqualTo []) then {
@@ -59,7 +60,7 @@ private _handle = [_range, _lootClasses] spawn {
         };
 
         sleep PER_ITEM_DELAY;
-    } forEach (player nearSupplies _range);
+    } forEach (_player nearSupplies _range);
 
     cob_SET(COB(WallhackManager), LootTrackerScriptHandler, scriptNull);
     cob_SET(COB(WallhackManager), TrackedLoot, _loot);

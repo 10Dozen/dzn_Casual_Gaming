@@ -23,11 +23,12 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-#define RANGE_MODIFIER 1.1
 #define ICON_INFANTRY_H 0.7
 #define ICON_INFANTRY_W 0.7
 #define ICON_VEHICLE_H 0.6
 #define ICON_VEHICLE_W 1.1
+#define ICON_PLAYER_H 1.25
+#define ICON_PLAYER_W 0.75
 #define TEXT_SIZE 0.035
 
 #define LOOT_COLOR_RGB(ALPHA) [0.93, 0.66, 0, ALPHA]
@@ -35,23 +36,26 @@ Author:
 #define OPFOR_COLOR_RGB(ALPHA) [0.8, 0, 0, ALPHA]
 #define GUER_COLOR_RGB(ALPHA) [0, 0.8, 0, ALPHA]
 #define CIV_COLOR_RGB(ALPHA) [0.6, 0, 0.8, ALPHA]
+#define PLAYER_COLOR_RGB [0.76, 0.92, 0.53, 1]
 
-#define __DRAW_MARK drawIcon3D ['', _color, _markPos, 0, 0, 0, _mark , 2, TEXT_SIZE, 'puristaMedium', 'center', true]
-#define __DRAW_RANGE drawIcon3D [_icon, _color, _iconPos, _iconW, _iconH, 0, _distanceText, 1, TEXT_SIZE, 'puristaMedium', 'center', false, 0, -0.05]
+#define PLAYER_ICON "\A3\ui_f\data\map\markers\military\triangle_CA.paa"
 
+#define __DRAW_MARK(COLOR, POS, MARK) \
+    drawIcon3D ['', COLOR, POS, 0, 0, 0, MARK , 2, TEXT_SIZE, 'puristaMedium', 'center', true]
+#define __DRAW_RANGE(ICON, COLOR, POS, WIDTH, HEIGHT, TEXT) \
+    drawIcon3D [ICON, COLOR, POS, WIDTH, HEIGHT, 0, TEXT, 1, TEXT_SIZE, 'puristaMedium', 'center', false, 0, -0.05]
 
 if (!self_GET(Enabled)) exitWith {};
 if (isGamePaused) exitWith {};
 if (!isNull curatorCamera) exitWith {};
 
+private _player = [] call CBA_fnc_currentUnit;
 private _selectedHUD = cob_CALL(self_GET(DetailLevel), GetValue);
 private _showMark = HUD_MARK in _selectedHUD;
 private _showIcon = HUD_ICON in _selectedHUD;
 private _showRange = HUD_RANGE in _selectedHUD;
 
 private _range = self_GET(Range) * RANGE_MODIFIER;
-
-//  self_GET(TrackedEntities);
 
 private [
     "_dist",
@@ -68,7 +72,7 @@ _mark = '•';
 _iconH = ICON_INFANTRY_H;
 _iconW = ICON_INFANTRY_W;
 {
-    _dist = player distance _x;
+    _dist = _player distance _x;
     if (_dist > _range) then { continue; };
     _markPos = _x modelToWorldVisual (_x selectionPosition "head");
     _icon = (_x getVariable SVAR(WallhackInfo)) # 1;
@@ -82,13 +86,13 @@ _iconW = ICON_INFANTRY_W;
     };
 
     if (_showMark) then {
-        __DRAW_MARK;
+        __DRAW_MARK(_color, _markPos, _mark);
     };
 
     if (_showIcon || _showRange) then {
         _distanceText = if (_showRange) then { format ["%1 m", str round(_dist)] } else { '' };
         _iconPos = [_markPos # 0, _markPos # 1, (_markPos # 2) + 2];
-        __DRAW_RANGE;
+        __DRAW_RANGE(_icon, _color, _iconPos, _iconW, _iconH, _distanceText);
     };
 } forEach _units;
 
@@ -97,7 +101,7 @@ _mark = "+";
 _iconH = ICON_VEHICLE_H;
 _iconW = ICON_VEHICLE_W;
 {
-    _dist = player distance _x;
+    _dist = _player distance _x;
     if (_dist > _range) then { continue; };
     _markPos = getPosVisual _x;
     _markPos set [2, _markPos # 2 + 2]; // put mark pos above the ground
@@ -112,13 +116,13 @@ _iconW = ICON_VEHICLE_W;
     };
 
     if (_showMark) then {
-        __DRAW_MARK;
+        __DRAW_MARK(_color, _markPos, _mark);
     };
 
     if (_showIcon || _showRange) then {
         _distanceText = if (_showRange) then { format ["%1 m", str round(_dist)] } else { '' };
         _iconPos = [_markPos # 0, _markPos # 1, (_markPos # 2) + 2];
-        __DRAW_RANGE;
+        __DRAW_RANGE(_icon, _color, _iconPos, _iconW, _iconH, _distanceText);
     };
 } forEach _vehicles;
 
@@ -128,9 +132,8 @@ _mark = '§';
 _icon = 'a3\ui_f_curator\data\displays\rscdisplaycurator\modemodules_ca.paa';
 _iconH = ICON_INFANTRY_H;
 _iconW = _iconH * 1.1;
-
 {
-    _dist = player distance _x;
+    _dist = _player distance _x;
     if (_dist > _range) then { continue; };
     _markPos = getPosVisual _x;
     _markPos set [2, 0.1]; // put mark pos a little above the ground
@@ -138,12 +141,12 @@ _iconW = _iconH * 1.1;
     _color = LOOT_COLOR_RGB(_alpha);
 
     if (_showMark) then {
-        __DRAW_MARK;
+        __DRAW_MARK(_color, _markPos, _mark);
     };
 
     if (_showIcon || _showRange) then {
         _distanceText = if (_showRange) then { format ["%1 m", str round(_dist)] } else { '' };
         _iconPos = [_markPos # 0, _markPos # 1, (_markPos # 2) + 2];
-        __DRAW_RANGE;
+        __DRAW_RANGE(_icon, _color, _iconPos, _iconW, _iconH, _distanceText);
     };
 } forEach self_GET(TrackedLoot);

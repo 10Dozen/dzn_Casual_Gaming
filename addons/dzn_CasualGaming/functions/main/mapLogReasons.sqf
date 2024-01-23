@@ -39,6 +39,7 @@ MAP_REASON(REASON_PINNED_VEHICLE_ENABLED,    "[Pinned Vehicle] Vehicle enabled")
 
 MAP_REASON(REASON_WALLHACK_TOGGLED,          "[Wallhack] Wallhack toggled");
 MAP_REASON(REASON_WALLHACK_RANGE_CHANGED,    "[Wallhack] Range changed");
+MAP_REASON(REASON_MINES_REVEALED,            "Mines revealed");
 
 MAP_REASON(REASON_CAMERA_OPENED,             "Splendid Camera opened");
 MAP_REASON(REASON_CONSOLE_OPENED,            "Console opened");

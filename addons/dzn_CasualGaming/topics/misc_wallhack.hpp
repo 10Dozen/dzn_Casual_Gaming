@@ -37,9 +37,17 @@ BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_STATICS]]
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_SHIP]] _WITH_TEXT(Ships)WS
 BTN_ COB(WallhackManager) call [cob_QPAR(SetMode), [MODE_TYPES, F_TYPE_NONE]] _WITH_TEXT(None)
 BR
-Track loot:  WS
+Track loot:       WS
 BTN_ COB(WallhackManager) call [cob_QPAR(ToggleLootTrack)] _WITH_TEXT(Toggle)
+BR
+Track at map: WS
+BTN_ COB(WallhackManager) call [cob_QPAR(ToggleMapTrack)] _WITH_TEXT(Toggle)
 BR
 NOTE_
 Note: Selecting large ranges causes FPS to drop! Use filters to exclude unwanted sides and categories - that may improve performance. _EOL
 BR
+BR
+BTN_ [] spawn FUNC(revealMines); _WITH_TEXT(Reveal mines)
+BR
+NOTE_
+Note: Mines become known to units of your side too, but only be visible depending of Difficulty level of the game. _EOL

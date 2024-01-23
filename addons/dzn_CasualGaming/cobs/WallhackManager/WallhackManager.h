@@ -1,6 +1,9 @@
 
 #define COB_SELF_NAME WallhackManager
 
+#define RANGE_MODIFIER 1.1
+
+
 #define MODE_DETAILS 1
 #define MODE_SIDE 2
 #define MODE_TYPES 3
@@ -41,4 +44,8 @@
     format ["<t align='right'>%1</t>", cob_CALL(self_GET(TypeFilter), GetInfo)], \
     lineBreak, \
     '<t align="left" color=COLOR_GRAY>Loot:</t>', \
-    format ["<t align='right'>%1</t>", ["No", "Yes"] select self_GET(LootTrackEnabled)]
+    format ["<t align='right'>%1</t>", ["No", "Yes"] select self_GET(LootTrackEnabled)], \
+    lineBreak, \
+    lineBreak, \
+    '<t align="left" color=COLOR_GRAY>Map tracker:</t>', \
+    format ["<t align='right'>%1</t>", ["No", "Yes"] select self_GET(MapTrackEnabled)]
