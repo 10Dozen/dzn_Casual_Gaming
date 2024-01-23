@@ -26,16 +26,18 @@ params ["_showHint"];
 
 if (!hasInterface) exitWith {};
 
+private _player = [] call CBA_fnc_currentUnit;
+
 // --- Vanilla healing
-player setDamage 0;
+_player setDamage 0;
 
 // --- ACE Healing
 if (!isNil "ace_medical_treatment_fnc_fullHealLocal") then {
-    [player] call ace_medical_treatment_fnc_fullHealLocal;
+    [_player] call ace_medical_treatment_fnc_fullHealLocal;
 };
 
 // --- BIS Revive
-["", 1, player] call BIS_fnc_reviveOnState;
+["", 1, _player] call BIS_fnc_reviveOnState;
 player setVariable ["#rev", 1, true];
 
 

@@ -52,6 +52,7 @@ COMPILE_FUNCTION(group_ai,fnc_manageGroup);
 
 // --- Misc component
 COMPILE_FUNCTION(misc,fnc_handleConsole);
+COMPILE_FUNCTION(misc,fnc_revealMines);
 
 // Component Objects
 COMPILE_COB(ToggleHandler);

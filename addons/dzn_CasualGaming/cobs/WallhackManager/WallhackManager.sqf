@@ -17,6 +17,7 @@ private _declaration = [
     [cob_PAR(Range), 300],
     [cob_PAR(TrackedEntities), []],
     [cob_PAR(TrackedLoot), []],
+
     [cob_PAR(EntityTrackerPFH), nil],
     [cob_PAR(LootTrackerPFH), nil],
     [cob_PAR(RendererPFH), nil],
@@ -52,6 +53,7 @@ private _declaration = [
         "All"] call COB_CONSTRUCTOR(ToggleHandler)
     ],
     [cob_PAR(LootTrackEnabled), false],
+    [cob_PAR(MapTrackEnabled), false],
 
     // Methods
     self_PREP(Toggle),
@@ -60,10 +62,12 @@ private _declaration = [
     self_PREP(SetRange),
     self_PREP(SetMode),
     self_PREP(ToggleLootTrack),
+    self_PREP(ToggleMapTrack),
     self_PREP(TrackEntities),
     self_PREP(TrackLoot),
     self_PREP(FilterObjects),
-    self_PREP(Render)
+    self_PREP(Render),    
+    self_PREP(RenderOnMap)
 ];
 
 COB_FQNAME = createHashMapObject [_declaration];
