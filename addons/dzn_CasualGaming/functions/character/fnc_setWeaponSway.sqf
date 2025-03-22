@@ -63,5 +63,5 @@ if (!isNil "ACE_setCustomAimCoef_baseline") then {
     };
 };
 
-hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Sway changed</t><br />%1%2", _coefChange, "%"];
+[format ["<t size='1.5' color='#FFD000' shadow='1'>Sway changed</t><br />%1%2", _coefChange, "%"]] call FUNC(hint);
 [player, REASON_WEAPON_SWAY_CHANGED] call FUNC(logUserAction);

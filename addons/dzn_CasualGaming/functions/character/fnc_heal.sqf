@@ -42,6 +42,6 @@ player setVariable ["#rev", 1, true];
 
 
 if (_showHint) then {
-    hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Healed</t>";
+    ["<t size='1.5' color='#FFD000' shadow='1'>Healed</t>"] call FUNC(hint);
 };
 [player, REASON_HEALING] call FUNC(logUserAction);

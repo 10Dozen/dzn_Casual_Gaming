@@ -49,8 +49,8 @@ if (_newState) then {
     self_SET(TrackedLoot, []);
 };
 
-[
+[[
     HINT_WALLHACK,
     format ["Loot track %1", ["disabled", "enabled"] select _newState],
     HINT_WALLHACK_SETTINGS_INFO
-] call FUNC(hint);
+]] call FUNC(hint);

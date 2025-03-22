@@ -42,16 +42,16 @@ private _modeHandler = switch _modeHandlerID do {
 if (isNil "_modeKey") exitWith {
     cob_CALL(_modeHandler, Reset);
 
-    [
+    [[
         HINT_WALLHACK,
         format ["%1 reset!", cob_GET(_modeHandler, Name)],
         HINT_WALLHACK_SETTINGS_INFO
-    ] call FUNC(hint);
+    ], 5] call FUNC(hint);
 };
 
 cob_CALL_WITH(_modeHandler, Toggle) _modeKey VARSET;
-[
+[[
     HINT_WALLHACK,
-    format ["%1 changed!", cob_GET(_modeHandler, Name) ],
+    format ["%1 changed!", cob_GET(_modeHandler, Name)],
     HINT_WALLHACK_SETTINGS_INFO
-] call FUNC(hint);
+], 15] call FUNC(hint);

@@ -541,11 +541,11 @@ if !(_title isEqualTo "") then {
         _slotInfo = format ["<t size='1.25' color='#FFD000' shadow='1'>Slot #%1</t><br />", _slotId];
     };
 
-    hint parseText format [
+    [format [
         "<t size='1.5' color='#FFD000' shadow='1'>Pinned Vehicle</t><br /><br />%1%2",
         _slotInfo,
         _title
-    ];
+    ]] call FUNC(hint);
 };
 
 // ["Finished. Mode: %1, Params: %2, Result: %3", _mode, _args, [_result, "Success"] select (_result isEqualTo -1)] call CVP_Log;

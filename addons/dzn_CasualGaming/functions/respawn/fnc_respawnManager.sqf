@@ -39,10 +39,10 @@ switch (toUpper _mode) do {
 
         setPlayerRespawnTime _payload;
 
-        hint parseText format [
+        [format [
             "<t size='1.5' color='#FFD000' shadow='1'>Respawn Time</t><br /><br />Set to %1 seconds"
             , _payload
-        ];
+        ]] call FUNC(hint);
 
         [player, REASON_RESPAWN_TIMER_CHANGED] call FUNC(logUserAction);
     };

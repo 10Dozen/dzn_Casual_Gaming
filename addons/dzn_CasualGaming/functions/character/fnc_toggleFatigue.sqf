@@ -46,9 +46,10 @@ if (!isNil "ace_advanced_fatigue_enabled") then {
     };
 };
 
-hint parseText format [
+
+[format [
     "<t size='1.5' shadow='1'><t color='#FFD000' >Fatigue</t> %1</t>"
     , if (_enable) then { "ON" } else { "OFF" }
-];
+]] call FUNC(hint);
 
 [player, REASON_FATIGUE_TOGGLED] call FUNC(logUserAction);

@@ -183,7 +183,7 @@ switch toUpper(_mode) do {
 
 
 if !(_title isEqualTo "") then {
-    hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Rallypoints</t><br /><br />%1", _title];
+    [format ["<t size='1.5' color='#FFD000' shadow='1'>Rallypoints</t><br /><br />%1", _title]] call FUNC(hint);
 };
 
 _result

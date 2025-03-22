@@ -65,7 +65,7 @@ switch (toUpper _mode) do {
             };
         };
 
-        hint "Executed";
+        ["Executed"] call FUNC(hint);
 
         [{ ["WATCH"] call SELF; }] call CBA_fnc_execNextFrame;
     };
