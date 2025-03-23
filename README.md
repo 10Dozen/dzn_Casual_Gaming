@@ -47,7 +47,7 @@ You can configure authorization settings on your server to prevent anyone except
 Authorization options are available at (Options - Addon Options - dzn Casual Gaming at Server or Mission tab) that may be forced from server-side or as mission settings and define list of usernames/UIDs that authorized to use Casual Gaming. Empty lists means mod allowed for everyone.
 
 #### Log usage
-Logs usage of mod's functions in server RPT log in format `[dzn_CG][PlayerName UID] ActionPerformed`
+Logs usage of mod's functions in server RPT log in format `[dzn_CG][%PlayerName %UID] %ActionPerformed`
 
 #### Re-add diary topics
 Adds diary topics if where deleted for some reason (e.g. DRO/DCO missions clears diary records on mission start). Just change state of the checkboxs (either check or uncheck) and click OK - topics will be added.
