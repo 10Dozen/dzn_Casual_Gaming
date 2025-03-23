@@ -29,9 +29,9 @@ private _mines = allMines;
     _playerSide revealMine _x;
 } forEach _mines;
 
-hint parseText format [
+[format [
     "<t size='1.5' color='#FFD000' shadow='1'>Mines revealed</t><br/>%1 mines",
     count _mines
-];
+]] call FUNC(hint);
 
 [player, REASON_MINES_REVEALED] call FUNC(logUserAction);

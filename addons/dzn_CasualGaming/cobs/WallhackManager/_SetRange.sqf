@@ -33,10 +33,10 @@ if (!self_GET(Enabled)) then {
     self_CALL(Enable);
 };
 
-[
+[[
     HINT_WALLHACK,
     "Range changed!",
     HINT_WALLHACK_SETTINGS_INFO
-] call FUNC(hint);
+]] call FUNC(hint);
 
 [player, REASON_WALLHACK_RANGE_CHANGED] call FUNC(logUserAction);

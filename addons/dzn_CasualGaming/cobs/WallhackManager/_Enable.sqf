@@ -41,8 +41,8 @@ self_SET(EntityTrackerPFH, _pfhEntityTracker);
 self_SET(RendererPFH, _pfhRenderer);
 self_SET(Enabled, true);
 
-[
+[[
     HINT_WALLHACK,
     format ["Enabled [%1 m]", self_GET(Range)],
     HINT_WALLHACK_SETTINGS_INFO
-] call FUNC(hint);
+], 15] call FUNC(hint);

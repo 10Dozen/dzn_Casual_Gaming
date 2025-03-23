@@ -25,5 +25,5 @@ Author:
 
 [QFUNC(ratingFix), [true]] call FUNC(remoteExecAll);
 
-hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Global Rating fix done</t>";
+["<t size='1.5' color='#FFD000' shadow='1'>Global Rating fix done</t>"] call FUNC(hint);
 [player, REASON_RATING_FIXED_GLOBAL] call FUNC(logUserAction);

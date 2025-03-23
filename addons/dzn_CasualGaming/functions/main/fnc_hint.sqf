@@ -3,10 +3,11 @@
 Function: dzn_CasualGaming_fnc_hint
 
 Description:
-    Shows pre-formatted hint.
+    Draws formatted hint for .75 second, then draws empty hint.
 
 Parameters:
-    _this -- array of lines
+    0: _message -- message to be parsed and shown <STRING> or array of lines to be composed <ARRAY>.
+    1: _timeout -- optional timeout before hidding. Defaults to 0.75 <NUMBER>.
 
 Returns:
     none
@@ -20,19 +21,30 @@ Author:
     10Dozen
 ---------------------------------------------------------------------------- */
 
-private _msg = _this;
+params ["_msg", ["_timeout", 0.75]];
 
-if (typename _msg != typename []) exitWith {
-    hint parseText _msg;
+// -- Prepare message
+if (_msg isEqualType []) then {
+    _msg = composeText (_msg apply {
+        if (typename _x == typename "") then {
+            parseText _x
+        } else {
+            _x
+        };
+    });
+} else {
+    _msg = parseText _msg;
 };
 
-// ComposeText case
-_msg = composeText (_msg apply {
-    if (typename _x == typename "") then {
-        parseText _x
-    } else {
-        _x
-    };
-});
-
+// -- Show message
 hint _msg;
+GVAR(HintID) = diag_frameNo;
+
+[
+    {
+        if (GVAR(HintID) isNotEqualTo _this) exitWith {}; // Skip if new hint was invoked
+        hintSilent "";
+    },
+    GVAR(HintID),
+    _timeout
+] call CBA_fnc_waitAndExecute;

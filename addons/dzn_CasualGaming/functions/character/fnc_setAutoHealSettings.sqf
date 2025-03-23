@@ -34,9 +34,9 @@ if (typename _setting == "BOOL") then {
 
 [] call FUNC(setAuthoHealHandler);
 
-hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Auto-Heal</t>
+[format ["<t size='1.5' color='#FFD000' shadow='1'>Auto-Heal</t>
     <br /><br />%1
     <br />%2 seconds"
     , if (GVAR(AutoHealEnabled)) then { "ON" } else { "OFF" }
     , GVAR(AutoHealTimer)
-];
+]] call FUNC(hint);

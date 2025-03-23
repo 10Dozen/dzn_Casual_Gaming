@@ -161,7 +161,7 @@ switch (toUpper _mode) do {
 
         player setVariable [SVAR(JoinToActionsID), [_joinToID,_joinUnitID, _removeID]];
 
-        hint parseText "<t size='1.5' color='#FFD000' shadow='1'>To join unit/to group</t><br /><br />Point to unit and use action!";
+        ["<t size='1.5' color='#FFD000' shadow='1'>To join unit/to group</t><br /><br />Point to unit and use action!"] call FUNC(hint);
     };
     case "JOIN_TO_ACTION_REMOVE": {
         private _actionIDs = player getVariable [SVAR(JoinToActionsID), []];
@@ -304,5 +304,5 @@ switch (toUpper _mode) do {
 };
 
 if !(_title isEqualTo "") then {
-    hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Group AI</t><br /><br />%1", _title];
+    [format ["<t size='1.5' color='#FFD000' shadow='1'>Group AI</t><br /><br />%1", _title]] call FUNC(hint);
 };

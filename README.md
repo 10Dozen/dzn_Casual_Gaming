@@ -1,5 +1,5 @@
 # dzn Casual Gaming
-##### Version: 5.3
+##### Version: 5.6
 
 Small cheat-mod to make any mission playable and fun if it isn't (e.g. not enough assets to complete the mission, absence of ACE Medical items, broken vehicles or scripts and so on). 
 
@@ -47,11 +47,17 @@ You can configure authorization settings on your server to prevent anyone except
 Authorization options are available at (Options - Addon Options - dzn Casual Gaming at Server or Mission tab) that may be forced from server-side or as mission settings and define list of usernames/UIDs that authorized to use Casual Gaming. Empty lists means mod allowed for everyone.
 
 #### Log usage
-Logs usage of mod's functions in server RPT log in format `[dzn_CG][PlayerName UID] ActionPerformed`
+Logs usage of mod's functions in server RPT log in format `[dzn_CG][%PlayerName %UID] %ActionPerformed`
 
 #### Re-add diary topics
 Adds diary topics if where deleted for some reason (e.g. DRO/DCO missions clears diary records on mission start). Just change state of the checkboxs (either check or uncheck) and click OK - topics will be added.
 
-#### Authorization Profile
-It's possible to set up availability of the features for players. Use ```Users (UIDs)``` settings to list player's UIDs or use "All" keyword to apply settings to all players (except listed in ```Authorized users``` and admin). Then pass through list of features and uncheck features you don't want to be available. Once mission restarted - new settings will be applied and players will be able to use only permitted features via diary and hotkeys.
+#### Authorization Profiles
+It's possible to set up availability of the specific features for specific players. Pass through list of features and uncheck features you don't want to be available. Once mission restarted - new settings will be applied and players will be able to use only permitted features via diary and hotkeys.
+
+There are 4 profiles that players may be assigned to (using `Users (UIDs)` field), each containing separated list of allowed features. If player is listed in several profiles - it will have access to combined list of features of all related profiles! 
+
+If `"all"` is used in the `Users (UIDs)` field - all players will be able to use features of this profile (combining with other profiles player assigned to).
+
+
 

@@ -39,7 +39,7 @@ self_SET(RendererPFH, nil);
 self_SET(LootTrackerHandler, scriptNull);
 self_SET(Enabled, false);
 
-[
-    HINT_WALLHACK,
+[[
+    HINT_WALLHACK, 
     "Disabled"
-] call FUNC(hint);
+]] call FUNC(hint);

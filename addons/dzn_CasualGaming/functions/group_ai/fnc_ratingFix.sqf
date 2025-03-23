@@ -32,6 +32,6 @@ if (_curRating <= 0) exitWith {
 };
 
 if (_showHint) then {
-    hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Rating fixed</t>";
+    ["<t size='1.5' color='#FFD000' shadow='1'>Rating fixed</t>"] call FUNC(hint);
 };
 [player, REASON_RATING_FIXED] call FUNC(logUserAction);

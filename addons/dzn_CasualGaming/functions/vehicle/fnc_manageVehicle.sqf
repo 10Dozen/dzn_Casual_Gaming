@@ -54,7 +54,7 @@ private _result = -1;
 // ["Invoked. Mode: %1, Params: %2", _mode, _args] call CGV_Log;
 
 if (_veh isEqualTo player && !(_mode in PUBLIC_METHODS)) exitWith {
-    hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Player is not in vehicle!";
+    ["<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Player is not in vehicle!"] call FUNC(hint);
 };
 
 switch (toUpper _mode) do {
@@ -97,7 +97,7 @@ switch (toUpper _mode) do {
                 } else {
                     deleteVehicle _u;
                     deleteGroup _grp;
-                    hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Failed to add driver (no seat?)";
+                    ["<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />Failed to add driver (no seat?)"] call FUNC(hint);
                 };
             },
             [_veh, _u, _grp]
@@ -336,7 +336,7 @@ switch (toUpper _mode) do {
 };
 
 if !(_title isEqualTo "") then {
-    hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />%1", _title];
+    [format ["<t size='1.5' color='#FFD000' shadow='1'>Vehicle Service</t><br /><br />%1", _title]] call FUNC(hint);
 };
 
 

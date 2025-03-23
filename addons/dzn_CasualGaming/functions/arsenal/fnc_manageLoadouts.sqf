@@ -40,8 +40,7 @@ switch (toUpper _mode) do {
         };
 
         _namespace setVariable [format ["%1_%2", SVAR(Loadout), _slotID], getUnitLoadout player];
-        hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>%1</t>", _msg];
-
+        [format ["<t size='1.5' color='#FFD000' shadow='1'>%1</t>", _msg]] call FUNC(hint);
         [player, REASON_LOADOUT_SAVED] call FUNC(logUserAction);
     };
     case "LOAD": {
@@ -57,11 +56,11 @@ switch (toUpper _mode) do {
         private _loadout = _namespace getVariable [format ["%1_%2", SVAR(Loadout), _slotID], []];
 
         if !(_loadout isEqualTo []) then {
-            hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>%1</t>", _msg];
+            [format ["<t size='1.5' color='#FFD000' shadow='1'>%1</t>", _msg]] call FUNC(hint);
             player setUnitLoadout _loadout;
             [player, REASON_LOADOUT_APPLIED] call FUNC(logUserAction);
         } else {
-            hint parseText "<t size='1.5' color='#FFFFFF' shadow='1'>Loadout is empty</t>";
+            ["<t size='1.5' color='#FFFFFF' shadow='1'>Loadout is empty</t>"] call FUNC(hint);
         };
     };
 
@@ -72,7 +71,7 @@ switch (toUpper _mode) do {
         player setUnitLoadout (getUnitLoadout _u);
         ["REMOVE_COPY_ACTION"] call SELF;
 
-        hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied from unit!</t>";
+        ["<t size='1.5' color='#FFD000' shadow='1'>Loadout copied from unit!</t>"] call FUNC(hint);
         [player, REASON_LOADOUT_COPIED] call FUNC(logUserAction);
     };
     case "COPY_LOADOUT_TO": {
@@ -82,7 +81,7 @@ switch (toUpper _mode) do {
         [_u, getUnitLoadout player] call FUNC(applyLoadoutToUnit);
         ["REMOVE_COPY_ACTION"] call SELF;
 
-        hint parseText "<t size='1.5' color='#FFD000' shadow='1'>Loadout copied to unit!</t>";
+        ["<t size='1.5' color='#FFD000' shadow='1'>Loadout copied to unit!</t>"] call FUNC(hint);
         [player, REASON_LOADOUT_COPIED] call FUNC(logUserAction);
     };
     case "ADD_COPY_ACTION": {
@@ -108,13 +107,13 @@ switch (toUpper _mode) do {
 
         player setVariable [SVAR(CopyLoadoutActionsID), [_copyFromID,_copyToID,_removeID]];
 
-        hint parseText "<t size='1.5' color='#FFD000' shadow='1'>To copy loadout</t><br /><br />Point to unit and use action!";
+        ["<t size='1.5' color='#FFD000' shadow='1'>To copy loadout</t><br /><br />Point to unit and use action!"] call FUNC(hint);
     };
     case "REMOVE_COPY_ACTION": {
         private _actionIDs = player getVariable [SVAR(CopyLoadoutActionsID), []];
         if (_actionIDs isEqualTo []) exitWith {};
 
         { player removeAction _x; } forEach _actionIDs;
-        hint "Copy loadout disabled";
+        ["Copy loadout disabled"] call FUNC(hint);
     };
 };

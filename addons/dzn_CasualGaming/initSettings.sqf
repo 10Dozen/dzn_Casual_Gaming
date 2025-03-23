@@ -8,7 +8,6 @@
 #define SETTING_RESTART_NEEDED true
 
 #define SETTING_MAIN_CATEGORY TITLE
-#define SETTING_PROFILE_CATEGORY [TITLE, "Authorization Profile"]
 
 //
 //     Addon Settings
@@ -80,7 +79,7 @@ private _add = {
     "ReaddTopicsToggle"
     , SETTING_CHECKBOX
     , "Re-add diary topics"
-    , "Re-adds CasualGaming topics if not exist or removed"
+    , "Changing this setting will re-add CasualGaming topics if not exist or removed"
     , SETTING_MAIN_CATEGORY
     , false
     , SETTING_LOCAL
@@ -108,16 +107,34 @@ private _add = {
 // Profile settings
 #include "profile_settings.hpp"
 private _addProfileFeatureSettings = {
-    params ["_profile"];
+    params ["_profileId"];
+    private _category = [TITLE, format ["Authorization Profile %1", _profileId]];
+    private _callback = [
+        { GVAR(AuthProfile1_UIDs) = call compile ("[" + toLower _this + "]"); },
+        { GVAR(AuthProfile2_UIDs) = call compile ("[" + toLower _this + "]"); },
+        { GVAR(AuthProfile3_UIDs) = call compile ("[" + toLower _this + "]"); }
+    ] select (_profileId - 1);
+
+    [
+        format ["AuthProfile%1_UIDsSetting", _profileId],
+        SETTING_EDITBOX,
+        "Users (UIDs)",
+        "List of users to apply authorization profile settings by player UID (admin is always authorized). In format: ""UID1"",""UID2"". Use ""All"" to apply profile options to all users except listed in Authorized users lists.",
+        _category,
+        "",
+        SETTING_GLOBAL,
+        _callback,
+        SETTING_RESTART_NEEDED
+    ] call _add;
 
     {
         _x params ["_name", "_title", "_tooltip"];
         [
-            format ["%1_%2", _profile, _name],
+            format ["AuthProfile%1_%2", _profileId, _name],
             SETTING_CHECKBOX,
             _title,
             _tooltip,
-            SETTING_PROFILE_CATEGORY,
+            _category,
             true,
             SETTING_GLOBAL,
             SETTING_NO_SCRIPT,
@@ -126,18 +143,10 @@ private _addProfileFeatureSettings = {
     } forEach PROFILE_SETTINGS;
 };
 
-[
-    "AuthProfile1_UIDsSetting"
-    , SETTING_EDITBOX
-    , "Users (UIDs)"
-    , "List of users to apply authorization profile settings by player UID (admin is always authorized). In format: ""UID1"",""UID2"". Use ""All"" to apply profile options to all users except listed in Authorized users lists."
-    , SETTING_PROFILE_CATEGORY
-    , ""
-    , SETTING_GLOBAL
-    , { GVAR(AuthProfile1_UIDs) = call compile ("[" + toLower _this + "]"); }
-    , SETTING_RESTART_NEEDED
-] call _add;
-["AuthProfile1"] call _addProfileFeatureSettings;
+[1] call _addProfileFeatureSettings;
+[2] call _addProfileFeatureSettings;
+[3] call _addProfileFeatureSettings;
+[4] call _addProfileFeatureSettings;
 
 //
 //   Keybindings

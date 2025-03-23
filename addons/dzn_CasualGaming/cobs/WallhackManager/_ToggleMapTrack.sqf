@@ -45,8 +45,8 @@ if (_newState) then {
     MAP_CTRL ctrlRemoveEventHandler ["Draw", _handler];
 };
 
-[
+[[
     HINT_WALLHACK,
     format ["Track on map %1", ["disabled", "enabled"] select _newState],
     HINT_WALLHACK_SETTINGS_INFO
-] call FUNC(hint);
+]] call FUNC(hint);

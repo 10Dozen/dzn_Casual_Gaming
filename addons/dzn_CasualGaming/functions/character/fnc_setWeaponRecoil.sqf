@@ -40,5 +40,5 @@ if (_coefChange != 0) then {
 // --- Update recoil coef
 _player setUnitRecoilCoefficient _coef;
 
-hint parseText format ["<t size='1.5' color='#FFD000' shadow='1'>Recoil changed</t><br />%1%2", _coefChange, "%"];
+[format ["<t size='1.5' color='#FFD000' shadow='1'>Recoil changed</t><br />%1%2", _coefChange, "%"]] call FUNC(hint);
 [player, REASON_WEAPON_RECOIL_CHANGED] call FUNC(logUserAction);
